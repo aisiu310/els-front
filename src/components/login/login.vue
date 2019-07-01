@@ -102,6 +102,7 @@ export default {
         console.log(this.formInline.user);
         console.log(this.formInline.password);
         this.$Message.success("登录成功！");
+        this.$router.push({path:'sender_header'})
       } else {
         this.$Message.error("验证码错误！");
       }

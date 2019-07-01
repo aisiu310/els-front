@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-link to="login"></router-link>
+    <router-link to="sender_header"></router-link>
+    <router-view></router-view>
   </div>
 </template>
 

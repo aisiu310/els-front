@@ -1,225 +1,30 @@
 <template>
-  <div class="login_bg">
-    <!-- 登陆页面文本框 -->
-    <div class="content">
-      <p class="chinese">世界因我们触手可得</p>
-      <label class="english">The world is Within Your Reach</label>
-    </div>
-    <!-- 登录框 -->
-    <div class="login_form">
-      <span class="loginCeontent">账户登录</span>
-      <Form ref="formInline" :model="formInline" :rules="ruleInline">
-        <FormItem prop="user">
-          <Input type="text" v-model="formInline.user" placeholder="用户名">
-            <Icon type="ios-person-outline" slot="prepend"></Icon>
-          </Input>
-        </FormItem>
-        <FormItem prop="password">
-          <Input type="password" v-model="formInline.password" placeholder="密码">
-            <Icon type="ios-lock-outline" slot="prepend"></Icon>
-          </Input>
-        </FormItem>
-        <!-- 生成验证码 -->
-        <div class="authcode">
-          <div>
-            <Input type="text" v-model="formInline.authcode" placeholder="请输入验证码"></Input>
-          </div>
-          <div class="checkbox" @click="createCode()">{{checkCode}}</div>
-        </div>
-        <br>
-        <FormItem :label-width="60">
-          <a @click="miss()" style="margin-left: 8px">
-            <label class="miss">忘记密码</label>
-          </a>
-          &nbsp;&nbsp;&nbsp;
-          <Button type="primary" @click="login('formInline')">登录</Button>
-        </FormItem>
-      </Form>
-    </div>
-    <!-- 物流搜索框 -->
-    <div class="logistics">
-      <Input search placeholder="物流查询，请输入快递单号"/>
-    </div>
-  </div>
+    <header>
+        <div class="logo"></div>
+        <div class="menu"></div>
+        <div class="username"></div>
+    </header>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      checkCode: "",
-      formInline: {
-        user: "",
-        password: "",
-        authcode: ""
-      },
-      ruleInline: {
-        user: [
-          {
-            required: true,
-            message: "请输入用户名",
-            trigger: "blur"
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: "请输入密码",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            min: 6,
-            message: "密码不能少于6位",
-            trigger: "blur"
-          }
-        ],
-        authcode: [
-          {
-            required: true,
-            message: "请输入验证码",
-            trigger: "blur"
-          }
-        ]
-      }
-    };
-  },
-
-  mounted:function() {
-    this.createCode();
-  },
-
-  methods: {
-    // 登录验证
-    login(data) {
-      if (this.formInline.authcode == this.checkCode) {
-        console.log(this.formInline.user);
-        console.log(this.formInline.password);
-        this.$Message.success("登录成功！")
-      }else {
-        this.$Message.error("验证码错误！")
-      }
-    },
-    // 忘记密码
-    miss() {
-      this.$Message.error("请联系管理员，重置密码");
-    },
-    // 创建验证码
-    createCode() {
-      var code = "";
-      var codeLength = 4; //验证码的长度
-      var random = new Array(
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z"
-      ); //随机数
-      for (var i = 0; i < codeLength; i++) {
-        //循环操作
-        var index = Math.floor(Math.random() * 36); //取得随机数的索引（0~35）
-        code += random[index]; //根据索引取得随机数加到code上
-      }
-      this.checkCode = code; //把code值赋给验证码
-    }
-  }
-};
-</script>
-
 <style scoped>
-.loginCeontent {
-  font-size: 16px;
-  color: white;
-  width: 15%;
-  position: relative;
-  margin-left: 40%;
+header{
+    height: 100px;
+    display: flex;
+}
+.logo{
+    width: 30%;
+    height: 80px;
+    background-color:yellow;
 }
 
-.login_form {
-  width: 20%;
-  height: 200px;
-  position: absolute;
-  margin-left: 65%;
-  margin-top: 180px;
+.menu{
+    width: 50%;
+    height:80px;
+    background-color:darkslateblue;
 }
-
-.login_bg {
-  margin: 10 px;
-  width: auto;
-  height: 610px;
-  background-image: url(assets/login_bg.png);
-  background-size: cover;
-}
-.miss {
-  color: aliceblue;
-}
-
-.content {
-  width: 25%;
-  height: 60px;
-  position: absolute;
-  margin-left: 10%;
-  margin-top: 30px;
-  color: white;
-}
-
-.chinese {
-  font-size: 32px;
-}
-
-.english {
-  position: relative;
-  margin-left: 120px;
-}
-
-.logistics {
-  color: white;
-  width: 25%;
-  position: absolute;
-  margin-left: 10%;
-  margin-top: 450px;
-}
-
-.authcode {
-  display: flex;
-}
-
-.checkbox {
-  width: 40%;
-  font-size: 26px;
-  /* background-color: white; */
-  color: white;
-  text-align: center;
+.username{
+    width: 20%;
+    height:80px;
+    background-color:gray;
 }
 </style>
