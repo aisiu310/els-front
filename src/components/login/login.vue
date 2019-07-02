@@ -196,15 +196,15 @@ export default {
   height: 200px;
   position: absolute;
   margin-left: 65%;
-  margin-top: 180px;
+  margin-top: 15%;
 }
 
 .login_bg {
   margin: 10 px;
-  width: auto;
+  width: 100%;
   height: 610px;
   background-image: url(../../assets/login_bg.png);
-  background-size: cover;
+  background-size: 100% auto;
 }
 .miss {
   color: aliceblue;
@@ -215,7 +215,7 @@ export default {
   height: 60px;
   position: absolute;
   margin-left: 10%;
-  margin-top: 30px;
+  margin-top: 5%;
   color: white;
 }
 
@@ -224,7 +224,6 @@ export default {
 }
 
 .english {
-  position: relative;
   margin-left: 120px;
 }
 
@@ -233,7 +232,7 @@ export default {
   width: 25%;
   position: absolute;
   margin-left: 10%;
-  margin-top: 450px;
+  margin-top: 35%;
 }
 
 .authcode {
@@ -243,7 +242,6 @@ export default {
 .checkbox {
   width: 40%;
   font-size: 26px;
-  /* background-color: white; */
   color: white;
   text-align: center;
 }
