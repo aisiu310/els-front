@@ -106,12 +106,8 @@
       <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">搜索</Button>
     </div>
 
-    <order class="search_order" :class="{'search_order':display}"></order>
-
     <div class="content">普通寄件</div>
     <sender></sender>
-
-    <Modal title="订单信息" v-model="search_order" :styles="{top: '20px'}"></Modal>
   </div>
 </template>
 
@@ -131,9 +127,6 @@ export default {
       search_value: "",
       // slide show data
       slidepic: 0,
-      // search order model
-      search_order: false,
-      display: true
     };
   },
   mounted: function() {
@@ -142,7 +135,7 @@ export default {
   methods: {
     // return to login.vue
     exit() {
-      this.$router.push({ path: "login" });
+      this.$router.push({ path: "/" });
     },
     // search order by search_type
     search(val) {
@@ -153,8 +146,6 @@ export default {
       } else {
         this.$Message.success("输入成功，等待查询！");
         // invoke  the back-end API
-        // this.search_order = true;
-        this.display-true;
       }
     },
     wait() {
