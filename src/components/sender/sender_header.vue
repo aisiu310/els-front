@@ -20,9 +20,40 @@
         </div>
       </div>
     </header>
+
     <div class="middle">
-      <div class="detial"></div>
-      <div class="slideshow"></div>
+      <div class="detail">
+        <div class="portrait">
+          <img src="../../assets/goudan.png" width="100%" height="100%">
+        </div>
+        <p>{{username}}</p>
+      </div>
+
+      <!-- 轮播图 走马灯 -->
+      <div class="slideshow">
+        <Carousel autoplay v-model="slidepic" loop>
+          <CarouselItem>
+            <div class="demo-carousel">
+              <img src="../../assets/我.png" width="100%" height="160px" />
+            </div>
+          </CarouselItem>
+          <CarouselItem>
+            <div class="demo-carousel">
+              <img src="../../assets/是.png" width="100%" height="160px" />
+            </div>
+          </CarouselItem>
+          <CarouselItem>
+            <div class="demo-carousel">
+              <img src="../../assets/帅.png" width="100%" height="160px" />
+            </div>
+          </CarouselItem>
+          <CarouselItem>
+            <div class="demo-carousel">
+              <img src="../../assets/哥.png" width="100%" height="160px" />
+            </div>
+          </CarouselItem>
+        </Carousel>
+      </div>
     </div>
 
     <div class="search">
@@ -42,18 +73,22 @@
         placeholder="请输入10位订单号，查询物流信息!"
         style="width: 300px"
       />
-      <Button type="primary" shape="circle" icon="ios-search">搜索</Button>
+      <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
     </div>
   </div>
 </template>
 
 <script>
+import { isNumber } from "util";
 export default {
   data() {
     return {
       username: "",
-      search_type: "",
+      search_type: "订单查询",
+      // search data
       search_value: "",
+      // slide show data
+      slidepic: 0,
       index: [
         {
           title: "首页",
@@ -99,12 +134,15 @@ export default {
     };
   },
   mounted: function() {
-    this.username = "18396016699";
+    this.username = this.$route.query.user;
   },
   methods: {
+    // return to login.vue
     exit() {
       this.$router.push({ path: "login" });
-    }
+    },
+    // search order by search_type
+    search() {}
   }
 };
 </script>
@@ -116,7 +154,6 @@ header {
   height: 50px;
   margin-left: 10%;
   display: flex;
-  background-color: aquamarine;
 }
 .logo {
   width: 30%;
@@ -159,7 +196,36 @@ header {
   width: 80%;
   height: 160px;
   margin-left: 10%;
-  background-color: antiquewhite;
+  display: flex;
+}
+
+.detail {
+  width: 30%;
+  height: 160px;
+}
+
+.portrait{
+ width: 100px;
+ height: 100px;
+ margin-left: 30%;
+ margin-top: 10px;
+ border-radius: 90px;
+}
+.portrait img {
+  border-radius: 90px;
+}
+
+.detail p{
+  width: 60%;
+  height: 20px;
+  margin-left: 18%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.slideshow {
+  width: 70%;
+  height: 160px;
 }
 
 .search {

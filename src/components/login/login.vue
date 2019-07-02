@@ -26,7 +26,7 @@
           </div>
           <div class="checkbox" @click="createCode()">{{checkCode}}</div>
         </div>
-        <br>
+        <br />
         <FormItem :label-width="60">
           <a @click="miss()" style="margin-left: 8px">
             <label class="miss">忘记密码</label>
@@ -102,7 +102,10 @@ export default {
         console.log(this.formInline.user);
         console.log(this.formInline.password);
         this.$Message.success("登录成功！");
-        this.$router.push({path:'sender_header'})
+        this.$router.push({
+          path: "sender_header",
+          query: { user: this.formInline.user }
+        });
       } else {
         this.$Message.error("验证码错误！");
       }
@@ -164,9 +167,9 @@ export default {
     logistic_search(data) {
       if (!data) {
         this.$Message.error("请输入十位数的物流单号！");
-      }else {
-          console.log(data);
-           this.$Message.success("查询成功！");
+      } else {
+        console.log(data);
+        this.$Message.success("查询成功！");
       }
     }
   }
