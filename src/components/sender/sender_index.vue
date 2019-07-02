@@ -14,7 +14,7 @@
           transfer
           placement="bottom-start"
           style="margin-top:16px; margin-left:20px"
-          @click="wait()"
+          @on-click="wait()"
         >
           <a href="javascript:void(0)">
             我的订单
