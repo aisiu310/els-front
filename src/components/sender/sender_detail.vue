@@ -4,7 +4,7 @@
       <!-- 寄件人 -->
       <div>
         <div>
-          <Icon type="ios-send" size="48" />寄件人
+          <Icon type="ios-send" size="54" />寄件人
         </div>
         <div>
           <Form ref="formValidate" :model="send" :rules="ruleValidate" :label-width="80">

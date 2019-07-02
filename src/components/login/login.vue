@@ -107,7 +107,7 @@ export default {
         this.$Message.success("登录成功！");
         this.$router.push({
           path: "sender_index",
-          query: { user: this.formInline.user }
+          params: { user: this.formInline.user }
         });
       } else {
         this.$Message.error("验证码错误！");
@@ -200,11 +200,11 @@ export default {
 }
 
 .login_bg {
-  margin: 10 px;
   width: 100%;
-  height: 610px;
+  height: 600px;
   background-image: url(../../assets/login_bg.png);
-  background-size: 100% auto;
+  /* background-size: 100% auto; */
+  background-size: cover;
 }
 .miss {
   color: aliceblue;

@@ -3,11 +3,7 @@
     <header>
       <div class="logo">express system</div>
       <div class="menu">
-        <Dropdown
-          transfer
-          placement="bottom-start"
-          style="margin-top:16px; margin-left:20px"
-        >
+        <Dropdown transfer placement="bottom-start" style="margin-top:16px; margin-left:20px">
           <a href="javascript:void(0)">首页</a>
         </Dropdown>
         <Dropdown
@@ -109,16 +105,23 @@
       />
       <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">搜索</Button>
     </div>
+
+    <order class="search_order" :class="{'search_order':display}"></order>
+
     <div class="content">普通寄件</div>
     <sender></sender>
+
+    <Modal title="订单信息" v-model="search_order" :styles="{top: '20px'}"></Modal>
   </div>
 </template>
 
 <script>
-import sender from './sender_detail'
+import sender from "./sender_detail";
+import order from "../reuse/order_detail";
 export default {
-  components:{
-    sender
+  components: {
+    sender,
+    order
   },
   data() {
     return {
@@ -127,7 +130,10 @@ export default {
       // search data
       search_value: "",
       // slide show data
-      slidepic: 0
+      slidepic: 0,
+      // search order model
+      search_order: false,
+      display: true
     };
   },
   mounted: function() {
@@ -141,11 +147,14 @@ export default {
     // search order by search_type
     search(val) {
       var reg = /^[0-9]*$/;
-      if (!val || !reg.test(val)) {
+      var length = val.length;
+      if (!val || !reg.test(val) || length != 10) {
         this.$Message.error("请输入合法10位订单号，订单号为纯数字");
       } else {
         this.$Message.success("输入成功，等待查询！");
         // invoke  the back-end API
+        // this.search_order = true;
+        this.display-true;
       }
     },
     wait() {
@@ -229,23 +238,27 @@ header {
 }
 
 .search {
-  width: 50%;
+  width: 44%;
   height: 32px;
-  margin-left: 25%;
+  margin-left: 28%;
   margin-top: 8px;
 }
 
-.send{
+.send {
   width: 80%;
   height: 400px;
   margin-left: 10%;
 }
 
-.content{
+.content {
   width: 80%;
   margin-left: 10%;
   color: black;
   font-size: 24px;
   font-family: "楷体";
+}
+
+.search_order {
+  display: none;
 }
 </style>
