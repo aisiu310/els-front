@@ -1,30 +1,22 @@
 <template>
-    <header>
-        <div class="logo"></div>
-        <div class="menu"></div>
-        <div class="username"></div>
-    </header>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
-<style scoped>
-header{
-    height: 100px;
-    display: flex;
+<script>
+export default {
+  name: 'App'
 }
-.logo{
-    width: 30%;
-    height: 80px;
-    background-color:yellow;
-}
+</script>
 
-.menu{
-    width: 50%;
-    height:80px;
-    background-color:darkslateblue;
-}
-.username{
-    width: 20%;
-    height:80px;
-    background-color:gray;
-}
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;*/
+} 
 </style>

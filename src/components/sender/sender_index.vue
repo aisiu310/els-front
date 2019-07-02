@@ -109,14 +109,17 @@
       />
       <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">搜索</Button>
     </div>
-
-    <div class="send"></div>
+    <div class="content">普通寄件</div>
+    <sender></sender>
   </div>
 </template>
 
 <script>
-import { isNumber } from "util";
+import sender from './sender_detail'
 export default {
+  components:{
+    sender
+  },
   data() {
     return {
       username: "",
@@ -230,5 +233,19 @@ header {
   height: 32px;
   margin-left: 25%;
   margin-top: 8px;
+}
+
+.send{
+  width: 80%;
+  height: 400px;
+  margin-left: 10%;
+}
+
+.content{
+  width: 80%;
+  margin-left: 10%;
+  color: black;
+  font-size: 24px;
+  font-family: "楷体";
 }
 </style>
