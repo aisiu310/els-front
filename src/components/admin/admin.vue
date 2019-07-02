@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import h from '../reuse/Header';
+import h from '../reuse/re_header';
 import n from '../reuse/Navigator'
 export default {
     components:{

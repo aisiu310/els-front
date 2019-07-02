@@ -107,7 +107,7 @@ export default {
         this.$Message.success("登录成功！");
         this.$router.push({
           path: "re_header",
-          params: { user: this.formInline.user }
+          query: { user: this.formInline.user }
         });
       } else {
         this.$Message.error("验证码错误！");

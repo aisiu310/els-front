@@ -7,11 +7,6 @@
       <Button type="info">立即审核</Button>
     </div>
 
-    <!-- <div class="search" v-if="username != 'admin'">
-      <Input v-model="search_value" placeholder="Enter something..." style="width: 400px" />
-      <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">Search</Button>
-    </div> -->
-
     <div id="icon-box">
       <Tooltip content="退出">
         {{username}}
