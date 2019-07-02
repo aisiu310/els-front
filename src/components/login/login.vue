@@ -15,14 +15,14 @@
           </Input>
         </FormItem>
         <FormItem prop="password">
-          <Input type="password" v-model="formInline.password" placeholder="密码">
+          <Input type="password" v-model="formInline.password" placeholder="密码" :minlength="6" :maxlength="20">
             <Icon type="ios-lock-outline" slot="prepend"></Icon>
           </Input>
         </FormItem>
         <!-- 生成验证码 -->
         <div class="authcode">
           <div>
-            <Input type="text" v-model="formInline.authcode" placeholder="请输入验证码"></Input>
+            <Input type="text" v-model="formInline.authcode" placeholder="请输入验证码" :maxlength="4"></Input>
           </div>
           <div class="checkbox" @click="createCode()">{{checkCode}}</div>
         </div>
@@ -43,6 +43,7 @@
         v-model="logisticId"
         @on-search="logistic_search(logisticId)"
         placeholder="物流查询，请输入快递单号"
+        :maxlength="10"
       />
     </div>
   </div>
@@ -64,19 +65,20 @@ export default {
           {
             required: true,
             message: "请输入用户名",
-            trigger: "blur"
+            trigger: "blur",
           }
         ],
         password: [
           {
             required: true,
             message: "请输入密码",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             type: "string",
             min: 6,
-            message: "密码不能少于6位",
+            max: 20,
+            message: "密码不能少于6位,最大为20位",
             trigger: "blur"
           }
         ],
@@ -98,9 +100,10 @@ export default {
   methods: {
     // 登录验证
     login(data) {
-      if (this.formInline.authcode == this.checkCode) {
-        console.log(this.formInline.user);
-        console.log(this.formInline.password);
+      if(!this.formInline.user || !this.formInline.password || !this.formInline.authcode){
+        this.$Message.error("用户名、密码、验证码不能为空");
+      }else {
+        if (this.formInline.authcode == this.checkCode) {
         this.$Message.success("登录成功！");
         this.$router.push({
           path: "sender_header",
@@ -109,6 +112,8 @@ export default {
       } else {
         this.$Message.error("验证码错误！");
       }
+      }
+      
     },
     // 忘记密码
     miss() {
@@ -165,11 +170,12 @@ export default {
     },
     // 物流查询
     logistic_search(data) {
-      if (!data) {
-        this.$Message.error("请输入十位数的物流单号！");
+      var reg = /^[0-9]*$/;
+      if (!data || !reg.test(data)) {
+        this.$Message.error("请输入合法10位订单号，订单号为纯数字");
       } else {
-        console.log(data);
         this.$Message.success("查询成功！");
+        // invoke the back-end API
       }
     }
   }

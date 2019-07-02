@@ -24,7 +24,7 @@
     <div class="middle">
       <div class="detail">
         <div class="portrait">
-          <img src="../../assets/goudan.png" width="100%" height="100%">
+          <img src="../../assets/goudan.png" width="100%" height="100%" />
         </div>
         <p>{{username}}</p>
       </div>
@@ -66,14 +66,16 @@
         v-model="search_value"
         placeholder="请输入10位订单号，查询订单详细信息!"
         style="width: 300px"
+        :maxlength="10"
       />
       <Input
         v-if="search_type === '物流查询'"
         v-model="search_value"
         placeholder="请输入10位订单号，查询物流信息!"
         style="width: 300px"
+        :maxlength="10"
       />
-      <Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button>
+      <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">搜索</Button>
     </div>
   </div>
 </template>
@@ -142,7 +144,16 @@ export default {
       this.$router.push({ path: "login" });
     },
     // search order by search_type
-    search() {}
+    search(val) {
+      var reg = /^[0-9]*$/;
+      if (!val || !reg.test(val)) {
+        this.$Message.error("请输入合法10位订单号，订单号为纯数字");
+      } else {
+        this.$Message.success("输入成功，等待查询！");
+        // invoke  the back-end API
+
+      }
+    }
   }
 };
 </script>
@@ -204,18 +215,18 @@ header {
   height: 160px;
 }
 
-.portrait{
- width: 100px;
- height: 100px;
- margin-left: 30%;
- margin-top: 10px;
- border-radius: 90px;
+.portrait {
+  width: 100px;
+  height: 100px;
+  margin-left: 30%;
+  margin-top: 10px;
+  border-radius: 90px;
 }
 .portrait img {
   border-radius: 90px;
 }
 
-.detail p{
+.detail p {
   width: 60%;
   height: 20px;
   margin-left: 18%;
