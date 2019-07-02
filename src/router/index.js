@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import login from '@/components/login/login'
-import sender_header from '@/components/sender/sender_header'
+import sender_index from '@/components/sender/sender_index'
 
 Vue.use(Router)
 
@@ -17,8 +17,8 @@ const routes = [
       component: login
     },
     {
-      path: '/sender_header',
-      component: sender_header
+      path: '/sender_index',
+      component: sender_index
     }
   ]
   var router = new Router({

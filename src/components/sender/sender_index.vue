@@ -3,16 +3,48 @@
     <header>
       <div class="logo">express system</div>
       <div class="menu">
-        <div>
-          <Tree :data="index"></Tree>
-        </div>
-        <div>
-          <Tree :data="mine"></Tree>
-        </div>
-        <div>
-          <Tree :data="setting"></Tree>
-        </div>
+        <Dropdown
+          transfer
+          placement="bottom-start"
+          style="margin-top:16px; margin-left:20px"
+        >
+          <a href="javascript:void(0)">首页</a>
+        </Dropdown>
+        <Dropdown
+          transfer
+          placement="bottom-start"
+          style="margin-top:16px; margin-left:20px"
+          @click="wait()"
+        >
+          <a href="javascript:void(0)">
+            我的订单
+            <Icon type="ios-arrow-down"></Icon>
+          </a>
+          <DropdownMenu slot="list">
+            <DropdownItem>全部订单</DropdownItem>
+            <DropdownItem>待取件</DropdownItem>
+            <DropdownItem>已签收</DropdownItem>
+            <DropdownItem>待派送</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <Dropdown
+          transfer
+          placement="bottom-start"
+          style="margin-top:16px; margin-left:20px"
+          @on-click="wait()"
+        >
+          <a href="javascript:void(0)">
+            账户管理
+            <Icon type="ios-arrow-down"></Icon>
+          </a>
+          <DropdownMenu slot="list">
+            <DropdownItem>基本信息</DropdownItem>
+            <DropdownItem>地址管理</DropdownItem>
+            <DropdownItem>密码修改</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
+
       <div class="username">
         <div>
           {{username}}
@@ -77,6 +109,8 @@
       />
       <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">搜索</Button>
     </div>
+
+    <div class="send"></div>
   </div>
 </template>
 
@@ -90,49 +124,7 @@ export default {
       // search data
       search_value: "",
       // slide show data
-      slidepic: 0,
-      index: [
-        {
-          title: "首页",
-          expand: false,
-          children: [
-            {
-              title: "1"
-            },
-            {
-              title: "2"
-            }
-          ]
-        }
-      ],
-      mine: [
-        {
-          title: "我的订单",
-          expand: false,
-          children: [
-            {
-              title: "1"
-            },
-            {
-              title: "2"
-            }
-          ]
-        }
-      ],
-      setting: [
-        {
-          title: "账户管理",
-          expand: false,
-          children: [
-            {
-              title: "1"
-            },
-            {
-              title: "2"
-            }
-          ]
-        }
-      ]
+      slidepic: 0
     };
   },
   mounted: function() {
@@ -151,8 +143,10 @@ export default {
       } else {
         this.$Message.success("输入成功，等待查询！");
         // invoke  the back-end API
-
       }
+    },
+    wait() {
+      this.$Message.success("工程师正在努力开发中...");
     }
   }
 };
@@ -179,14 +173,6 @@ header {
   width: 50%;
   height: 40px;
   display: flex;
-}
-
-.menu div {
-  width: 20%;
-  height: 20px;
-  position: relative;
-  margin-top: 8px;
-  margin-left: 20px;
 }
 
 .username {
