@@ -2,10 +2,10 @@
   <div id="header">
     <div id="company-name">{{name}}</div>
     
-    <div class="check">
-      {{check}}
-      <Button type="info">立即审核</Button>
-    </div>
+    <div id="check">
+				<p>{{check}}</p>
+				<Button type="info">立即审核</Button>
+		</div>	
 
     <div id="icon-box">
       <Tooltip content="退出">
@@ -44,25 +44,39 @@ export default {
 #header {
   width: 100%;
   height: 100px;
+  position: relative ;
   background-color: black;
-  display: flex;
 }
 #company-name {
-  width: 30%;
-  height: 60px;
-  margin-top: 20px;
+  width: auto;
+	height: auto;
+	margin: 2% 0% 0% 2%;
+	position: absolute;	
   color: white;
   font-family: "Brush Script Std";
-  font-size: 40px;
+  font-size: 3.5em;
   text-align: center;
+  /* border: solid red 1px; */
 }
-.check {
-  width: 60%;
-  height: 60px;
-  font-size: 20px;
-  background-color: #fff;
-  
-  border: solid white 1px;
+#check {
+  width: 600px;
+  height: auto;
+  position: relative;
+  /* border: solid red 1px; */
+  top: 40%;
+  left: 40%;
+}
+#check p{		
+  width: auto;
+  float: left;		
+  color: white;
+  font-size: 1.8rem;
+  border: solid white 0px;
+}
+#check button{
+  width: auto;	
+  font-size: 1.2rem;
+  margin-left: 3%;
 }
 #icon-box {
   color: white;
@@ -70,7 +84,7 @@ export default {
   height: auto;
   font-size: 2rem;
   margin: 0% 0% 0% 94%;
-
-  border: solid white 1px;
+/* 
+  border: solid white 1px; */
 }
 </style>

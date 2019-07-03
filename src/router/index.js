@@ -2,9 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login/login'
 import shop from '@/components/layout/shop'
-import arrive_list from '@/components/layout/arrive_list'
-import transfer_list from '@/components/layout/transfer_list'
-import loadcar_list from '@/components/layout/loadcar_list'
+import warehouse_layout from '@/components/warehouse/common/warehouse_layout'
+import manager_layout from '@/components/manager/common/manager_layout'
 import sender_index from '@/components/sender/sender_index'
 import admin from '@/components/admin/admin'
 
@@ -29,6 +28,16 @@ const routes = [
       path: '/admin',
       name: 'admin',
       component: admin
+    },
+    {
+      path:'/warehouse',
+      name:'warehouse',
+      component:warehouse_layout
+    },
+    {
+      path:'/manager',
+      name:'manager',
+      component:manager_layout
     }
 
 ]

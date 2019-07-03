@@ -1,5 +1,5 @@
 <template>
-	<div id="shop">
+	<div id="manager">
 		<Head></Head>
 	
 		<navigat></navigat>
@@ -7,25 +7,25 @@
 </template>
 
 <script>
-import Head from '../reuse/Header';
-import navigat from '../reuse/Navigator';
+import Head from '../../reuse/Header';
+import navigat from './Navigator';
 export default{
-  name: 'shop-layout',
+  name: 'manager_layout',
   components:{
     Head,
     navigat
   },
   data(){
     return {
-//    userRole: 'Topest',
+
     }
   },
 }
 </script>
 
 <style>
-	#shop{
-		border: solid red 1px;	
+	#manager{
+
 		height: auto;
 		width: 100%;		
 		margin:10 px;

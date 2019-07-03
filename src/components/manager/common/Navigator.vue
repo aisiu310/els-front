@@ -3,12 +3,12 @@
 		<div id="navigator-bar">
 			<div id="navigator-bar-item">
 				<ul>
-					<li>出入庫管理</li>
-					<li>库存盘点与警戒</li>
-					<li>库存调整</li>
-					<li>仓库可视化</li>
-					<li>库存初始化</li>
-					<li>其他</li>
+					<li>单据审批</li>
+					<li>人员调整</li>
+					<li>机构调整</li>
+					<li>薪水策略</li>
+					<li>邮递收费策略</li>
+					<li>日志</li>
 				</ul>
 
 			</div>
@@ -27,8 +27,6 @@
 				</ul>
 			</div>		
     	</div>
-			
-		</div>
 	</div>
 </template>
 
