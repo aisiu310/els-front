@@ -61,8 +61,9 @@ export default {
   height: 60px;
   font-size: 20px;
   background-color: #fff;
+  
+  border: solid white 1px;
 }
-
 #icon-box {
   color: white;
   width: auto;
@@ -70,6 +71,6 @@ export default {
   font-size: 2rem;
   margin: 0% 0% 0% 94%;
 
-  /*border: solid white 1px;*/
+  border: solid white 1px;
 }
 </style>

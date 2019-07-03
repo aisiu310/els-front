@@ -2,20 +2,8 @@
 	<div id="navigator">	
 		<div id="navigator-bar">
 			<div id="navigator-bar-item">
-				
-				<!--<template v-for="(item,index) in meuns" v-if="!item.hidden">
-        			<router-link :to="item.path+'/'+item.children[0].path">
-          			//index跟浏览器地址对应，这样菜单才能显示选中状态 
-          			<li :index="item.path+'/'+item.children[0].path">
-	            		<template slot="title">
-		              		//菜单名称 
-		              		{{item.children[0].meta.title}}
-            			</template>
-      				</li>
-       			 	</router-link>
-      			</template>-->
 				<ul>
-					<li v-for="menu in menus">{{menu.item}}</li>
+					<li>{{menu.item}}</li>
 				</ul>
 
 			</div>
@@ -40,40 +28,17 @@
 </template>
 
 <script>
-	var role = sessionStorage.getItem("role")
-	console.log(2,role)
 	export default{				
-		data(){	
-			return{
-				menus:''
-			}},	
-			mounted(){
-				var menu=[
-					{
-						menu1:[					
-							{item:'这是条目1'},
-							{item:'这是条目2'},
-							{item:'这是条目3'},
-							{item:'这是条目4'},
-							{item:'这是条目5'},
-						]
-					},
-					{
-						menu1:[
-							{item:'这是目1'},
-							{item:'这条目2'},
-							{item:'是条目3'},
-							{item:'这是目4'},
-							{item:'这条目5'},
-						]
-					}
-				];
-				this.menus = menu[role].menu1
-			}
+		data(){				
+			menu:[					
+				{item:'出入庫管理'},
+				{item:'这是条目2'},
+				{item:'这是条目3'},
+				{item:'这是条目4'},
+				{item:'这是条目5'},
+			]						
 		}
-	
-		
-
+	}
 </script>
 
 <style>
