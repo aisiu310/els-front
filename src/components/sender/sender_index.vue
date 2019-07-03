@@ -6,16 +6,14 @@
         <Dropdown
           transfer
           placement="bottom-start"
-          style="margin-top:16px; margin-left:20px"
-        >
+          style="margin-top:16px; margin-left:20px">
           <a href="javascript:void(0)">首页</a>
         </Dropdown>
         <Dropdown
           transfer
           placement="bottom-start"
           style="margin-top:16px; margin-left:20px"
-          @on-click="wait()"
-        >
+          @on-click="wait()">
           <a href="javascript:void(0)">
             我的订单
             <Icon type="ios-arrow-down"></Icon>

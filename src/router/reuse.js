@@ -13,8 +13,8 @@ export default new Router({
     	path:'/user/:id',
     	name:'user',
     	components:{
-		header:Header,
-		navigator:Navigator
+			header:Header,
+			navigator:Navigator
     	}
     },{
     	path:'/',

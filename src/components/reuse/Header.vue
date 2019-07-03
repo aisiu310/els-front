@@ -10,7 +10,7 @@
 			</div>			
 			<div id="icon-box">
 				<Tooltip content="退出">
-					<Icon type="ios-log-out"/>
+					<Icon type="ios-log-out"  @click="outSystem"/>
 				</Tooltip>
 			</div>			
 		</div>
@@ -20,13 +20,19 @@
 
 <script>
 	export default{		
-		el:'#header',
 		data(){
 			return{
 				name:'Express System',
 				check:'今日共有256条记录待审核'
 			}			
-		}	
+		},
+		 methods: {
+    		outSystem() { //退出系统
+      		localStorage.setItem("userRole", 'unload')
+      		// 跳转到登录页的时候顺便刷新
+      		window.location.href = window.location.origin + window.location.pathname
+    },
+  },
 	}
 </script>
 

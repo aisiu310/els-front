@@ -103,13 +103,29 @@ export default {
       if(!this.formInline.user || !this.formInline.password || !this.formInline.authcode){
         this.$Message.error("用户名、密码、验证码不能为空");
       }else {
-        if (this.formInline.authcode == this.checkCode) {
-        this.$Message.success("登录成功！");
-        this.$router.push({
-          path: "sender_index",
-          query: { user: this.formInline.user }
-        });
-      } else {
+        if (this.formInline.authcode == this.checkCode) {     	      	
+	        this.$Message.success("登录成功！");
+	        
+	        let GetUserRole = this.formInline.user//获取用户信息
+	        if(GetUserRole == 'admin'){
+	        	sessionStorage.setItem('role',1)
+	        }else if(GetUserRole =='user'){
+	        	sessionStorage.setItem('role',2)
+	        }else{
+	        	sessionStorage.setItem('role',3)
+	        }        
+	        console.log(1,GetUserRole)
+	        var role = sessionStorage.getItem("role")
+	        console.log(role)
+
+	        
+	        this.$router.push({
+	          path: 'shop',
+	          params: { user: this.formInline.user }
+	          
+	        });
+      } 
+      else {
         this.$Message.error("验证码错误！");
       }
       }
