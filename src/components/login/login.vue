@@ -103,6 +103,31 @@ export default {
       if(!this.formInline.user || !this.formInline.password || !this.formInline.authcode){
         this.$Message.error("用户名、密码、验证码不能为空");
       }else {
+<<<<<<< HEAD
+        if (this.formInline.authcode == this.checkCode) {     	      	
+	        this.$Message.success("登录成功！");
+	        
+	        let GetUserRole = this.formInline.user//获取用户信息
+	        if(GetUserRole == 'admin'){
+	        	sessionStorage.setItem('role',1)
+	        }else if(GetUserRole =='user'){
+	        	sessionStorage.setItem('role',2)
+	        }else{
+	        	sessionStorage.setItem('role',3)
+	        }        
+	        console.log(1,GetUserRole)
+	        var role = sessionStorage.getItem("role")
+	        console.log(role)
+
+	        
+	        this.$router.push({
+	          path: 'shop',
+	          params: { user: this.formInline.user }
+	          
+	        });
+      } 
+      else {
+=======
         if (this.formInline.authcode == this.checkCode) {
         this.$Message.success("登录成功！");
         this.$router.push({
@@ -110,6 +135,7 @@ export default {
           params: { user: this.formInline.user }
         });
       } else {
+>>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
         this.$Message.error("验证码错误！");
       }
       }

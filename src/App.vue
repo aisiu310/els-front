@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+<<<<<<< HEAD
+    <router-link to="login"></router-link>
+    <router-link to="shop"></router-link>
+    <router-link to="sender_header"></router-link>
+=======
+>>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
     <router-view></router-view>
   </div>
 </template>

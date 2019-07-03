@@ -1,4 +1,41 @@
 <template>
+<<<<<<< HEAD
+	<div >
+		<div id="header">	
+			<div id="company-name">
+				{{name}}
+			</div>
+			<div id="check">
+				<p>{{check}}</p>
+				<Button type="info">立即审核</Button>
+			</div>			
+			<div id="icon-box">
+				<Tooltip content="退出">
+					<Icon type="ios-log-out"  @click="outSystem"/>
+				</Tooltip>
+			</div>			
+		</div>
+		
+	</div>
+</template>
+
+<script>
+	export default{		
+		data(){
+			return{
+				name:'Express System',
+				check:'今日共有256条记录待审核'
+			}			
+		},
+		 methods: {
+    		outSystem() { //退出系统
+      		localStorage.setItem("userRole", 'unload')
+      		// 跳转到登录页的时候顺便刷新
+      		window.location.href = window.location.origin + window.location.pathname
+    },
+  },
+	}
+=======
   <div id="header">
     <div id="company-name">{{name}}</div>
     
@@ -38,6 +75,7 @@ export default {
     }
   }
 };
+>>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
 </script>
 
 <style>
