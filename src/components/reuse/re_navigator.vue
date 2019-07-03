@@ -3,7 +3,7 @@
     <div class="divide"></div>
     <div class="work_list">
       <ul>
-        <li v-for="item in manager">
+        <li v-for="item in finance">
           <a>{{item.text}}</a>
         </li>
       </ul>
@@ -53,6 +53,23 @@ export default {
           },
           {
            text:"查看日志"   
+          }
+      ],
+      finance:[
+          {
+              text:'账户管理'
+          },
+          {
+              text:'成本管理'
+          },
+          {
+              text:'结算管理'
+          },
+          {
+              text:'统计报表'
+          },
+          {
+              text:'查看日志'
           }
       ]
     };

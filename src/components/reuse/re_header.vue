@@ -28,7 +28,7 @@ export default {
     };
   },
   mounted() {
-    this.username = this.$route.query.user;
+    this.username = this.$route.params.user;
     // invoke the back-end API in order to get An unapproved order
     this.check = "123";
   },

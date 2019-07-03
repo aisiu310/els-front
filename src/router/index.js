@@ -13,10 +13,12 @@ const routes = [
     },
     {
       path: '/sender_index',
+      name:'sender_index',
       component: sender_index
     },
     {
       path: '/admin',
+      name: 'admin',
       component: admin
     }
   ]

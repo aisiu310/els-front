@@ -130,7 +130,7 @@ export default {
     };
   },
   mounted: function() {
-    this.username = this.$route.query.user;
+    this.username = this.$route.params.user;
   },
   methods: {
     // return to login.vue

@@ -106,8 +106,8 @@ export default {
         if (this.formInline.authcode == this.checkCode) {
         this.$Message.success("登录成功！");
         this.$router.push({
-          path: "/admin",
-          query: { user: this.formInline.user }
+          name: "sender_index",
+          params: { user: this.formInline.user }
         });
       } else {
         this.$Message.error("验证码错误！");
