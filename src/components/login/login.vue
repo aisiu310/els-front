@@ -76,7 +76,7 @@ export default {
           },
           {
             type: "string",
-            min: 6,
+            min: 5,
             max: 20,
             message: "密码不能少于6位,最大为20位",
             trigger: "blur"
