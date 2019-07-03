@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <h></h>
-    <n></n>
+    <!-- <h></h>
+    <n></n> -->
+	<router-view></router-view>
   </div>
 </template>
 
 <script>
-import h from './components/reuse/Header';
-import n from './components/reuse/Navigator'
+// import h from './components/reuse/Header';
+// import n from './components/reuse/Navigator'
 export default {
-  name: 'App',
-  components:{
-    h,n
-  }
+  name: 'App'
+//   components:{
+//     h,n
+//   }
 }
 </script>
 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import sender_detail from '@/components/sender/sender_detail'
+import admin from '@/components/admin/admin'
+import n from '@/components/reuse/re_navigator'
 
 Vue.use(Router)
 
@@ -8,8 +9,8 @@ export default new Router ({
     routes: [
         {
             path: '/',
-            name: 'sender_detail',
-            component: sender_detail
+            name: 'admin',
+            component: admin
         }
     ]
 })

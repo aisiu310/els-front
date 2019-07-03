@@ -103,6 +103,7 @@ export default {
       if(!this.formInline.user || !this.formInline.password || !this.formInline.authcode){
         this.$Message.error("用户名、密码、验证码不能为空");
       }else {
+<<<<<<< HEAD
         if (this.formInline.authcode == this.checkCode) {     	      	
 	        this.$Message.success("登录成功！");
 	        
@@ -126,6 +127,15 @@ export default {
 	        });
       } 
       else {
+=======
+        if (this.formInline.authcode == this.checkCode) {
+        this.$Message.success("登录成功！");
+        this.$router.push({
+          path: "/admin",
+          query: { user: this.formInline.user }
+        });
+      } else {
+>>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
         this.$Message.error("验证码错误！");
       }
       }
@@ -212,14 +222,14 @@ export default {
   height: 200px;
   position: absolute;
   margin-left: 65%;
-  margin-top: 180px;
+  margin-top: 15%;
 }
 
 .login_bg {
-  margin: 10 px;
-  width: auto;
-  height: 610px;
+  width: 100%;
+  height: 600px;
   background-image: url(../../assets/login_bg.png);
+  /* background-size: 100% auto; */
   background-size: cover;
 }
 .miss {
@@ -231,7 +241,7 @@ export default {
   height: 60px;
   position: absolute;
   margin-left: 10%;
-  margin-top: 30px;
+  margin-top: 5%;
   color: white;
 }
 
@@ -240,7 +250,6 @@ export default {
 }
 
 .english {
-  position: relative;
   margin-left: 120px;
 }
 
@@ -249,7 +258,7 @@ export default {
   width: 25%;
   position: absolute;
   margin-left: 10%;
-  margin-top: 450px;
+  margin-top: 35%;
 }
 
 .authcode {
@@ -259,7 +268,6 @@ export default {
 .checkbox {
   width: 40%;
   font-size: 26px;
-  /* background-color: white; */
   color: white;
   text-align: center;
 }
