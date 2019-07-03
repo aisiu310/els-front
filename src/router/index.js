@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login/login'
 import sender_index from '@/components/sender/sender_index'
-import re_header from '@/components/reuse/re_header'
+import admin from '@/components/admin/admin'
 
 Vue.use(Router)
 
@@ -16,8 +16,8 @@ const routes = [
       component: sender_index
     },
     {
-      path: '/re_header',
-      component: re_header
+      path: '/admin',
+      component: admin
     }
   ]
   var router = new Router({

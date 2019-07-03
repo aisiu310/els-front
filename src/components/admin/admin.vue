@@ -1,14 +1,22 @@
 <template>
   <div>
+    <div class="header">
       <h></h>
-      <n></n>
-      <div class="ad"><ad></ad></div>
+    </div>
+    <div class="content">
+      <div class="aside">
+        <n></n>
+      </div>
+      <div class="article">
+        <ad></ad>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import h from "../reuse/re_header";
-import n from "../reuse/Navigator";
+import n from "../reuse/re_navigator";
 import ad from "./admin_detail";
 export default {
   components: {
@@ -20,15 +28,26 @@ export default {
 </script>
 
 <style scoped>
-n{  
-    width: 30%;
-    float: left;
-    background-color: antiquewhite
+.header {
+  width: 100%;
+  height: 118px;
 }
-.ad{
-    width: 70%;
-    float: left;
-    background-color: aqua
+
+.content {
+  width: 100%;
+  height: auto;
+  display: flex;
+}
+
+.aside {
+  width: 18%;
+  height: auto;
+  background-color: black;
+}
+
+.article {
+  width: 82%;
+  height: auto;
 }
 </style>
 
