@@ -21,18 +21,14 @@ const routes = [
       component: sender_index
     },
     {
-<<<<<<< HEAD
       path:'/shop',
+      name: 'shop',
       component:shop
     },
     {
-      path:'/warehouse_keeper'
-  	  component:''
-=======
       path: '/admin',
       name: 'admin',
       component: admin
->>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
     }
 
 ]

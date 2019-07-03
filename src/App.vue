@@ -1,28 +1,26 @@
 <template>
   <div id="app">
-<<<<<<< HEAD
     <router-link to="login"></router-link>
     <router-link to="shop"></router-link>
     <router-link to="sender_header"></router-link>
-=======
->>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
+
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App"
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center;
   color: #2c3e50;
   margin-top: 60px;*/
-} 
+}
 </style>

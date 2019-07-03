@@ -3,14 +3,7 @@
     <header>
       <div class="logo">express system</div>
       <div class="menu">
-<<<<<<< HEAD
-        <Dropdown
-          transfer
-          placement="bottom-start"
-          style="margin-top:16px; margin-left:20px">
-=======
         <Dropdown transfer placement="bottom-start" style="margin-top:16px; margin-left:20px">
->>>>>>> 90884f4a84c407d4104efb4b91924d745339eb48
           <a href="javascript:void(0)">首页</a>
         </Dropdown>
         <Dropdown
