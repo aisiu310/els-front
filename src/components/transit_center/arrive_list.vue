@@ -1,43 +1,59 @@
 <template>
-    <Table stripe border :columns="columns1" :data="data1">
-        <template slot-scope="{row,index}" slot="date">
-            <input type="text" v-model="editDate" v-if="editIndex === index">
-            <span v-else>{{row.date}}</span>
-        </template>
-        <template slot-scope="{row,index}" slot="number">
-            <input type="text" v-model="editNumber" v-if="editIndex === index">
-            <span v-else>{{row.number}}</span>
-        </template>
-        <template slot-scope="{row,index}" slot="address">
-            <input type="text" v-model="editAddress" v-if="editIndex === index">
-            <span v-else>{{row.address}}</span>
-        </template>
-        <template slot-scope="{row,index}" slot="state">
-            <input type="text" v-model="editState" v-if="editIndex === index">
-            <span v-else>{{row.state}}</span>
-        </template>
+    <div>
+        <Table stripe border :columns="columns" :data="data">
+            
+            <template slot-scope="{row,index}" slot="date">
+                <input type="text" v-model="editDate" v-if="editIndex === index"/>
+                <span v-else>{{row.date}}</span>
+            </template>
+            <template slot-scope="{row,index}" slot="number">
+                <input type="text" v-model="editNumber" v-if="editIndex === index"/>
+                <span v-else>{{row.number}}</span>
+            </template>
+            <template slot-scope="{row,index}" slot="address">
+                <input type="text" v-model="editAddress" v-if="editIndex === index"/>
+                <span v-else>{{row.address}}</span>
+            </template>
+            <template slot-scope="{row,index}" slot="state">
+                <input type="text" v-model="editState" v-if="editIndex === index"/>
+                <span v-else>{{row.state}}</span>
+            </template>
 
-        <template slot-scope="{row,index}" slot="action">
-            <div v-if="editIndex === index">
-                <Button @click="handleSave(index)">save</Button>
-                <Button @click="editIndex = -1">cancel</Button>
+            <template slot-scope="{ row }" slot="date">
+                <strong>{{ row.date }}</strong>
+            </template>
+
+            <template slot-scope="{row,index}" slot="action">
+                
+                <div v-if="editIndex === index">
+                    <Button @click="handleSave(index)">save</Button>
+                    <Button @click="editIndex = -1">cancel</Button>
+                </div>
+                <div v-else>
+                    <Button @click="handleEdit(row,index)">操作</Button>
+                    <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
+                    <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                </div>
+            </template>
+        </Table>
+        <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+                <Page :total="sum" @on-change="changePage"  show-elevator show-total></Page>
             </div>
-            <div v-else>
-                <Button @click="handleEdit(row,index)">操作</Button>
-            </div>
-        </template>
-    </Table>
+        </div>
+    </div>
+
 </template>
 <script>
     export default {
-        data () {
+        data(){
             return {
-                columns1: [
-                    // {
-                    //     type: 'selection',
-                    //     width: 60,
-                    //     align: 'center'
-                    // },
+                columns: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: 'ArriveDate',
                         slot: 'date',
@@ -57,56 +73,195 @@
                         slot: 'state',
                         filters:[
                             {
-                                lable: 'arrive',
-                                value:1
+                                label: 'arrive',
+                                value: 'arrive'
                             },
                             {   
-                                lable: 'transfer',
-                                value:2
+                                label: 'transfer',
+                                value: 'transfer'
                             }
                         ],
-                        filterMultiple: false,
+                        filterMultiple: true,
                         filterMethod (value, row) {
-                            if (value === 1) {
-                                return row.state == 'arrive';
-                            } else if (value === 2) {
-                                return row.state == 'transfer';
-                            }
+                            return row.state.indexOf(value) > -1;
+                            // if (value === 1) {
+                            //     return row.state = 'arrive';
+                            // } else if (value === 2) {
+                            //     return row.state = 'transfer';
+                            // }
                         }
-                    },                             
+                    },  
+                    {
+                        title: '操作',
+                        slot: 'action'
+                    }                           
                 ],
-                data1: [
-                    {
-                        date: '2016-10-03',                       
-                        number: 18,
-                        address: 'New York No. 1 Lake Park',
-                        state: 'arrive',
-                    },
-                    {
-                        date: '2016-10-01',
-                        number: 24,
-                        address: 'London No. 1 Lake Park',
-                        state: 'transfer',                       
-                    },
-                    {                        
-                        date: '2016-10-02',
-                        number: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        state: 'arrive',
-                    },
-                    {
-                        date: '2016-10-04',                       
-                        number: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        state: 'arrive',
-                    }
-                ],
+                data: [],
                 editIndex: -1,  // 当前聚焦的输入框的行数
                 editDate: '',  // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
                 editNumber: '',  // 第二列输入框
                 editAddress: '',  // 第三列输入框
                 editState: '',  // 第四列输入框
+                sum: 0
             }
+        },
+        mounted(){
+            var pagedata = [
+                    {
+                        date: '2016-10-03',                       
+                        number: 1,
+                        address: 'New York No. 1 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-01',
+                        number: 2,
+                        address: 'London No. 1 Lake Park',
+                        state: 'transfer',                       
+                    },
+                    {                        
+                        date: '2016-10-02',
+                        number: 3,
+                        address: 'Sydney No. 1 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 4,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 5,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 6,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 7,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 8,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 9,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 10,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 11,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 12,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 13,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 14,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 15,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 16,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 17,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 18,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 19,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 20,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 21,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 22,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 23,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 24,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 25,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    }
+                ];
+  
+            
+                this.sum = pagedata.length;
+                this.data = pagedata.splice(0,10);
         },
         methods:{
             handleEdit (row, index) {
@@ -115,14 +270,182 @@
                 this.editAddress = row.address;
                 this.editState = row.state;
                 this.editIndex = index;
-      },
+            },
             handleSave (index) {
                 this.data[index].date = this.editDate;
                 this.data[index].number = this.editNumber;
                 this.data[index].address = this.editAddress;
-                this.data[index].editState = this.editState;
+                this.data[index].state = this.editState;
                 this.editIndex = -1;
             },
+            show (index) {
+                this.$Modal.info({
+                    title: 'Arrive Date',
+                    content: `Date：${this.data[index].date}<br>ListNumber：${this.data[index].number}<br>Address：${this.data[index].address}<br>State:${this.data[index].state}`
+                })
+            },
+            remove (index) {
+                this.data.splice(index, 1);
+            },
+            changePage(Page) {
+                var pagedata = [
+                    {
+                        date: '2016-10-03',                       
+                        number: 1,
+                        address: 'New York No. 1 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-01',
+                        number: 2,
+                        address: 'London No. 1 Lake Park',
+                        state: 'transfer',                       
+                    },
+                    {                        
+                        date: '2016-10-02',
+                        number: 3,
+                        address: 'Sydney No. 1 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 4,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 5,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 6,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 7,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 8,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 9,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 10,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 11,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 12,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 13,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 14,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 15,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 16,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 17,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 18,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 19,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 20,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 21,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 22,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 23,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 24,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    },
+                    {
+                        date: '2016-10-04',                       
+                        number: 25,
+                        address: 'Ottawa No. 2 Lake Park',
+                        state: 'arrive',
+                    }
+                ];                   
+
+                this.data = pagedata.slice((Page-1)*10,Page*10);
+                console.log((Page-1)*1,Page*10);
+            },
+
+           
         }
     }
 </script>
