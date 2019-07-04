@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import test from '@/components/reuse/table'
+import test from '@/components/finance/finance'
 
 Vue.use(Router)
 

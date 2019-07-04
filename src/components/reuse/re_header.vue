@@ -1,14 +1,14 @@
 <template>
   <div class="header">
-    <div class="logo">express system</div>
+    <div class="logo">Express System</div>
     <div class="search" v-if="username !== 'manager'">
-      <Input v-model="search_value" placeholder="Enter something..." style="width: 400px" />
-      <Button type="primary" shape="circle" icon="ios-search" @click="search()">Search</Button>
+      <!-- <Input v-model="search_value" placeholder="Enter something..." style="width: 400px" />
+      <Button type="primary" shape="circle" icon="ios-search" @click="search()">Search</Button> -->
     </div>
 
     <div class="search" v-if="username === 'manager'">
-      当前共有{{check}}条记录待审核！
-      <Button type="info" shape="circle">立即审核</Button>
+      <!-- 当前共有{{check}}条记录待审核！
+      <Button type="info" shape="circle">立即审核</Button> -->
     </div>
 
     <div class="username">
@@ -23,12 +23,12 @@ export default {
   data() {
     return {
       search_value: "",
-      username: "",
+      username: "11111111111",
       check:''
     };
   },
   mounted() {
-    this.username = this.$route.params.user;
+    // this.username = this.$route.params.user;
     // invoke the back-end API in order to get An unapproved order
     this.check = "123";
   },
@@ -47,32 +47,30 @@ export default {
 <style scoped>
 .header {
   width: 100%;
-  height: 118px;
+  height: 35px;
   display: flex;
   background-color: black;
 }
 
 .logo {
-  width: 30%;
-  font-family: "Brush Script Std";
-  font-size: 40px;
-  margin-top: 28px;
-  text-align: center;
+  width: 28%;
+  font-size: 20px;
+  font-family: '隶书';
   color: white;
+  margin-left: 2%
 }
 
 .search {
-  width: 50%;
-  margin-top: 45px;
+  width: 60%;
   font-size: 20px;
   color: white;
   text-align: center
 }
 
 .username {
-  width: 20%;
-  margin-top: 45px;
-  font-size: 20px;
+  width: 10%;
+  font-size: 16px;
+  margin-top: .5%;
   color: white;
 }
 </style>

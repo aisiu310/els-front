@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <div class="word">成本结算（付款单）</div>
+      <div class="word">结算管理（收款单）</div>
       <!-- search box -->
       <div class="search">
         <Input
@@ -57,18 +57,25 @@
             </FormItem>
           </Form>
         </Modal>
+
+        <Button type="error" shape="circle">删除</Button>
+        <Button type="error" shape="circle">批量删除</Button>
       </div>
     </div>
     <Divider class="common" />
     <div class="payee_table">
-        
+      <payee></payee>
     </div>
   </div>
 </template>
 
 
 <script>
+import payee from "./payee_table";
 export default {
+  components: {
+    payee
+  },
   data() {
     return {
       payee_value: "",
@@ -113,6 +120,7 @@ export default {
   font-size: 16px;
   color: black;
   text-align: center;
+  margin-top: 1%;
 }
 .search {
   width: 30%;
@@ -120,16 +128,16 @@ export default {
 }
 
 .divide {
-  width: 25%;
-  height: auto;
-}
-
-.button {
   width: 15%;
   height: auto;
 }
 
-.common{
-    margin: 5px 0;
+.button {
+  width: 25%;
+  height: auto;
+}
+
+.common {
+  margin: 5px 0;
 }
 </style>
