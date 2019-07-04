@@ -420,7 +420,8 @@ export default {
   height: auto;
   text-align: right;
   margin-top: .5%;
-  margin-right: 3% 
+  margin-right: 3%;
+  border-bottom: 3px; 
 }
 </style>
 

@@ -14,6 +14,40 @@
       </div>
       <div class="divide"></div>
       <div class="button">
+        <Button type="success" shape="circle" @click="calculate = true">收款结算</Button>
+        <!-- calculate payee modal -->
+        <Modal title="收款结算" v-model="calculate" :styles="{top: '20px'}" :footer-hide="true">
+          <Form :model="calculate_data" :label-width="80">
+            <FormItem label="收款日期">
+              <Row>
+                <Col span="11">
+                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.date"></DatePicker>
+                </Col>
+              </Row>
+            </FormItem>
+            <FormItem label="所属营业厅">
+              <Select v-model="formItem.code" placeholder="请选择所属营业厅">
+                <Option value="001">鼓楼区</Option>
+                <Option value="002">雨花台区</Option>
+                <Option value="003">秦淮区</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="总金额">
+              <Input
+                v-model="formItem.money"
+                type="number"
+                placeholder="收款总金额"
+                prefix="logo-usd"
+                :disabled="true"
+              ></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="calculate_payee()">计算收款金额</Button>
+              <Button style="margin-left: 8px" @click="calculate = false">退出</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
         <Button type="success" shape="circle" @click="modal = true">新建收款单</Button>
         <!-- add payee modal -->
         <Modal title="新建收款单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
@@ -58,8 +92,7 @@
           </Form>
         </Modal>
 
-        <Button type="error" shape="circle">删除</Button>
-        <Button type="error" shape="circle">批量删除</Button>
+        <Button type="error" shape="circle" @click="del()">删除</Button>
       </div>
     </div>
     <Divider class="common" />
@@ -72,6 +105,7 @@
 
 <script>
 import payee from "./payee_table";
+import bus from "../reuse/bus";
 export default {
   components: {
     payee
@@ -80,14 +114,26 @@ export default {
     return {
       payee_value: "",
       modal: false,
+      calculate: false,
+      deldata: "",
       formItem: {
         code: "",
         date: "",
         money: "",
         courier: "",
         orderList: ""
+      },
+      calculate_data: {
+        date: "",
+        code: "",
+        money: ""
       }
     };
+  },
+  mounted() {
+    bus.$on("del_id", msg => {
+      this.deldata = msg;
+    });
   },
   methods: {
     // search payee
@@ -101,6 +147,12 @@ export default {
       var time = this.formItem.date;
       var t = time.toString();
       console.log(t);
+    },
+    // calculate the payee
+    calculate_payee() {},
+    // del payee
+    del() {
+      alert("从远处传来数据：" + this.deldata);
     }
   }
 };
@@ -115,12 +167,11 @@ export default {
 }
 
 .word {
-  width: 30%;
+  width: 20%;
   height: auto;
   font-size: 16px;
   color: black;
-  text-align: center;
-  margin-top: 1%;
+  margin-top: 0.3%;
 }
 .search {
   width: 30%;
@@ -133,7 +184,7 @@ export default {
 }
 
 .button {
-  width: 25%;
+  width: 35%;
   height: auto;
 }
 
