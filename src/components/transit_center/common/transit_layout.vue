@@ -1,14 +1,15 @@
 <template>
 	<div id="transit">
 		<Head></Head>
-	
-		<navigat></navigat>
+		<navigat></navigat>   
 	</div>
 </template>
 
 <script>
 import Head from '../../reuse/Header';
 import navigat from './Navigator';
+// import arrive_list from '../arrive_list'
+
 export default{
   name: 'transit_layout',
   components:{

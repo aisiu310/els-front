@@ -1,48 +1,85 @@
 <template>
-	<div id="navigator">	
-		<div id="navigator-bar">
-			<div id="navigator-bar-item">
-				<ul>
-					<li>到达单管理</li>
-					<li>中转单管理</li>
-					<li>装车单管理</li>
-				</ul>
-
+	<div>
+		<div id="navigator">	
+			<div id="navigator-bar">
+				<div id="navigator-bar-item">
+					<ul>
+						<li>
+							<router-link to="/arrive_list" @click="Input(到达单管理)">到达单管理</router-link>
+						</li>
+						<li>
+							<router-link to="/transfer_list">中转单管理</router-link>
+						</li>
+						<li>
+							<router-link to="/loadcar_list">装车单管理</router-link>
+						</li>					
+					</ul>				
+				</div>
+			</div>
+			<div id="employee-info">
+				<div id="employee-photo">
+					<img src="../../../assets/employee.png" />
+				</div>
+				<div id="employee-textinfo">
+					<ul>
+						<li>这里是个人信息{{}}</li>
+						<li>这里是职位{{}}</li>
+						<li>这里是姓名{{}}</li>
+						<li>这里是日期{{}}</li>
+						<li>这里是部门{{}}</li>
+					</ul>
+				</div>		
 			</div>
 		</div>
-		<div id="employee-info">
-			<div id="employee-photo">
-				<img src="../../../assets/employee.png" />
-			</div>
-			<div id="employee-textinfo">
-				<ul>
-					<li>这里是个人信息{{}}</li>
-					<li>这里是职位{{}}</li>
-					<li>这里是姓名{{}}</li>
-					<li>这里是日期{{}}</li>
-					<li>这里是部门{{}}</li>
-				</ul>
-			</div>		
-    	</div>
+		<div id="main">
+			<p>{{name}}</p>
+			<br>
+			<router-view></router-view>
+		</div>		
 	</div>
+	
 </template>
 
 <script>
 	export default{				
-		
+		methods:{
+			Input(name){
+				localStorage.setItem("name","name");
+
+				
+			}
+		},
+		data(){
+			return{			
+				name:localStorage.getItem("name"), 			  
+			}			
+		}
 	}
 </script>
 
 <style>
+
+	#main{
+		border: 4px solid red;
+		margin-left: 16%;
+		width: 84%;
+		padding: 1% 1% 0% 1%
+	}
+	#main p{
+		font-size: 2em;
+	}
+
 	#navigator{
-		/*width: 238px;
-		height: 780px;*/
+		/* width: 238px;
+		height: 780px; */
+		border: 1px solid red;
 		
 		width: 16%;
-        height: auto;
-		/*border: 1px solid red;*/
+        height: auto;		
 		margin-top: 0px;
 		background-color: black;
+
+		float: left;
 	}
 	#navigator-bar{
 		padding: 6% 0% 0% 0%;
