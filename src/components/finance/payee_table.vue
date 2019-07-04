@@ -7,7 +7,7 @@
       :size="tableSize"
       :data="payeeData"
       :columns="tableColumns"
-      @on-select="single"
+      @on-select="check"
     ></Table>
 
     <!-- page -->
@@ -23,11 +23,9 @@ export default {
     return {
       payeeData: [],
       dataLength: 0,
-      deleteData:[],
       showBorder: true,
       showStripe: true,
       showHeader: true,
-      // showIndex: true,
       showCheckbox: true,
       tableSize: "default"
     };
@@ -207,7 +205,6 @@ export default {
         state: "审核不通过"
       }
     ];
-
     this.dataLength = tableData.length;
     this.payeeData = tableData.slice(0, 10);
   },
@@ -390,11 +387,22 @@ export default {
       ];
       this.payeeData = tableData.slice((val - 1) * 10, val * 10);
     },
-    single(val,obj) {
-      this.deleteData = obj.id;
-      bus.$emit('del_id', obj.id);
-      console.log(this.deleteData);
-    }     
+    show(index) {
+      this.$Modal.info({
+        title: "付款单信息",
+        content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].state}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courier}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].state}`
+      });
+    },
+    // del payee and get the data which is from back-end
+    remove(index) {
+      this.payeeData.splice(index, 1);
+    },
+    // send id to settle_accounts
+    check(val,obj){
+      bus.$emit('check_id',obj.id);
+      console.log(val);
+      console.log(obj.id);
+    }
   },
   computed: {
     tableColumns() {
@@ -483,6 +491,49 @@ export default {
         ],
         filterMethod(value, row) {
           return row.state.indexOf(value) > -1;
+        }
+      });
+      columns.push({
+        title: "操作",
+        key: "action",
+        width: 150,
+        align: "center",
+        render: (h, params) => {
+          return h("div", [
+            h(
+              "Button",
+              {
+                props: {
+                  type: "primary",
+                  size: "small"
+                },
+                style: {
+                  marginRight: "5px"
+                },
+                on: {
+                  click: () => {
+                    this.show(params.index);
+                  }
+                }
+              },
+              "查看"
+            ),
+            h(
+              "Button",
+              {
+                props: {
+                  type: "error",
+                  size: "small"
+                },
+                on: {
+                  click: () => {
+                    this.remove(params.index);
+                  }
+                }
+              },
+              "删除"
+            )
+          ]);
         }
       });
       return columns;

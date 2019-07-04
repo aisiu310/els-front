@@ -18,7 +18,7 @@
 <script>
 import h from '../reuse/re_header'
 import n from './finance_navigator'
-import sa from './settle_accounts'
+import sa from './cost_management'
 export default {
     components:{
         h,n,sa

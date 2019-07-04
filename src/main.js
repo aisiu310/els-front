@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App1'
 import iView from 'iview'
+import vueResource from 'vue-resource'
 
 // import router from './router'
 import router from './router/test'
@@ -10,6 +11,7 @@ import router from './router/test'
 import 'iview/dist/styles/iview.css'
 
 Vue.use(iView)
+Vue.use(vueResource)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
