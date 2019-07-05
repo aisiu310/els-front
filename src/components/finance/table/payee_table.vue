@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import bus from "../reuse/bus";
+import bus from "../../reuse/bus";
 export default {
   data() {
     return {
@@ -246,6 +246,7 @@ export default {
       }
       columns.push({
         title: "收款单编号",
+        tooltip: true,
         key: "id"
       });
       columns.push({

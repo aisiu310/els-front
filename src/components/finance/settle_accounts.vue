@@ -99,7 +99,7 @@
 
 
 <script>
-import payee from "./payee_table";
+import payee from "./table/payee_table";
 import bus from '../reuse/bus';
 export default {
   components: {
@@ -174,6 +174,7 @@ export default {
   width: 100%;
   height: auto;
   display: flex;
+  margin-top: .5%
 }
 
 .word {

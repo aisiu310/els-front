@@ -84,7 +84,7 @@
 
 
 <script>
-import pay from "./pay_table";
+import pay from "./table/pay_table";
 import bus from "../reuse/bus";
 export default {
   components: {
@@ -164,6 +164,7 @@ export default {
   width: 100%;
   height: auto;
   display: flex;
+  margin-top: .5%
 }
 
 .word {
