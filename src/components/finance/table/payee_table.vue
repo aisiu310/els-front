@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       payeeData: [],
-      tableData: [],
       dataLength: 0,
       showBorder: true,
       showStripe: true,
@@ -41,156 +40,22 @@ export default {
     };
   },
   mounted() {
-    this.tableData = [
-      {
-        id: "201907031201",
-        code: "雨花台区",
-        date: "2019-06-29",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "未提交审核"
-      },
-      {
-        id: "2019070367601",
-        code: "鼓楼区",
-        date: "2019-06-25",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "未提交审核"
-      },
-      {
-        id: "201907045301",
-        code: "雨花台区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "未提交审核"
-      },
-      {
-        id: "201907089301",
-        code: "秦淮区",
-        date: "2019-07-02",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "未提交审核"
-      },
-      {
-        id: "201907480301",
-        code: "雨花台区",
-        date: "2019-07-01",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核通过"
-      },
-      {
-        id: "2019070366601",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核通过"
-      },
-      {
-        id: "2019074440301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核通过"
-      },
-      {
-        id: "20190775780301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核通过"
-      },
-      {
-        id: "201907360301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核通过"
-      },
-      {
-        id: "201907452470301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核不通过"
-      },
-      {
-        id: "20190704245301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核不通过"
-      },
-      {
-        id: "20190707894301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核不通过"
-      },
-      {
-        id: "20190704563301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核不通过"
-      },
-      {
-        id: "20190745340301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "未提交审核"
-      },
-      {
-        id: "20190345370301",
-        code: "鼓楼区",
-        date: "2019-07-03",
-        money: "123",
-        courier: "John Brown",
-        orderList: "123456,1234567,12345678",
-        state: "审核不通过"
-      }
-    ];
-    this.dataLength = this.tableData.length;
-    this.payeeData = this.tableData.slice(0, 10);
+    this.$http.get('http://192.168.2.229/receipt/getReceiptList?currentPage=1&pageCount=10').then(res =>{
+       this.payeeData = res.data.data;
+       console.log(res.data.data);
+    });
+    this.dataLength = this.payeeData.length;
   },
   methods: {
     changePage(val) {
       // invoke the back-end API limit 10
       // 后端分页查询
-      this.payeeData = this.tableData.slice((val - 1) * 10, val * 10);
+      
     },
     show(index) {
       this.$Modal.info({
         title: "付款单信息",
-        content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].state}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courier}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].state}`
+        content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].state}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courier}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].is_pass}`
       });
     },
     // del payee and get the data which is from back-end
@@ -255,16 +120,16 @@ export default {
         sortable: true,
         filters: [
           {
-            label: "鼓楼区",
-            value: "鼓楼区"
+            label: "001",
+            value: "001"
           },
           {
-            label: "雨花台区",
-            value: "雨花台区"
+            label: "002",
+            value: "002"
           },
           {
-            label: "秦淮区",
-            value: "秦淮区"
+            label: "003",
+            value: "003"
           }
         ],
         filterMethod(value, row) {
@@ -293,28 +158,29 @@ export default {
       });
       columns.push({
         title: "审核状态",
-        key: "state",
+        key: "is_pass",
         sortable: true,
         filters: [
           {
             label: "未提交审核",
-            value: "未提交审核"
+            value: 0
           },
           {
             label: "待审核",
-            value: "待审核"
+            value: 1
           },
           {
             label: "审核通过",
-            value: "审核通过"
+            value: 2
           },
           {
             label: "审核不通过",
-            value: "审核不通过"
+            value: 3
           }
         ],
         filterMethod(value, row) {
-          return row.state.indexOf(value) > -1;
+          console.log(row);
+          return row.is_pass.indexOf(value) > -1;
         }
       });
       columns.push({
