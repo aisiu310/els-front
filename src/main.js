@@ -5,8 +5,8 @@ import App from './App1'
 import iView from 'iview'
 
 // import router from './router'
-import router from './router/test'
-// import router from './router/zxy-test'
+// import router from './router/test'
+import router from './router/zxy-test'
 import 'iview/dist/styles/iview.css'
 
 Vue.use(iView)

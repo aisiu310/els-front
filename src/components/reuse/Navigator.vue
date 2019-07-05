@@ -15,7 +15,7 @@
        			 	</router-link>
       			</template>-->
 				<ul>
-					<li v-for="menu in menus">{{menu.item}}</li>
+					<li>{{menu.item}}</li>
 				</ul>
 
 			</div>

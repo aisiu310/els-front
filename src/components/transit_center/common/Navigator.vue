@@ -5,13 +5,13 @@
 				<div id="navigator-bar-item">
 					<ul>
 						<li>
-							<router-link to="/arrive_list" @click="Input(到达单管理)">到达单管理</router-link>
+							<router-link to="/transit_arrive_list" @click="Input(到达单管理)">到达单管理</router-link>
 						</li>
 						<li>
-							<router-link to="/transfer_list">中转单管理</router-link>
+							<router-link to="/transit_transfer_list">中转单管理</router-link>
 						</li>
 						<li>
-							<router-link to="/loadcar_list">装车单管理</router-link>
+							<router-link to="/transit_loadcar_list">装车单管理</router-link>
 						</li>					
 					</ul>				
 				</div>
@@ -36,8 +36,7 @@
 			<br>
 			<router-view></router-view>
 		</div>		
-	</div>
-	
+	</div>	
 </template>
 
 <script>
