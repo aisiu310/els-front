@@ -40,10 +40,147 @@ export default {
     };
   },
   mounted() {
-    this.$http.get('http://192.168.2.229/receipt/getReceiptList?currentPage=1&pageCount=10').then(res =>{
-       this.payeeData = res.data.data;
-       console.log(res.data.data);
-    });
+    // this.$http.get('http://192.168.2.229/receipt/getReceiptList?currentPage=1&pageCount=10').then(res =>{
+    //    this.payeeData = res.data.data;
+    //    console.log(res.data.data);
+    // });
+this.payeeData = [
+      {
+        id: "201907031201",
+        code: "雨花台区",
+        date: "2019-06-29",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "未提交审核"
+      },
+      {
+        id: "2019070367601",
+        code: "鼓楼区",
+        date: "2019-06-25",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "未提交审核"
+      },
+      {
+        id: "201907045301",
+        code: "雨花台区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "未提交审核"
+      },
+      {
+        id: "201907089301",
+        code: "秦淮区",
+        date: "2019-07-02",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "未提交审核"
+      },
+      {
+        id: "201907480301",
+        code: "雨花台区",
+        date: "2019-07-01",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核通过"
+      },
+      {
+        id: "2019070366601",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核通过"
+      },
+      {
+        id: "2019074440301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核通过"
+      },
+      {
+        id: "20190775780301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核通过"
+      },
+      {
+        id: "201907360301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核通过"
+      },
+      {
+        id: "201907452470301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核不通过"
+      },
+      {
+        id: "20190704245301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核不通过"
+      },
+      {
+        id: "20190707894301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核不通过"
+      },
+      {
+        id: "20190704563301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核不通过"
+      },
+      {
+        id: "20190745340301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "未提交审核"
+      },
+      {
+        id: "20190345370301",
+        code: "鼓楼区",
+        date: "2019-07-03",
+        money: "123",
+        courier: "John Brown",
+        orderList: "123456,1234567,12345678",
+        state: "审核不通过"
+      }
+    ];
     this.dataLength = this.payeeData.length;
   },
   methods: {

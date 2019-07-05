@@ -5,7 +5,7 @@ import App from './App'
 import iView from 'iview'
 import vueResource from 'vue-resource'
 
-// import router from './router'
+// import router from './router'git
 import router from './router/zxy-test'
 // import router from './router/finance'
 // import router from './router/zxy-test'

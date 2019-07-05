@@ -41,10 +41,10 @@
 			</div>
 		</div>
 		<div id="main">
-			<p>{{name}}</p>
-			<hr>
+			<!-- <p>{{name}}</p>
+			<hr> -->
 			<router-view></router-view>
-		</div>
+		</div> 
 	</div>	
 </template>
 

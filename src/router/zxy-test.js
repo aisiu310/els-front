@@ -12,8 +12,8 @@ import business_car_info from '@/components/business_hall/car_info'
 import business_driver_info from '@/components/business_hall/driver_info'
 import business_receipt_list from '@/components/business_hall/receipt_list'
 import business_layout from '@/components/business_hall/common/business_layout'
-                                                                     
-// import finance from './finance'
+ 
+import payee from '@/components/finance/settle_accounts'
 
 Vue.use(Router)
 
@@ -76,7 +76,7 @@ export default new Router ({
                 {
                     path: 'business_receipt_list',
                     name: 'business_receipt_list',
-                    component: business_receipt_list
+                    component: payee
                 },                 
             ]
         }
