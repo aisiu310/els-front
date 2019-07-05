@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import finance from '@/components/finance/common/finance'
 import pay from '@/components/finance/cost_management'
 import payee from '@/components/finance/settle_accounts'
+import init from '@/components/finance/table/init_account_table'
 
 Vue.use(Router)
 
@@ -12,7 +13,7 @@ export default new Router({
         {
             path: '/finance',
             name: 'finance',
-            redirect:'/finance/payee',
+            redirect: '/finance/payee',
             component: finance,
             children: [
                 {
@@ -23,8 +24,13 @@ export default new Router({
                     path: 'payee',
                     name: 'payee',
                     component: payee
+                },
+                {
+                    path: 'init',
+                    name: 'init',
+                    component: init
                 }
             ]
-        },
+        }
     ]
 })
