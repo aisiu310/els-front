@@ -4,9 +4,7 @@
       <div class="divide"></div>
       <div class="work_list">
         <ul>
-          <li>
-            账户管理
-          </li>
+          <li>账户管理</li>
           <li>
             <router-link to="/payee">成本管理</router-link>
           </li>

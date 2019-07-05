@@ -6,9 +6,8 @@
       <div class="search">
 
       </div>
-      <div class="divide"></div>
       <div class="button">
-        <Button type="success" shape="circle" @click="calculate = true">收款结算</Button>
+        <Button type="primary" shape="circle" @click="calculate = true">收款结算</Button>
         <!-- calculate payee modal -->
         <Modal title="收款结算" v-model="calculate" :styles="{top: '20px'}" :footer-hide="true">
           <Form :model="calculate_data" :label-width="80">
@@ -42,7 +41,7 @@
           </Form>
         </Modal>
 
-        <Button type="success" shape="circle" @click="modal = true">新建收款单</Button>
+        <Button type="primary" shape="circle" @click="modal = true">新建收款单</Button>
         <!-- add payee modal -->
         <Modal title="新建收款单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
           <Form :model="formItem" :label-width="80">
@@ -86,7 +85,8 @@
           </Form>
         </Modal>
 
-        <Button type="success" shape="circle" @click="check()">审核</Button>
+        <Button type="success" shape="circle" @click="check()">批量审核</Button>
+        <Button type="error" shape="circle" @click="del()">批量删除</Button>
 
       </div>
     </div>
@@ -109,7 +109,10 @@ export default {
     return {
       modal: false,
       calculate: false,
-      check_id: "",
+      // the parameter of batch approval
+      check_arr: '',
+      // the parameter of batch del
+      del_arr: '',
       formItem: {
         code: "",
         date: "",
@@ -125,8 +128,11 @@ export default {
     };
   },
   mounted() {
-    bus.$on("check_id", msg => {
-      this.check_id = msg;
+    bus.$on("payee_batch_check", msg => {
+      this.check_arr = msg;
+    });
+    bus.$on("payee_batch_del", msg => {
+      this.del_arr = msg;
     });
   },
   methods: {
@@ -142,8 +148,21 @@ export default {
     calculate_payee() {},
     // check order
     check(){
-      alert(this.check_id);
-      
+      var check_id = [];
+      for(var i = 0; i < this.check_arr.length; i++){
+        check_id[i] = this.check_arr[i].id;
+      }
+      console.log(check_id);
+      window.location.reload();
+    },
+    // payee batch del
+    del(){
+      var del_id = [];
+      for(var i = 0; i < this.del_arr.length; i++){
+        del_id[i] = this.del_arr[i].id;
+      }
+      console.log(del_id);
+      window.location.reload();
     }
   }
 };
@@ -169,14 +188,11 @@ export default {
   height: auto;
 }
 
-.divide {
-  width: 15%;
-  height: auto;
-}
-
 .button {
-  width: 35%;
+  width: 47%;
   height: auto;
+  text-align: right;
+  margin-right: 3%
 }
 
 .common {

@@ -7,12 +7,21 @@
       :size="tableSize"
       :data="payData"
       :columns="tableColumns"
-      @on-select="check"
+      @on-select="mulCheck"
+      @on-select-all="selectAll"
+      ref="payTable"
     ></Table>
 
     <!-- page -->
-    <div class="page">
-      <Page :total="dataLength" show-elevator @on-change="changePage" />
+    <div class="expand">
+      <div class="excel">
+        <Button type="primary" @click="exportData()">
+          <Icon type="ios-download-outline"></Icon>导出Excel
+        </Button>
+      </div>
+      <div class="page">
+        <Page :total="dataLength" show-elevator @on-change="changePage" />
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +31,7 @@ export default {
   data() {
     return {
       payData: [],
+      tableData:[],
       dataLength: 0,
       showBorder: true,
       showStripe: true,
@@ -31,39 +41,36 @@ export default {
     };
   },
   mounted() {
-    var tableData = [
+    this.tableData = [
       {
         id: "2019070304",
         pay_date: "2019-07-04",
         pay_money: "123",
         pay_name: "John Brown",
         pay_account: "John Brown",
-        pay_list:
-          "123456,1234567,12345678,123456,1234567,12345678,123456,1234567,12345678",
+        pay_list: "123456,12345",
+        pay_remarks: "无",
+        state: "未提交审核"
+      },
+      {
+        id: "2019070304",
+        pay_date: "2019-07-04",
+        pay_money: "123",
+        pay_name: "John Brown",
+        pay_account: "John Brown",
+        pay_list: "123456,1234567,12345678",
         pay_remarks: "无",
         state: "待审核"
       }
     ];
-    this.dataLength = tableData.length;
-    this.payData = tableData.slice(0, 10);
+    this.dataLength = this.tableData.length;
+    this.payData = this.tableData.slice(0, 10);
   },
   methods: {
     changePage(val) {
       // invoke the back-end API limit 10
       // 后端分页查询
-      var tableData = [
-        {
-          id: "2019070304",
-          pay_date: "2019-07-04",
-          pay_money: "123",
-          pay_name: "John Brown",
-          pay_account: "John Brown",
-          pay_list: "123456,1234567,12345678",
-          pay_remarks: "无",
-          state: "待审核"
-        }
-      ];
-      this.payData = tableData.slice((val - 1) * 10, val * 10);
+      this.payData = this.tableData.slice((val - 1) * 10, val * 10);
     },
     show(index) {
       this.$Modal.info({
@@ -75,11 +82,34 @@ export default {
     remove(index) {
       this.payData.splice(index, 1);
     },
-    // send id to settle_accounts
-    check(val, obj) {
-      bus.$emit("check_id", obj.id);
+    // send the check's msg to the back-end
+    // invoke API
+    check(index) {
+      if (this.payData[index].state == "待审核") {
+        this.$Message.error("已提交审核，请等待总经理审批");
+      } else {
+        this.$Message.success("提交成功，待总经理审批");
+        this.payData[index].state = "待审核";
+      }
+    },
+    // batch check
+    mulCheck(val, obj) {
+      bus.$emit("pay_batch_check", val);
       console.log(val);
-      console.log(obj.id);
+    },
+    selectAll(val) {
+      console.log(val);
+      bus.$emit("pay_batch_del", val);
+    },
+    // export data by excel
+    exportData() {
+      this.$refs.payTable.exportCsv({
+        filename: "付款单",
+        columns: this.tableColumns.filter(
+          (col, index) => index < 9 && index > 0
+        ),
+        data: this.payData.filter((payData, index) => index < 9)
+      });
     }
   },
   computed: {
@@ -110,8 +140,9 @@ export default {
       });
       columns.push({
         title: "付款金额",
-        width: 100,
-        key: "pay_money"
+        width: 120,
+        key: "pay_money",
+        sortable: true
       });
       columns.push({
         title: "付款人",
@@ -162,7 +193,7 @@ export default {
       columns.push({
         title: "操作",
         key: "action",
-        width: 150,
+        width: 200,
         align: "center",
         render: (h, params) => {
           return h("div", [
@@ -183,6 +214,24 @@ export default {
                 }
               },
               "查看"
+            ),
+            h(
+              "Button",
+              {
+                props: {
+                  type: "success",
+                  size: "small"
+                },
+                style: {
+                  marginRight: "5px"
+                },
+                on: {
+                  click: () => {
+                    this.check(params.index);
+                  }
+                }
+              },
+              "提交审核"
             ),
             h(
               "Button",
@@ -209,8 +258,19 @@ export default {
 </script>
 
 <style scoped>
-.page {
+.expand {
   width: auto;
+  display: flex;
+}
+
+.excel {
+  width: 50%;
+  height: auto;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+}
+.page {
+  width: 47%;
   height: auto;
   text-align: right;
   margin-top: 0.5%;
