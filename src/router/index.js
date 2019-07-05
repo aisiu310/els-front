@@ -14,51 +14,51 @@ import admin from '@/components/admin/admin'
 Vue.use(Router)
 
 const routes = [
-    {
-      path: '/',
-      component: login
-    },
-    {
-      path: '/sender_index',
-      name:'sender_index',
-      component: sender_index
-    },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: admin
-    },
-    {
-      path:'/warehouse',
-      name:'warehouse',
-      component:warehouse_layout
-    },
-    {
-      path:'/manager',
-      name:'manager',
-      component:manager_layout
-    },
-    {
-      path:'/business',
-      name:'business',
-      component:business_layout
-    },
-    {
-      path:'/transit',
-      name:'transit',
-      component:transit_layout
-    },
-    {
-      path:'/courie',
-      name:'courie',
-      component:courie_layout
-    }
-    
+  {
+    path: '/',
+    component: login
+  },
+  {
+    path: '/sender_index',
+    name: 'sender_index',
+    component: sender_index
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: admin
+  },
+  {
+    path: '/warehouse',
+    name: 'warehouse',
+    component: warehouse_layout
+  },
+  {
+    path: '/manager',
+    name: 'manager',
+    component: manager_layout
+  },
+  {
+    path: '/business',
+    name: 'business',
+    component: business_layout
+  },
+  {
+    path: '/transit',
+    name: 'transit',
+    component: transit_layout
+  },
+  {
+    path: '/courie',
+    name: 'courie',
+    component: courie_layout
+  }
+
 
 ]
 var router = new Router({
-    routes
+  routes
 })
-export default router 
+export default router
 
-  
+

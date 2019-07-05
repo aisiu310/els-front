@@ -1,29 +1,31 @@
 <template>
-      <div>
+  <div>
     <div class="header">
       <h></h>
     </div>
     <div class="content">
-      <div class="aside">
+      <!-- <div class="aside">
         <n></n>
-      </div>
-      <div class="article">
+      </div> -->
+      <!-- <div class="article">
         <sa></sa>
-      </div>
+      </div>-->
+      <n></n>
     </div>
   </div>
 </template>
 
 
 <script>
-import h from '../reuse/re_header'
-import n from './finance_navigator'
-import sa from './cost_management'
+import h from "../reuse/re_header";
+import n from "./finance_navigator";
+// import sa from './settle_account'
 export default {
-    components:{
-        h,n,sa
-    }
-}
+  components: {
+    h,
+    n
+  }
+};
 </script>
 
 <style scoped>
@@ -35,18 +37,18 @@ export default {
 .content {
   width: 100%;
   height: auto;
-  display: flex;
+  /* display: flex; */
 }
 
-.aside {
+/* .aside {
   width: 15%;
   height: auto;
-  background-color: black
+  background-color: black;
 }
 
 .article {
   width: 85%;
   margin-top: 1%;
   height: auto;
-}
+} */
 </style>

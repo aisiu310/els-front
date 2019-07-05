@@ -136,7 +136,7 @@ export default {
     // check order
     check(){
     //   alert(this.check_id);
-      this.$http.get('http://192.168.2.229/consumer/get?id=15130803').then(res => {
+      this.$http.get('http://192.168.2.229:9527/yuantu/mydept/stu/get/15130801').then(res => {
           console.log(res);
       })
       
