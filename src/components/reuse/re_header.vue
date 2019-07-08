@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       search_value: "",
-      username: "11111111111",
+      username: "",
       check:''
     };
   },

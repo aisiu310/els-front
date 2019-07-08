@@ -88,7 +88,12 @@
       </div>
     </div>
 
+<<<<<<< HEAD
+    <hr class="common" />
+
+=======
    <hr>
+>>>>>>> 88c377f2a8805aeece8c555f680ea78bd54f8d53
     <div class="payee_table">
       <payee></payee>
     </div>
@@ -177,7 +182,6 @@ export default {
   width: 100%;
   height: auto;
   display: flex;
-  float: left;
   margin-top: 0.5%;
 }
 
@@ -200,7 +204,9 @@ export default {
   margin-right: 3%;
 }
 
-/* .common {
+.common {
   margin: 5px 0;
-} */
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
 </style>

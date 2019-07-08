@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+// import Vue from 'vue'
+// import Router from 'vue-router'
 
 import business_loadcar_list from '@/components/business_hall/loadcar_list'
 import business_arrive_list from '@/components/business_hall/arrive_list'
@@ -9,9 +9,10 @@ import business_driver_info from '@/components/business_hall/driver_info'
 import business_receipt_list from '@/components/business_hall/receipt_list'
 import business_layout from '@/components/business_hall/common/business_layout'
 
-Vue.use(Router)
-export default new Router ({
-    routes: [
+// Vue.use(Router)
+export default [
+// new Router ({
+    // routes: [
     {
         path: '/business_hall',
         name: 'business_layout',
@@ -49,5 +50,7 @@ export default new Router ({
                 component: business_receipt_list
             },                 
         ]
-    }]
-})
+    }
+]
+// ]
+// })

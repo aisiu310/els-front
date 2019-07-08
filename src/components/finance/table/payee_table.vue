@@ -52,7 +52,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "未提交审核"
+        is_pass: "未提交审核"
       },
       {
         id: "2019070367601",
@@ -61,7 +61,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "未提交审核"
+        is_pass: "未提交审核"
       },
       {
         id: "201907045301",
@@ -70,7 +70,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "未提交审核"
+        is_pass: "未提交审核"
       },
       {
         id: "201907089301",
@@ -79,7 +79,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "未提交审核"
+        is_pass: "未提交审核"
       },
       {
         id: "201907480301",
@@ -88,7 +88,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核通过"
+        is_pass: "审核通过"
       },
       {
         id: "2019070366601",
@@ -97,7 +97,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核通过"
+        is_pass: "审核通过"
       },
       {
         id: "2019074440301",
@@ -106,7 +106,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核通过"
+        is_pass: "审核通过"
       },
       {
         id: "20190775780301",
@@ -115,7 +115,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核通过"
+        is_pass: "审核通过"
       },
       {
         id: "201907360301",
@@ -124,7 +124,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核通过"
+        is_pass: "审核通过"
       },
       {
         id: "201907452470301",
@@ -133,7 +133,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核不通过"
+        is_pass: "审核不通过"
       },
       {
         id: "20190704245301",
@@ -142,7 +142,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核不通过"
+        is_pass: "审核不通过"
       },
       {
         id: "20190707894301",
@@ -151,7 +151,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核不通过"
+        is_pass: "审核不通过"
       },
       {
         id: "20190704563301",
@@ -160,7 +160,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核不通过"
+        is_pass: "审核不通过"
       },
       {
         id: "20190745340301",
@@ -169,7 +169,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "未提交审核"
+        is_pass: "未提交审核"
       },
       {
         id: "20190345370301",
@@ -178,7 +178,7 @@ this.payeeData = [
         money: "123",
         courier: "John Brown",
         orderList: "123456,1234567,12345678",
-        state: "审核不通过"
+        is_pass: "审核不通过"
       }
     ];
     this.dataLength = this.payeeData.length;
@@ -385,7 +385,8 @@ this.payeeData = [
     }
   }
 };
-</script>
+</script>                
+
 
 <style scoped>
 .expand {
