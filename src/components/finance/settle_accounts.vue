@@ -88,7 +88,7 @@
       </div>
     </div>
 
-   <Divider class="common" />
+   <hr>
     <div class="payee_table">
       <payee></payee>
     </div>
@@ -168,6 +168,11 @@ export default {
 
 
 <style scoped>
+
+/* .payee_table{
+  margin-top: -800px;
+} */
+
 .header {
   width: 100%;
   height: auto;

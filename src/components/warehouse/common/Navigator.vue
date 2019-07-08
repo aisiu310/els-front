@@ -1,44 +1,74 @@
 <template>
-	<div id="navigator">	
-		<div id="navigator-bar">
-			<div id="navigator-bar-item">
-				<ul>
-					<li>出入庫管理</li>
-					<li>库存盘点与警戒</li>
-					<li>库存调整</li>
-					<li>仓库可视化</li>
-					<li>库存初始化</li>
-					<li>其他</li>
-				</ul>
+	<div>
+		<div id="navigator">	
+			<div id="navigator-bar">
+				<div id="navigator-bar-item">
+					<ul>
+						<li>
+							<router-link to="/warehouse/visiual">出入庫管理</router-link>
+						</li>
+						<li>库存盘点与警戒</li>
+						<li>库存调整</li>
+						<li>
+							<router-link to="/warehouse/visiual">仓库可视化</router-link>
+						</li>
+						<li>库存初始化</li>
+						<li>其他</li>
+					</ul>
 
+				</div>
 			</div>
+			<div id="employee-info">
+				<div id="employee-photo">
+					<img src="../../../assets/employee.png" />
+				</div>
+				<div id="employee-textinfo">
+					<ul>
+						<li>这里是个人信息{{}}</li>
+						<li>这里是职位{{}}</li>
+						<li>这里是姓名{{}}</li>
+						<li>这里是日期{{}}</li>
+						<li>这里是部门{{}}</li>
+					</ul>
+				</div>		
+			</div>			
 		</div>
-		<div id="employee-info">
-			<div id="employee-photo">
-				<img src="../../../assets/employee.png" />
-			</div>
-			<div id="employee-textinfo">
-				<ul>
-					<li>这里是个人信息{{}}</li>
-					<li>这里是职位{{}}</li>
-					<li>这里是姓名{{}}</li>
-					<li>这里是日期{{}}</li>
-					<li>这里是部门{{}}</li>
-				</ul>
-			</div>		
-    	</div>
-			
-		</div>
+		<div id="main">
+			<p>{{name}}</p>
+			<hr>
+			<router-view></router-view>
+		</div> 
 	</div>
 </template>
 
 <script>
 	export default{				
-		
+		data(){
+			return{
+				name:'仓库可视化'
+			}
+		}
 	}
 </script>
 
 <style>
+	#main{
+		border: 0px solid red;
+		margin-left: 16%;
+		width: 84%;
+		padding: 1% 1% 0% 1%
+	}
+	#main p{
+		font-size: 2em;
+	}
+	#main hr {/*内嵌水平线*/
+		width:100%;
+		margin:0% 0% 1% 0%;
+		
+		border-top: 3px solid rgba(0, 0, 0, 0.1);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	}
+
 	#navigator{
 		/*width: 238px;
 		height: 780px;*/
@@ -48,6 +78,8 @@
 		/*border: 1px solid red;*/
 		margin-top: 0px;
 		background-color: black;
+
+		float: left;
 	}
 	#navigator-bar{
 		padding: 6% 0% 0% 0%;

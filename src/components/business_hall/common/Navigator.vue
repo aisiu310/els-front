@@ -5,22 +5,33 @@
 				<div id="navigator-bar-item">
 					<ul>
 						<li>
-							<router-link to="/business_hall/business_loadcar_list">车辆装车</router-link>
+							<router-link to="/business_hall/business_loadcar_list">
+								<div @click="HandleChange('车辆装车')">车辆装车</div>
+							</router-link>
 						</li>
 						<li>
-							<router-link to="/business_hall/business_arrive_list">到达接收</router-link>
+							<router-link to="/business_hall/business_arrive_list">
+								<div  @click="HandleChange('到达接收')">到达接收</div>
+							</router-link>
 						</li>
 						<li>
-							<router-link to="/business_hall/business_deliver_list">派件管理</router-link>
+							<router-link to="/business_hall/business_deliver_list">
+								<div  @click="HandleChange('派件管理')">派件管理</div>
+							</router-link>
 						</li>
 						<li>
-							<router-link to="/business_hall/business_car_info">车辆信息管理</router-link>
+							<router-link to="/business_hall/business_car_info">
+								<div @click="HandleChange('车辆信息管理')">车辆信息管理</div>
+							</router-link>
 						</li>
 						<li>
-							<router-link to="/business_hall/business_driver_info">司机信息管理</router-link>
-						</li>
+							<router-link to="/business_hall/business_driver_info">
+								<div @click="HandleChange('司机信息管理')">司机信息管理</div>
+							</router-link>
 						<li>
-							<router-link to="/business_hall/business_receipt_list">收款单</router-link>
+							<router-link to="/business_hall/business_receipt_list">
+								<div @click="HandleChange('收款单')">收款单</div>
+							</router-link>
 						</li>
 					</ul>
 				</div>
@@ -41,27 +52,36 @@
 			</div>
 		</div>
 		<div id="main">
-			<!-- <p>{{name}}</p>
-			<hr> -->
+			<p>{{name}}</p>
+			<hr>
 			<router-view></router-view>
 		</div> 
 	</div>	
 </template>
 
 <script>
-	export default{				
-		methods:{
-			Input(name){
-				localStorage.setItem("name","name");
-
-				
-			}
-		},
+    // import Bus from '../../../bus' 
+	export default{	
 		data(){
 			return{			
-				name:'localStorage.getItem("name"), '			  
+				  name:'车辆管理'
 			}			
-		}
+		},
+		// mounted(){
+		// 	Bus.$on('change',(val) => {
+		// 		this.name = val
+		// 	})
+		// },		
+		methods:{
+			HandleChange(val){
+				this.name = val;			
+			}
+			// HandleChange(val){
+			// 	Bus.$emit('change',val);
+			// 	alert(val);
+			// }
+		},
+		
 	}
 </script>
 
