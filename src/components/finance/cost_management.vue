@@ -75,7 +75,7 @@
         <Button type="error" shape="circle" @click="del()">批量删除</Button>
       </div>
     </div>
-    <Divider class="common" />
+    <hr class="common" />
     <div class="payee_table">
       <pay></pay>
     </div>
@@ -164,7 +164,7 @@ export default {
   width: 100%;
   height: auto;
   display: flex;
-  margin-top: .5%
+  margin-top: 0.5%;
 }
 
 .word {
@@ -188,5 +188,7 @@ export default {
 
 .common {
   margin: 5px 0;
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 </style>
