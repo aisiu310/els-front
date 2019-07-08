@@ -17,7 +17,7 @@ export default new Router({
         {
             path: '/finance',
             name: 'finance',
-            redirect: '/finance/payee',
+            redirect: '/finance/business_graph',
             component: finance,
             children: [
                 {

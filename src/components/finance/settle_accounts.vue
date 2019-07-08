@@ -87,13 +87,7 @@
         <Button type="error" shape="circle" @click="del()">批量删除</Button>
       </div>
     </div>
-
-<<<<<<< HEAD
     <hr class="common" />
-
-=======
-   <hr>
->>>>>>> 88c377f2a8805aeece8c555f680ea78bd54f8d53
     <div class="payee_table">
       <payee></payee>
     </div>
@@ -173,7 +167,6 @@ export default {
 
 
 <style scoped>
-
 /* .payee_table{
   margin-top: -800px;
 } */

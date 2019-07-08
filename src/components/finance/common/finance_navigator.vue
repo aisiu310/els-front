@@ -3,7 +3,13 @@
     <div class="navigator">
       <div class="divide"></div>
       <div class="work_list">
-        <Menu :theme="theme" :open-names="['1']" :width="100" :accordion="true">
+        <Menu
+          :theme="theme"
+          :active-name="['4-1']"
+          :open-names="['4']"
+          :width="100"
+          :accordion="true"
+        >
           <Submenu name="1">
             <template slot="title">账户管理</template>
             <MenuItem name="1-1" to="/finance/init">初期建账</MenuItem>

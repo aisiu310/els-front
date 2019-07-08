@@ -300,19 +300,19 @@ this.payeeData = [
         filters: [
           {
             label: "未提交审核",
-            value: 0
+            value: "未提交审核"
           },
           {
             label: "待审核",
-            value: 1
+            value: "待审核"
           },
           {
             label: "审核通过",
-            value: 2
+            value: "审核通过"
           },
           {
             label: "审核不通过",
-            value: 3
+            value: "审核不通过"
           }
         ],
         filterMethod(value, row) {
