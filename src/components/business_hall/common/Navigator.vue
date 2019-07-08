@@ -5,10 +5,14 @@
         <div id="navigator-bar-item">
           <ul>
             <li>
-              <router-link to="/business_hall/business_loadcar_list">车辆装车</router-link>
+              <router-link to="/business_hall/business_loadcar_list">
+                <div @click="Input('车辆装车')">车辆装车</div>
+              </router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_arrive_list">到达接收</router-link>
+              <router-link to="/business_hall/business_arrive_list">
+                <div @click="Input('到达接收')">到达接收</div>
+              </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_deliver_list">派件管理</router-link>
@@ -41,8 +45,8 @@
       </div>
     </div>
     <div id="main">
-      <!-- <p>{{name}}</p>
-      <hr>-->
+      <p>{{name}}</p>
+      <hr />
       <router-view></router-view>
     </div>
   </div>
@@ -50,25 +54,38 @@
 
 <script>
 // import Bus from '../../../bus'
+const axios = require("axios");
 export default {
   data() {
     return {
       name: "车辆管理"
     };
   },
-  // mounted(){
-  // 	Bus.$on('change',(val) => {
-  // 		this.name = val
-  // 	})
-  // },
+
   methods: {
-    HandleChange(val) {
+    Input(val) {
       this.name = val;
+    },
+
+    data() {
+      return {
+        name: "车辆装车"
+      };
+    },
+    // mounted(){
+    // 	Bus.$on('change',(val) => {
+    // 		this.name = val
+    // 	})
+    // },
+    methods: {
+      HandleChange(val) {
+        this.name = val;
+      }
+      // HandleChange(val){
+      // 	Bus.$emit('change',val);
+      // 	alert(val);
+      // }
     }
-    // HandleChange(val){
-    // 	Bus.$emit('change',val);
-    // 	alert(val);
-    // }
   }
 };
 </script>
@@ -94,7 +111,7 @@ export default {
 
 #navigator {
   /*width: 238px;
-		height: 780px;*/
+      height: 780px;*/
 
   width: 16%;
   height: auto;
