@@ -1,5 +1,37 @@
 <template>
   <div>
+    <div class="page">
+      <Button type="success" @click="modal = true">新增地址</Button>
+      <Modal title="新增地址" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+          <FormItem label="姓名" prop="name">
+            <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+          </FormItem>
+          <FormItem label="手机号" prop="phone">
+            <Input v-model="formValidate.phone" placeholder="Enter your phone"></Input>
+          </FormItem>
+          <FormItem label="所属城市" prop="region">
+            <Select v-model="formValidate.region" placeholder="Select your city">
+              <Option value="beijing">New York</Option>
+              <Option value="shanghai">London</Option>
+              <Option value="shenzhen">Sydney</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="详细地址" prop="detail_address">
+            <Input
+              v-model="formValidate.detail_address"
+              type="textarea"
+              :autosize="{minRows: 2,maxRows: 5}"
+              placeholder="Enter something..."
+            ></Input>
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="handleSubmit('formValidate')">提交</Button>
+            <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+          </FormItem>
+        </Form>
+      </Modal>
+    </div>
     <div>
       <Table border :columns="columns" :data="showData">
         <template slot-scope="{ row }" slot="name">
@@ -22,6 +54,7 @@ export default {
   data() {
     return {
       dataTotal: 0,
+      modal: false,
       columns: [
         {
           type: "index",
@@ -105,7 +138,44 @@ export default {
           detail_address: "雨花台软件大道"
         }
       ],
-      showData: []
+      showData: [],
+      formValidate: {
+        name: "",
+        phone: "",
+        region: "",
+        detail_address: ""
+      },
+      ruleValidate: {
+        name: [
+          {
+            required: true,
+            message: "The name cannot be empty",
+            trigger: "blur"
+          }
+        ],
+        phone: [
+          {
+            required: true,
+            type: "phone",
+            message: "Mailbox cannot be empty",
+            trigger: "blur"
+          }
+        ],
+        region: [
+          {
+            required: true,
+            message: "Please select the city",
+            trigger: "change"
+          }
+        ],
+        detail_address: [
+          {
+            required: true,
+            message: "Please enter a personal introduction",
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   mounted() {
@@ -115,6 +185,18 @@ export default {
   methods: {
     change(val) {
       this.showData = this.addressData.slice((val - 1) * 5, val * 5);
+    },
+    handleSubmit(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.$Message.success("Success!");
+        } else {
+          this.$Message.error("Fail!");
+        }
+      });
+    },
+    handleReset(name) {
+      this.$refs[name].resetFields();
     }
   }
 };
@@ -124,5 +206,6 @@ export default {
 .page {
   margin-right: 1%;
   text-align: right;
+  margin-bottom: 0.5%;
 }
 </style>
