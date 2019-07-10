@@ -3,41 +3,29 @@
     <header>
       <div class="logo">express system</div>
       <div class="menu">
-        <Dropdown transfer placement="bottom-start" style="margin-top:16px; margin-left:20px">
-          <a href="javascript:void(0)">首页</a>
-        </Dropdown>
-        <Dropdown
-          transfer
-          placement="bottom-start"
-          style="margin-top:16px; margin-left:20px"
-          @on-click="wait()">
-          <a href="javascript:void(0)">
-            我的订单
-            <Icon type="ios-arrow-down"></Icon>
-          </a>
-          <DropdownMenu slot="list">
-            <DropdownItem>全部订单</DropdownItem>
-            <DropdownItem>待取件</DropdownItem>
-            <DropdownItem>已签收</DropdownItem>
-            <DropdownItem>待派送</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        <Dropdown
-          transfer
-          placement="bottom-start"
-          style="margin-top:16px; margin-left:20px"
-          @on-click="wait()"
-        >
-          <a href="javascript:void(0)">
-            账户管理
-            <Icon type="ios-arrow-down"></Icon>
-          </a>
-          <DropdownMenu slot="list">
-            <DropdownItem>基本信息</DropdownItem>
-            <DropdownItem>地址管理</DropdownItem>
-            <DropdownItem>密码修改</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <Menu mode="horizontal" :theme="theme" active-name="1">
+          <MenuItem name="1" to="/sender/sender_detail">
+            <Icon type="ios-home" />首页
+          </MenuItem>
+          <Submenu name="2">
+            <template slot="title">
+              <Icon type="ios-briefcase" />订单管理
+            </template>
+            <MenuItem name="2-1" to='/sender/all_order'>全部订单</MenuItem>
+            <MenuItem name="2-2">待接受</MenuItem>
+            <MenuItem name="2-3">待派送</MenuItem>
+            <MenuItem name="2-4">派送中</MenuItem>
+            <MenuItem name="2-5">已签收</MenuItem>
+          </Submenu>
+          <Submenu name="3">
+            <template slot="title">
+              <Icon type="ios-people" />账户管理
+            </template>
+            <MenuItem name="3-1">基本信息</MenuItem>
+            <MenuItem name="3-2">地址管理</MenuItem>
+            <MenuItem name="3-3">密码修改</MenuItem>
+          </Submenu>
+        </Menu>
       </div>
 
       <div class="username">
@@ -105,31 +93,28 @@
       <Button type="primary" shape="circle" icon="ios-search" @click="search(search_value)">搜索</Button>
     </div>
 
-    <div class="content">普通寄件</div>
-    <sender></sender>
+    <div>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import sender from "./sender_detail";
-import order from "../reuse/order_detail";
 export default {
-  components: {
-    sender,
-    order
-  },
   data() {
     return {
-      username: "",
+       theme: 'light',
+      username: "sender",
       search_type: "订单查询",
       // search data
       search_value: "",
       // slide show data
-      slidepic: 0,
+      slidepic: 0
     };
   },
   mounted: function() {
-    this.username = this.$route.params.user;
+    // this.username = this.$route.params.user;
+    this.username = "sender";
   },
   methods: {
     // return to login.vue
@@ -188,7 +173,7 @@ header {
   width: 60%;
   height: 20px;
   position: relative;
-  margin-top: 15px;
+  margin-top: 10%;
 }
 
 .middle {

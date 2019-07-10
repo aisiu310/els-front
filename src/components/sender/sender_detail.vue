@@ -1,5 +1,6 @@
 <template>
   <div class="send">
+    <div class="content">普通寄件</div>
     <div class="send_up">
       <!-- 寄件人 -->
       <div>
@@ -87,14 +88,14 @@
         </div>
         <div class="expand">
           <label>快递费用：</label>
-            <Input
-              v-model="cost"
-              prefix="logo-usd"
-              placeholder="填写完自动计算价格"
-              style="width: 200px"
-              disabled
-            />
-            <Button type="success" shape="circle" @click="pay()">下单</Button>
+          <Input
+            v-model="cost"
+            prefix="logo-usd"
+            placeholder="填写完自动计算价格"
+            style="width: 200px"
+            disabled
+          />
+          <Button type="success" shape="circle" @click="pay()">下单</Button>
         </div>
       </div>
     </div>
@@ -106,8 +107,8 @@ export default {
   data() {
     return {
       cost: "",
-      package: '',
-      courie:'',
+      package: "",
+      courie: "",
       send: {
         name: "",
         phone: "",
@@ -161,18 +162,18 @@ export default {
     handleReset(name) {
       this.$refs[name].resetFields();
     },
-    pay(){
-        this.$Message.success("下单成功");
+    pay() {
+      this.$Message.success("下单成功");
     }
   },
   // wait for calculate
-  watch:{
-     package:function(){
-         this.cost = "123";
-     },
-     courie:function(val){
-         this.cost="150";
-     }
+  watch: {
+    package: function() {
+      this.cost = "123";
+    },
+    courie: function(val) {
+      this.cost = "150";
+    }
   }
 };
 </script>
@@ -187,7 +188,7 @@ export default {
 
 .content {
   width: 80%;
-  margin-left: 10%;
+  /* margin-left: 10%; */
   color: black;
   font-size: 24px;
   font-family: "楷体";
