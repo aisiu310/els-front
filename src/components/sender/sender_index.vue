@@ -3,27 +3,26 @@
     <header>
       <div class="logo">express system</div>
       <div class="menu">
-        <Menu mode="horizontal" :theme="theme" active-name="1">
-          <MenuItem name="1" to="/sender/sender_detail">
+        <Menu mode="horizontal" :theme="theme" active-name="0" @on-select="sendChoice">
+          <MenuItem name="0" to="/sender/sender_detail">
             <Icon type="ios-home" />首页
           </MenuItem>
-          <Submenu name="2">
+          <Submenu name="1">
             <template slot="title">
               <Icon type="ios-briefcase" />订单管理
             </template>
-            <MenuItem name="2-1" to='/sender/all_order'>全部订单</MenuItem>
-            <MenuItem name="2-2">待接受</MenuItem>
-            <MenuItem name="2-3">待派送</MenuItem>
-            <MenuItem name="2-4">派送中</MenuItem>
-            <MenuItem name="2-5">已签收</MenuItem>
+            <MenuItem name="1-1" to="/sender/orderManage/order_table">全部订单</MenuItem>
+            <MenuItem name="1-2" to="/sender/orderManage/order_table">待取件</MenuItem>
+            <MenuItem name="1-3" to="/sender/orderManage/order_table">派送中</MenuItem>
+            <MenuItem name="1-4" to="/sender/orderManage/order_table">已签收</MenuItem>
           </Submenu>
-          <Submenu name="3">
+          <Submenu name="2">
             <template slot="title">
               <Icon type="ios-people" />账户管理
             </template>
-            <MenuItem name="3-1">基本信息</MenuItem>
-            <MenuItem name="3-2">地址管理</MenuItem>
-            <MenuItem name="3-3">密码修改</MenuItem>
+            <MenuItem name="2-1" to="/sender/senderManage/person">基本信息</MenuItem>
+            <MenuItem name="2-2" to="/sender/senderManage/address">地址管理</MenuItem>
+            <MenuItem name="2-3" to="/sender/senderManage/password">密码修改</MenuItem>
           </Submenu>
         </Menu>
       </div>
@@ -100,10 +99,11 @@
 </template>
 
 <script>
+import bus from '../reuse/bus'
 export default {
   data() {
     return {
-       theme: 'light',
+      theme: "light",
       username: "sender",
       search_type: "订单查询",
       // search data
@@ -132,8 +132,9 @@ export default {
         // invoke  the back-end API
       }
     },
-    wait() {
-      this.$Message.success("工程师正在努力开发中...");
+    sendChoice(val) {
+      bus.$emit('sendChoice', val);
+      // this.$Message.success("工程师正在努力开发中...");
     }
   }
 };
