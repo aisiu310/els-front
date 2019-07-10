@@ -1,42 +1,81 @@
 <template>
-	<div id="navigator">	
-		<div id="navigator-bar">
-			<div id="navigator-bar-item">
-				<ul>
-					<li>单据审批</li>
-					<li>人员调整</li>
-					<li>机构调整</li>
-					<li>薪水策略</li>
-					<li>邮递收费策略</li>
-					<li>日志</li>
-				</ul>
+	<div>
+		<div id="navigator">	
+			<div id="navigator-bar">
+				<div id="navigator-bar-item">
+					<ul>
+						<li>
+							<router-link to="/manager/check_list">
+								<div @click="Input('单据审批')">单据审批</div>
+							</router-link>								
+						</li>
+						<li>人员调整</li>
+						<li>机构调整</li>
+						<li>薪水策略</li>
+						<li>邮递收费策略</li>
+						<li>日志</li>
+					</ul>
 
+				</div>
+			</div>
+			<div id="employee-info">
+				<div id="employee-photo">
+					<img src="../../../assets/employee.png" />
+				</div>
+				<div id="employee-textinfo">
+					<ul>
+						<li>这里是个人信息{{}}</li>
+						<li>这里是职位{{}}</li>
+						<li>这里是姓名{{}}</li>
+						<li>这里是日期{{}}</li>
+						<li>这里是部门{{}}</li>
+					</ul>
+				</div>		
 			</div>
 		</div>
-		<div id="employee-info">
-			<div id="employee-photo">
-				<img src="../../../assets/employee.png" />
-			</div>
-			<div id="employee-textinfo">
-				<ul>
-					<li>这里是个人信息{{}}</li>
-					<li>这里是职位{{}}</li>
-					<li>这里是姓名{{}}</li>
-					<li>这里是日期{{}}</li>
-					<li>这里是部门{{}}</li>
-				</ul>
-			</div>		
-    	</div>
+		<div id="main">
+			<p>{{name}}</p>
+			<hr />
+			<router-view></router-view>
+		</div>
 	</div>
 </template>
 
 <script>
-	export default{				
-		
+export default{	
+	data() {
+		return {
+			name: "车辆装车"
+		};
+	},			
+	methods: {
+		Input(val) {
+		this.name = val;
+		},   
+// mounted(){
+// 	Bus.$on('change',(val) => {
+// 		this.name = val
+// 	})
+// },
 	}
+}
 </script>
 
 <style>
+	#main {
+	border: 4px solid red;
+	margin-left: 16%;
+	width: 84%;
+	padding: 1% 1% 0% 1%;
+	}
+	#main p {
+	font-size: 2em;
+	}
+	#main hr {
+	/*内嵌水平线*/
+	width: 100%;
+	margin: 0% 0% 1% 0%;
+	}
 	#navigator{
 		/*width: 238px;
 		height: 780px;*/

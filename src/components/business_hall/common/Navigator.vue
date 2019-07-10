@@ -24,7 +24,7 @@
               <router-link to="/business_hall/business_driver_info">司机信息管理</router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_receipt_list">收款单</router-link>
+              <router-link to="/business_hall/business_receipt_list">收款</router-link>
             </li>
           </ul>
         </div>
@@ -63,19 +63,14 @@ export default {
       job:"业务员",
       ename:"楚岩",
       date:"2019-7-9",
-      depart:"营业厅"
+      depart:"营业厅",
+      name: "车辆装车"
     };
   },
 
   methods: {
     Input(val) {
       this.name = val;
-    },
-
-    data() {
-      return {
-        name: "车辆装车"
-      };
     },
     // mounted(){
     // 	Bus.$on('change',(val) => {

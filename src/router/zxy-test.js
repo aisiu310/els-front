@@ -17,7 +17,9 @@ import business_arrive_list_add from '@/components/business_hall/arrive_list_add
 import visiual from '@/components/warehouse/Visiual'
 import warehouse_layout from '@/components/warehouse/common/warehouse_layout'
 
- 
+import check_list from '@/components/manager/check_list'
+import manager_layout from '@/components/manager/common/manager_layout' 
+
 import payee from '@/components/finance/settle_accounts'
 
 Vue.use(Router)
@@ -100,6 +102,19 @@ export default new Router ({
                     path:'visiual',
                     name:'visiual',
                     component:visiual
+                }
+            ]
+        },
+        {
+            path:'/manager',
+            name:'manager',
+            redirect:'/manager/check_list',
+            component:manager_layout,
+            children:[
+                {
+                    path:'check_list',
+                    name:'check_list',
+                    component:check_list
                 }
             ]
         }
