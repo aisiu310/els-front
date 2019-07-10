@@ -58,6 +58,7 @@ const axios = require("axios");
 export default {
   data() {
     return {
+      info:"test",
       name: "车辆管理",
       job:"业务员",
       ename:"楚岩",
@@ -81,15 +82,6 @@ export default {
     // 		this.name = val
     // 	})
     // },
-    methods: {
-      HandleChange(val) {
-        this.name = val;
-      }
-      // HandleChange(val){
-      // 	Bus.$emit('change',val);
-      // 	alert(val);
-      // }
-    }
   }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table stripe border :columns="columns" :data="data">
+        <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
             
             <template slot-scope="{row,index}" slot="date">
                 <input type="text" v-model="editDate" v-if="editIndex === index"/>
@@ -36,7 +36,7 @@
                 </div>
             </template>
         </Table>
-        <Button type="error" id="delete_button" @click="deleteAll">删除</Button>
+        <Button type="error" id="delete_button" :v-bind="sel"  @click="deleteAll(sel)">删除</Button>
         <div id="arrive_list_add">
             <AB></AB>
         </div>
@@ -56,6 +56,7 @@ export default {
     },
     data(){
         return {
+            sel:[],
             columns: [
                 {
                     type: 'selection',
@@ -113,19 +114,20 @@ export default {
             sum: 0
         }
     },
-        created(){
+    created(){
         this.$axios({
-            method:'post',
-            url:'api',
-            data:this.qs.stringify({    //这里是发送给后台的数据
-                    userId:this.userId,
-                    token:this.token,
-            })
+            // method:'post',
+            // url:'api',
+            // data:this.qs.string({    //这里是发送给后台的数据
+            //         userId:this.userId,
+            //         token:this.token,
+            // })
         }).then((response) =>{          //这里使用了ES6的语法
             console.log(response)       //请求成功返回的数据
         }).catch((error) =>{
             console.log(error)       //请求失败返回的数据
-        })
+        }),
+        console.log(this.sel);
     },
     mounted(){
         var pagedata = [
@@ -279,15 +281,22 @@ export default {
                     address: 'Ottawa No. 2 Lake Park',
                     state: 'arrive',
                 }
-            ];
-
-        
+            ];        
             this.sum = pagedata.length;
             this.data = pagedata.splice(0,10);
     },
     methods:{
-        deleteAll(){
-            this.$refs.selection.splice
+        select(selection,row){                 
+            console.log(selection);
+            this.sel = selection;
+        },
+        deleteAll(sel){
+            console.log(1,sel)
+            if(sel.length !=0){
+                alert("删除成功")
+            }else{
+                alert("你还没有选择")
+            }
         },
         handleEdit (row, index) {
             this.editDate = row.date;
