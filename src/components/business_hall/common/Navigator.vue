@@ -35,11 +35,11 @@
         </div>
         <div id="employee-textinfo">
           <ul>
-            <li>这里是个人信息{{}}</li>
-            <li>这里是职位{{}}</li>
-            <li>这里是姓名{{}}</li>
-            <li>这里是日期{{}}</li>
-            <li>这里是部门{{}}</li>
+            <li>{{info}}</li>
+            <li>{{job}}</li>
+            <li>{{ename}}</li>
+            <li>{{date}}</li>
+            <li>{{depart}}</li>
           </ul>
         </div>
       </div>
@@ -58,7 +58,11 @@ const axios = require("axios");
 export default {
   data() {
     return {
-      name: "车辆管理"
+      name: "车辆管理",
+      job:"业务员",
+      ename:"楚岩",
+      date:"2019-7-9",
+      depart:"营业厅"
     };
   },
 

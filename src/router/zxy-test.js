@@ -12,6 +12,7 @@ import business_car_info from '@/components/business_hall/car_info'
 import business_driver_info from '@/components/business_hall/driver_info'
 import business_receipt_list from '@/components/business_hall/receipt_list'
 import business_layout from '@/components/business_hall/common/business_layout'
+import business_arrive_list_add from '@/components/business_hall/arrive_list_add'
 
 import visiual from '@/components/warehouse/Visiual'
 import warehouse_layout from '@/components/warehouse/common/warehouse_layout'
@@ -81,7 +82,12 @@ export default new Router ({
                     path: 'business_receipt_list',
                     name: 'business_receipt_list',
                     component: business_receipt_list
-                },                 
+                },  
+                {
+                    path: 'business_arrive_list_add',
+                    name: 'business_arrive_list_add',
+                    component: business_arrive_list_add
+                },                
             ]
         },
         {

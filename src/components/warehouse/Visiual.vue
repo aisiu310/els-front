@@ -53,14 +53,20 @@ export default {
                     grid3D: {
                         boxWidth: 200,
                         boxDepth: 80,
+                        // postEffect:bloom,
                         viewControl: {
+                            bata:0
                             // projection: 'orthographic'
+                            // autoRotate:true,
+                            // autoRotateDirection:ccw,
+                            // autoRotateSpeed:100,
+                            // alpha:40,                          
                         },
                         light: {
                             main: {
                                 intensity: 1.2,
                                 shadow: true
-                            },
+                            },  
                             ambient: {
                                 intensity: 0.3
                             }
@@ -110,8 +116,8 @@ export default {
 <style>
     #myChart{
         width: 100%;
-        height: 600px;
-        /* border: 1px solid red; */
+        height: 65em;
+        border: 1px solid red;
     }
 
 </style>

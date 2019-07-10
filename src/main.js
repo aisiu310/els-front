@@ -8,7 +8,7 @@ import 'iview/dist/styles/iview.css'
 // import router from './router'
 
 // import router from './router/zxy-test'
-import router from './router/finance'
+// import router from './router/finance'
 
 import router from './router/zxy-test'
 // import router from './router/finance'
