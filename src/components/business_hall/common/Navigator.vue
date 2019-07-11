@@ -6,25 +6,33 @@
           <ul>
             <li>
               <router-link to="/business_hall/business_loadcar_list">
-                <div @click="Input('车辆装车')">车辆装车</div>
+                <div @click="Input('装车管理')">装车管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_arrive_list">
-                <div @click="Input('到达接收')">到达接收</div>
+                <div @click="Input('接收管理')">接收管理</div>
               </router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_deliver_list">派件管理</router-link>
+              <router-link to="/business_hall/business_deliver_list">
+                <div @click="Input('派件管理')">派件管理</div>
+              </router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_car_info">车辆信息管理</router-link>
+              <router-link to="/business_hall/business_car_info">
+                <div @click="Input('车辆信息管理')">车辆信息管理</div>
+              </router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_driver_info">司机信息管理</router-link>
+              <router-link to="/business_hall/business_driver_info">
+               <div @click="Input('司机信息管理')">司机信息管理</div>
+              </router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_receipt_list">收款</router-link>
+              <router-link to="/business_hall/business_receipt_list_test">
+               <div @click="Input('收款管理')">收款管理</div>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -45,8 +53,8 @@
       </div>
     </div>
     <div id="main">
-      <p>{{name}}</p>
-      <hr />
+      <!-- <p>{{name}}</p>
+      <hr /> -->
       <router-view></router-view>
     </div>
   </div>
@@ -83,7 +91,7 @@ export default {
 
 <style>
 #main {
-  border: 4px solid red;
+  /* border: 4px solid red; */
   margin-left: 16%;
   width: 84%;
   padding: 1% 1% 0% 1%;
@@ -106,7 +114,7 @@ export default {
 
   width: 16%;
   height: auto;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   margin-top: 0px;
   background-color: black;
 

@@ -1,41 +1,46 @@
 <template>
     <div>
-        <Table stripe border :columns="columns" :data="data">
-            
-            <template slot-scope="{row,index}" slot="date">
-                <input type="text" v-model="editDate" v-if="editIndex === index"/>
-                <span v-else>{{row.date}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="number">
-                <input type="text" v-model="editNumber" v-if="editIndex === index"/>
-                <span v-else>{{row.number}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="deliver">
-                <input type="text" v-model="editDeliver" v-if="editIndex === index"/>
-                <span v-else>{{row.deliver}}</span>
-            </template>
+        <Tabs>
+            <TabPane label="派件管理" icon="ios-swap">
+                <Table stripe border :columns="columns" :data="data">         
+                    <template slot-scope="{row,index}" slot="date">
+                        <input type="text" v-model="editDate" v-if="editIndex === index"/>
+                        <span v-else>{{row.date}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="number">
+                        <input type="text" v-model="editNumber" v-if="editIndex === index"/>
+                        <span v-else>{{row.number}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="deliver">
+                        <input type="text" v-model="editDeliver" v-if="editIndex === index"/>
+                        <span v-else>{{row.deliver}}</span>
+                    </template>
 
-            <template slot-scope="{ row }" slot="date">
-                <strong>{{ row.date }}</strong>
-            </template>
+                    <template slot-scope="{ row }" slot="date">
+                        <strong>{{ row.date }}</strong>
+                    </template>
 
-            <template slot-scope="{row,index}" slot="action">
-                
-                <div v-if="editIndex === index">
-                    <Button @click="handleSave(index)">save</Button>
-                    <Button @click="editIndex = -1">cancel</Button>
+                    <template slot-scope="{row,index}" slot="action">
+                        
+                        <div v-if="editIndex === index">
+                            <Button @click="handleSave(index)">save</Button>
+                            <Button @click="editIndex = -1">cancel</Button>
+                        </div>
+                        <div v-else>
+                            <Button @click="handleEdit(row,index)">操作</Button>
+                            <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                        </div>
+                    </template>
+                </Table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div style="float: right;">
+                        <Page :total="sum" @on-change="changePage"  show-elevator show-total></Page>
+                    </div>
                 </div>
-                <div v-else>
-                    <Button @click="handleEdit(row,index)">操作</Button>
-                    <Button type="error" size="small" @click="remove(index)">Delete</Button>
-                </div>
-            </template>
-        </Table>
-        <div style="margin: 10px;overflow: hidden">
-            <div style="float: right;">
-                <Page :total="sum" @on-change="changePage"  show-elevator show-total></Page>
-            </div>
-        </div>
+            </TabPane>
+            <TabPane label="历史记录" icon="ios-clock-outline"></TabPane>
+        </Tabs>
+        
     </div>
 
 </template>

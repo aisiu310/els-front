@@ -1,61 +1,65 @@
 <template>
     <div>
-        <Table stripe border :columns="columns" :data="data">           
-            <template slot-scope="{row,index}" slot="driverid">
-                <input type="text" v-model="editDriverId" v-if="editIndex === index"/>
-                <span v-else>{{row.driverid}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="businesshallnumber">
-                <input type="text" v-model="editBusinessHallNumber" v-if="editIndex === index"/>
-                <span v-else>{{row.businesshallnumber}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="drivername">
-                <input type="text" v-model="editDriverName" v-if="editIndex === index"/>
-                <span v-else>{{row.drivername}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="driversex">
-                <input type="text" v-model="editDriverSex" v-if="editIndex === index"/>
-                <span v-else>{{row.driversex}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="drivercardid">
-                <input type="text" v-model="editDriverCardId" v-if="editIndex === index"/>
-                <span v-else>{{row.drivercardid}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="phonenumber">
-                <input type="text" v-model="editPhoneNumber" v-if="editIndex === index"/>
-                <span v-else>{{row.phonenumber}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="driverbirthday">
-                <input type="text" v-model="editDriverBirthday" v-if="editIndex === index"/>
-                <span v-else>{{row.driverbirthday}}</span>
-            </template>
-            <template slot-scope="{row,index}" slot="driverlicensedata">
-                <input type="text" v-model="editDriverLicenseData" v-if="editIndex === index"/>
-                <span v-else>{{row.driverlicensedata}}</span>
-            </template>
+        <Tabs>
+            <TabPane label="司机信息" icon="ios-car">
+                <Table stripe border :columns="columns" :data="data">           
+                    <template slot-scope="{row,index}" slot="driverid">
+                        <input type="text" v-model="editDriverId" v-if="editIndex === index"/>
+                        <span v-else>{{row.driverid}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="businesshallnumber">
+                        <input type="text" v-model="editBusinessHallNumber" v-if="editIndex === index"/>
+                        <span v-else>{{row.businesshallnumber}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="drivername">
+                        <input type="text" v-model="editDriverName" v-if="editIndex === index"/>
+                        <span v-else>{{row.drivername}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="driversex">
+                        <input type="text" v-model="editDriverSex" v-if="editIndex === index"/>
+                        <span v-else>{{row.driversex}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="drivercardid">
+                        <input type="text" v-model="editDriverCardId" v-if="editIndex === index"/>
+                        <span v-else>{{row.drivercardid}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="phonenumber">
+                        <input type="text" v-model="editPhoneNumber" v-if="editIndex === index"/>
+                        <span v-else>{{row.phonenumber}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="driverbirthday">
+                        <input type="text" v-model="editDriverBirthday" v-if="editIndex === index"/>
+                        <span v-else>{{row.driverbirthday}}</span>
+                    </template>
+                    <template slot-scope="{row,index}" slot="driverlicensedata">
+                        <input type="text" v-model="editDriverLicenseData" v-if="editIndex === index"/>
+                        <span v-else>{{row.driverlicensedata}}</span>
+                    </template>
 
-            <template slot-scope="{ row }" slot="date">
-                <strong>{{ row.date }}</strong>
-            </template>
+                    <template slot-scope="{ row }" slot="date">
+                        <strong>{{ row.date }}</strong>
+                    </template>
 
-            <template slot-scope="{row,index}" slot="action">
-                
-                <div v-if="editIndex === index">
-                    <Button @click="handleSave(index)">save</Button>
-                    <Button @click="editIndex = -1">cancel</Button>
+                    <template slot-scope="{row,index}" slot="action">
+                        
+                        <div v-if="editIndex === index">
+                            <Button @click="handleSave(index)">save</Button>
+                            <Button @click="editIndex = -1">cancel</Button>
+                        </div>
+                        <div v-else>
+                            <Button @click="handleEdit(row,index)">操作</Button>
+                            
+                            <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                        </div>
+                    </template>
+                </Table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div style="float: right;">
+                        <Page :total="sum" @on-change="changePage"  show-elevator show-total></Page>
+                    </div>
                 </div>
-                <div v-else>
-                    <Button @click="handleEdit(row,index)">操作</Button>
-                    
-                    <Button type="error" size="small" @click="remove(index)">Delete</Button>
-                </div>
-            </template>
-        </Table>
-        <div style="margin: 10px;overflow: hidden">
-            <div style="float: right;">
-                <Page :total="sum" @on-change="changePage"  show-elevator show-total></Page>
-            </div>
-        </div>
+            </TabPane>
+        </Tabs>
     </div>
 
 </template>
