@@ -23,9 +23,13 @@
 let echarts = require("echarts/lib/echarts");
 export default {
   data() {
-    return {};
+    return {
+      payAnalyze: [],
+      payNumber:[]
+    };
   },
   mounted() {
+    this.getData();
     this.payee();
     this.pay();
     this.myChart();
@@ -54,20 +58,21 @@ export default {
     },
     pay() {
       let pay = echarts.init(document.getElementById("pay"));
+      console.log(this.payNumber)
       pay.setOption({
         title: {
           text: "付款单"
         },
         xAxis: {
           type: "category",
-          data: ["07/08", "07/09", "07/10", "07/11", "07/12", "07/13", "07/14"]
+          data: this.payAnalyze[0]
         },
         yAxis: {
           type: "value"
         },
         series: [
           {
-            data: [220, 182, 191, 234, 290, 330, 310],
+            data: this.payNumber,
             type: "bar"
           }
         ]
@@ -121,6 +126,20 @@ export default {
           }
         ]
       });
+    },
+    getData() {
+      this.$http
+        .get(
+          "http://localhost:8021/pay/calculate?begin=2019-07-03&end=2019-07-13"
+        )
+        .then(res => {
+          this.payAnalyze = res.data.data;
+          console.log(this.payAnalyze[1][0]);
+          var res = [240, 488, 2000, 2000, 3200, 200, 240];
+          for(let i = 0; i< this.payAnalyze[1].length; i++){
+            this.payNumber[i] = this.payAnalyze[1][i];
+          }
+        });
     }
   }
 };

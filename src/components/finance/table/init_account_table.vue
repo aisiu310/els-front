@@ -7,7 +7,7 @@
         <!-- init account modal -->
         <Modal v-model="modal" title="新建账本" :styles="{top: '20px'}" :footer-hide="true">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-            <FormItem label="创建日期">
+            <!-- <FormItem label="创建日期">
               <Row>
                 <Col span="11">
                   <FormItem prop="date">
@@ -15,7 +15,7 @@
                   </FormItem>
                 </Col>
               </Row>
-            </FormItem>
+            </FormItem>-->
             <FormItem label="账本名称" prop="name">
               <Input v-model="formValidate.name"></Input>
             </FormItem>
@@ -31,8 +31,8 @@
             <FormItem label="仓库数量" prop="inventory">
               <Input type="number" v-model="formValidate.inventory"></Input>
             </FormItem>
-            <FormItem label="账户数量" prop="Bank_account">
-              <Input type="number" v-model="formValidate.Bank_account"></Input>
+            <FormItem label="账户数量" prop="bankAccount">
+              <Input type="number" v-model="formValidate.bankAccount"></Input>
             </FormItem>
             <FormItem>
               <Button type="primary" @click="handleSubmit('formValidate')">新建账本</Button>
@@ -46,6 +46,9 @@
     <div>
       <Table :columns="columns" :data="data"></Table>
     </div>
+    <div class="page">
+      <Page :total="dataLength" show-elevator @on-change="changePage" />
+    </div>
   </div>
 </template>
 
@@ -54,6 +57,8 @@ import expandRow from "./init_expand";
 export default {
   data() {
     return {
+      data: [],
+      dataLength: 0,
       modal: false,
       columns: [
         {
@@ -105,24 +110,6 @@ export default {
                 "Button",
                 {
                   props: {
-                    type: "success",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.update(params.index);
-                    }
-                  }
-                },
-                "修改"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
                     type: "error",
                     size: "small"
                   },
@@ -138,36 +125,24 @@ export default {
           }
         }
       ],
-      data: [
-        {
-          id: "00001",
-          date: "2019/07/05",
-          name: "上甘岭2019账本",
-          organization: 16,
-          personnel: 300,
-          car: 150,
-          inventory: 6,
-          Bank_account: 10
-        }
-      ],
       formValidate: {
-        date: "",
+        // date: "",
         name: "",
         organization: "",
         personnel: "",
         car: "",
         inventory: "",
-        Bank_account: ""
+        bankAccount: ""
       },
       ruleValidate: {
-        date: [
-          {
-            required: true,
-            type: "date",
-            message: "输入不能为空",
-            trigger: "blur"
-          }
-        ],
+        // date: [
+        //   {
+        //     required: true,
+        //     type: "date",
+        //     message: "输入不能为空",
+        //     trigger: "blur"
+        //   }
+        // ],
         name: [{ required: true, message: "输入不能为空", trigger: "blur" }],
         organization: [
           { required: true, message: "输入不能为空", trigger: "change" }
@@ -179,37 +154,82 @@ export default {
         inventory: [
           { required: true, message: "输入不能为空", trigger: "change" }
         ],
-        Bank_account: [
+        bankAccount: [
           { required: true, message: "输入不能为空", trigger: "change" }
         ]
       }
     };
   },
+  mounted() {
+    this.getData();
+  },
   methods: {
     show(index) {
       this.$Modal.info({
         title: this.data.name,
-        content: `编号:${this.data[index].id}<br>创建日期：${this.data[index].date}<br>账本名称：${this.data[index].name}<br>机构数量：${this.data[index].organization}个<br>人员数量：${this.data[index].personnel}人<br>车辆数量：${this.data[index].car}辆<br>仓库数量：${this.data[index].inventory}座<br>银行账号数量：${this.data[index].Bank_account}个`
+        content: `编号:${this.data[index].id}<br>创建日期：${this.data[index].date}<br>账本名称：${this.data[index].name}<br>机构数量：${this.data[index].organization}个<br>人员数量：${this.data[index].personnel}人<br>车辆数量：${this.data[index].car}辆<br>仓库数量：${this.data[index].inventory}座<br>银行账号数量：${this.data[index].bankAccount}个`
       });
     },
     // del payee and get the data which is from back-end
     remove(index) {
       this.$Message.error("初始账本无法被删除！");
     },
-    update(index) {
-      this.$Message.error("对不起，您当前没有权限修改初始账本信息！");
-    },
+    // add init Account
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$Message.success("Success!");
+          this.$http
+            .post(
+              "http://localhost:8021/enterprise/addEnterprise",
+              {
+                id: null,
+                name: this.formValidate.name,
+                date: null,
+                organization: this.formValidate.organization,
+                personnel: this.formValidate.personnel,
+                car: this.formValidate.car,
+                inventory: this.formValidate.inventory,
+                bankAccount: this.formValidate.bankAccount
+              },
+              { emulateJson: true }
+            )
+            .then(res => {
+              if (res.data.data == 1) {
+                this.getData();
+                this.modal = false;
+                this.$Message.success("新建成功");
+              }
+            });
         } else {
           this.$Message.error("Fail!");
         }
       });
     },
+    // reset
     handleReset(name) {
       this.$refs[name].resetFields();
+    },
+    // page
+    changePage(val) {
+      this.$http
+        .get(
+          "http://localhost:8021/enterprise/getAllEnterprise?skipCount=" +
+            val +
+            "&pageCount=10"
+        )
+        .then(res => {
+          this.data = res.data.data[0];
+        });
+    },
+    getData() {
+      this.$http
+        .get(
+          "http://localhost:8021/enterprise/getAllEnterprise?skipCount=1&pageCount=10"
+        )
+        .then(res => {
+          this.data = res.data.data[0];
+          this.dataLength = res.data.data[1];
+        });
     }
   }
 };
@@ -239,5 +259,13 @@ export default {
   margin: 5px 0;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.page {
+  width: 97%;
+  height: auto;
+  text-align: right;
+  margin-top: 0.5%;
+  margin-right: 3%;
+  margin-bottom: 0.5%;
 }
 </style>

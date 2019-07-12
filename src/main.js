@@ -6,7 +6,7 @@ import 'iview/dist/styles/iview.css'
 
 // import router from './router'
 // import router from './router/zxy-test'
-import router from './router/sender'  
+import router from './router/finance'  
 
 import echarts from 'echarts' //引入echarts
 Vue.prototype.$echarts = echarts //引入组件,作为全局变量

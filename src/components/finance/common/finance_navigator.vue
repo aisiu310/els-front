@@ -6,7 +6,6 @@
         <Menu
           :theme="theme"
           :active-name="['4-1']"
-          :open-names="['4']"
           :width="100"
           :accordion="true"
         >
@@ -15,8 +14,8 @@
             <MenuItem name="1-1" to="/finance/init">初期建账</MenuItem>
             <MenuItem name="1-2" to="/finance/bank">账号管理</MenuItem>
           </Submenu>
-          <MenuItem name="2" to="/finance/payee">成本管理</MenuItem>
-          <MenuItem name="3" to="/finance/pay">结算管理</MenuItem>
+          <MenuItem name="2" to="/finance/payee">结算管理</MenuItem>
+          <MenuItem name="3" to="/finance/pay">成本管理</MenuItem>
           <Submenu name="4">
             <template slot="title">统计报表</template>
             <MenuItem name="4-1" to="/finance/business_graph">经营情况表</MenuItem>
