@@ -61,7 +61,7 @@
 </template>
 
 <script>
-// import Bus from '../../../bus'
+import Bus from '../../reuse/bus';
 const axios = require("axios");
 export default {
   data() {
@@ -75,16 +75,25 @@ export default {
       name: "车辆装车"
     };
   },
-
+  created(){ 
+      Bus.$emit('setBusiness','雨花台');
+      Bus.$emit('setName','楚岩');
+      Bus.$emit('setNumber','12121');    
+  },
   methods: {
     Input(val) {
       this.name = val;
     },
-    // mounted(){
-    // 	Bus.$on('change',(val) => {
-    // 		this.name = val
-    // 	})
-    // },
+    test(){    
+      Bus.$on('setBusiness',content =>{
+            alert(content);
+        })
+    },
+    mounted(){
+    	this.$root.Bus.$on('change',(val) => {
+    		this.name = val
+    	})
+    },
   }
 };
 </script>

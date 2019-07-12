@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
 // use the enent bus
-const bus = new Vue();
+const Bus = new Vue();
 
-export default bus;
+export default Bus;

@@ -3,22 +3,24 @@
         <Tabs>
             <TabPane label="收款记录" icon="logo-yen">
                 <div id="split">
-                    <Split v-model="split">               
+                    <Split v-model="split"> 
+
+
                         <div slot="left" id="left">
                             <h1 style="text-align: center">快递员信息</h1><hr>
                             <Scroll :on-reach-bottom="handleReachBottom" height="720" loading-text="人员信息加载ing">                        
-                                <Card :bordered="true" v-for="(item,index) in list1" id="card" @click.native="showlist('褚岩')" :v-bind="name" :key="index">                          
+                                <Card :bordered="true" v-for="(courier,index) in courier" id="card" @click.native="showlist(courier.courier_name)" :v-bind="name" :key="index">                          
                                     <p slot="title">
-                                        褚岩   
-                                        <Badge :count="10" id="hint"></Badge >                            
+                                        {{courier.courier_name}}   
+                                        <Badge :count="courier.count" id="hint"></Badge >                            
                                         <Icon type="ios-notifications-outline" style="margin-left:6.5em" size="24"></Icon>                                                                  
                                     </p>  
-                                    <p>2019-7-10日，{{item}}条收款记录                               
+                                    <p>工号{{courier.courier_id}}，{{courier.count}}条收款记录                               
                                     </p>
                                 </Card>                        
-                                <Card :bordered="true"  @click.native="showlist('逻辑')">
+                                <Card :bordered="true"  @click.native="showlist('张三')">
                                     <p slot="title" >
-                                        罗辑
+                                         张三
                                         <Badge :count="999" id="hint" type="primary"></Badge >                            
                                         <Icon type="ios-notifications-outline" style="margin-left:6.5em" size="24"></Icon>                                                                  
                                     </p>
@@ -26,19 +28,22 @@
                                 </Card>
                             </Scroll>
                         </div>
+
+
                         <div slot="right">
                             <Scroll :on-reach-bottom="handleReachBottom" height="720" loading-text="收款信息加载ing">
-                                <Card dis-hover v-for="(item, index) in receiptlist" :key="index" style="margin: 20px 0">
-                                    日期：{{item.time}}
-                                    快递员：{{item.name}}
-                                    收款：{{item.receipt}}
-                                    快递单号：{{item.number}}
+                                <Card dis-hover v-for="(receipt, index) in receipt" :key="index" style="margin: 20px 0">
+                                    收款日期：{{receipt.payment_time}}
+                                    收款快递员：{{receipt.courier_name}}
+                                    收款金额：{{receipt.total_fee}}
+                                    快递单号：{{receipt.code}}
                                 </Card>
                                 <Button @click.native="createlist();modal = true" type="primary" style="float:right">建立收款单</Button>
                             </Scroll>
                         </div>
                     </Split> 
                 </div>
+
                 <Modal
                     width=40
                     v-model="modal"
@@ -67,8 +72,9 @@
                     </Form>
                 </Modal>
             </TabPane>
+
             <TabPane label="收款单" icon="ios-paper">
-                 <Table stripe border :columns="columns" :data="data">         
+                 <Table stripe border :columns="columns" :data="receipt">         
                     <template slot-scope="{row,index}" slot="driverid">
                         <input type="text" v-model="editDriverId" v-if="editIndex === index"/>
                         <span v-else>{{row.driverid}}</span>
@@ -115,13 +121,15 @@
     </div>
 </template>
 <script>
-
+import Bus from '../reuse/bus'
+import { connect } from 'net';
 export default {
     data(){
         return{
             modal: false,
             split:0.2,
-            list1: [1, 2, 3],
+            receipt:[],
+            courier:[],
             name:[],
             receiptlist:[],
             formItem:{
@@ -181,7 +189,7 @@ export default {
                         slot: 'action'
                     }                           
                 ],                                
-                data: [],
+               
                 editIndex: -1,  // 当前聚焦的输入框的行数
                 editDriverId: '',  // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
                 editProceedTime: '',  // 第二列输入框
@@ -191,7 +199,53 @@ export default {
                 sum: 0
         }
     },
+    mounted(){
+            this.$axios.get(' http://192.168.2.229/order/getPaymentInfoList', {
+                    params: {
+                    hallCode:'025000',
+                    date:'2019-07-12'
+                    }
+            }).then((response) => {
+                this.receipt = response.data.data[0]
+                this.courier = response.data.data[1]
+                console.log(this.receipt,this.courier)
+            }).catch(function (error) {
+                alert('请求超时');
+            })          
+            var receipt = [
+                    {
+                        driverid: '1',                       
+                        proceedtime: '2016-10-02',
+                        proceedamount: 25,
+                        proceedcourier: '褚岩',
+                        ordernumber:'23452634365453'
+                    },
+                    {
+                        driverid: '2',                       
+                        proceedtime: '2016-10-02',
+                        proceedamount: 25,
+                        proceedcourier: '褚岩',
+                        ordernumber:'23452634365453'                   
+                    }
+                ];          
+                this.sum = receipt.length;
+                this.receipt = receipt.splice(0,10);
+        },
     methods:{
+        showlist(val){
+            var list = []
+            if(val){
+                this.receipt.forEach(Element => {
+                    if(Element.courier_name == val){
+                        list.push(Element)
+                    }
+                })
+            this.receipt = list
+            // console.log(list);
+            }else{
+                this.$Message.error('错误')
+            }      
+        },
         ok(){
             this.$Message.info('Clicked ok');
 
@@ -209,55 +263,53 @@ export default {
             if (mm < 10) mm = '0' + mm;
             var ss = myDate.getSeconds();
             if (ss < 10) ss = '0' + ss;
+            this.formItem.business = this.getBusiness();
             this.formItem.time = year + "-" + month + "-" + date + "-" + " " + hh + ":" + mm + ":" + ss;
+            this.formItem.money = this.caculatemoney();
+            this.formItem.name = this.getName();
+            this.formItem.number = this.getNumber();
+            this.formItem.info = 'this'
+        },
+        getBusiness(){
+            alert('111');
+            Bus.$on('setBusiness',content =>{               
+                return content;
+                console.log(content)              
+            })
+        },
+        getName(){
+            Bus.$on('setName',content =>{
+                return content
+            })
+        },
+        getNumber(){
+            Bus.$on('setNumber',content =>{
+                return content
+            })
+        },
+        caculatemoney(){
+            var data = this.receiptlist
+            var summoney = 0
+            if(data.length){
+                data.forEach(Element => {
+                    summoney +=Element.money
+                })
+                return summoney
+                console.log(summoney)
+            }else{
+                this.$Message.error('收款记录为空')
+            }
         },
         handleReachBottom () {
             return new Promise(resolve => {
                 setTimeout(() => {
-                    const last = this.list1[this.list1.length - 1];
+                    const last = this.courier[this.courier.length - 1];
                     for (let i = 1; i < 11; i++) {
-                        this.list1.push(last + i);
+                        this.courier.push(last + i);
                     }
                     resolve();
                 }, 2000);
             });
-        },
-        requestEmployName(){
-
-        },
-        showlist(val){
-            // alert(val);
-            // alert('这里根据员工姓名对数据库请求收款记录')
-            if(val == '褚岩'){
-                // alert('success')
-                this.receiptlist=[
-                    {
-                        time :'2019年07月11日',
-                        name:'褚岩',
-                        receipt:'$300',
-                        number:'Xh9070909-9867',
-                    },{
-                        time :'2019年07月11日',
-                        name:'章北海',
-                        receipt:'$300',
-                        number:'Xh9070909-9867',
-                    },{
-                        time :'2019年07月11日',
-                        name:'惠子',
-                        receipt:'$300',
-                        number:'Xh9070909-9867',
-                    }
-                ]
-            }else{
-                    this.receiptlist=[
-                    {
-                        time :'2019年07月11日',
-                        name:'程心',
-                        receipt:'$300',
-                        number:'Xh9070909-9867',
-                    }
-                ]
-            }               
         },
          handleEdit (row, index) {
                 this.editDriverId = row.driverid;
@@ -268,7 +320,7 @@ export default {
                 this.editIndex = index;
             },
             handleSave (index) {
-               this.editDriverId = row.driverid;
+                this.editDriverId = row.driverid;
                 this.editProceedTime = row.proceedtime;
                 this.editProceedAmount = row.editProceedAmount;
                 this.editProceedCourier = row.proceedcourier;
@@ -276,7 +328,7 @@ export default {
                 this.editIndex = -1;
             },
             remove (index) {
-                this.data.splice(index, 1);
+                this.receipt.splice(index, 1);
             },
             changePage(Page) {
                 var pagedata = [
@@ -295,31 +347,12 @@ export default {
                         ordernumber:'23452634365453'                   
                     }
                 ];                   
-                this.data = pagedata.slice((Page-1)*10,Page*10);
+                this.receipt = pagedata.slice((Page-1)*10,Page*10);
                 console.log((Page-1)*1,Page*10);
             },
 
     },
-     mounted(){
-            var pagedata = [
-                    {
-                        driverid: '1',                       
-                        proceedtime: '2016-10-02',
-                        proceedamount: 25,
-                        proceedcourier: '褚岩',
-                        ordernumber:'23452634365453'
-                    },
-                    {
-                        driverid: '2',                       
-                        proceedtime: '2016-10-02',
-                        proceedamount: 25,
-                        proceedcourier: '褚岩',
-                        ordernumber:'23452634365453'                   
-                    }
-                ];          
-                this.sum = pagedata.length;
-                this.data = pagedata.splice(0,10);
-        },
+    
 }
 </script>
 <style>

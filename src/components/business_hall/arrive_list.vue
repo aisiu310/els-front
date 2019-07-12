@@ -45,7 +45,6 @@
                         title="添加" 
                         @on-click="ok" 
                         @on-cancle="cancle">
-
                         <Form :model="formItem" :label-width="80">
                             <FormItem label="DatePicker">
                                 <Row>
@@ -83,20 +82,14 @@
 
 </template>
 <script>
-export default {
-    
+export default {   
     data(){
         return {
             formItem: {
                 input: '',
-                select: '',
-                radio: 'male',
-                checkbox: [],
-                switch: true,
+                select: '',             
                 date: '',
                 time: '',
-                slider: [20, 50],
-                textarea: ''
             },
             modal:false,
             sel:[],
@@ -324,20 +317,42 @@ export default {
             console.log(response)       //请求成功返回的数据
         }).catch((error) =>{
             console.log(error)       //请求失败返回的数据
-        }),
-        console.log(this.sel);
+        });
     },
     mounted(){        
         this.data = this.pagedata.slice(0,10);          
     },
     methods:{
+        ok(){
+            alert('我被调用了');
+            if(this.formItem.input||this.formItem.date||this.formItem.time||this.formItem.select){
+                this.$Message.error('输入为空')
+            }else{
+                // Vue.axios.get(api).then((response) => {
+                //     console.log(response.data)
+                // })
+                update();
+                this.$Message.success('添加成功');
+            }
+        },
+        update(){
+            alert('更新数据');
+        },
+        cancle(){
+            this.$Message.info('取消');
+        },
         select(selection,row){                 
             console.log(selection);
             this.sel = selection;
         },
         deleteAll(sel){
-            console.log(1,sel)
-            if(sel.length !=0){
+            console.log('delete',sel);
+            if(sel.length){
+                sel.forEach(element => {
+                    console.log(element.number)
+                    this.data.splice(element.number,1)
+                    this.sum = this.data.length
+                });
                 alert("删除成功")
             }else{
                 alert("你还没有选择")
@@ -369,19 +384,11 @@ export default {
         changePage(Page) {
             console.log(this.pagedata);
             this.data = this.pagedata.slice((Page-1)*10,Page*10);          
-        },
-        ok(){
-            this.$Message.info('点击');
-        }
-        ,
-        cancle(){
-            this.$Message.info('取消');
-        }
-        
+        },        
     }
 }
 </script>
-<style>
+<style >
   #delete_button{
       margin: 10px;
       float:left;
