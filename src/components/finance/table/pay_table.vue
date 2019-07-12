@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       payData: [],
-      tableData:[],
       dataLength: 0,
       showBorder: true,
       showStripe: true,
@@ -41,55 +40,59 @@ export default {
     };
   },
   mounted() {
-    this.tableData = [
-      {
-        id: "2019070304",
-        pay_date: "2019-07-04",
-        pay_money: "123",
-        pay_name: "John Brown",
-        pay_account: "John Brown",
-        pay_list: "123456,12345",
-        pay_remarks: "无",
-        state: "未提交审核"
-      },
-      {
-        id: "2019070304",
-        pay_date: "2019-07-04",
-        pay_money: "123",
-        pay_name: "John Brown",
-        pay_account: "John Brown",
-        pay_list: "123456,1234567,12345678",
-        pay_remarks: "无",
-        state: "待审核"
-      }
-    ];
-    this.dataLength = this.tableData.length;
-    this.payData = this.tableData.slice(0, 10);
+    this.getPayData();
   },
   methods: {
     changePage(val) {
       // invoke the back-end API limit 10
       // 后端分页查询
-      this.payData = this.tableData.slice((val - 1) * 10, val * 10);
+      this.$http
+        .get(
+          "http://localhost:8021/pay/getAllPay?skip=" + val + "&pageCount=10"
+        )
+        .then(res => {
+          this.payData = res.data.data[0];
+        });
     },
     show(index) {
       this.$Modal.info({
         title: "收款单信息",
-        content: `编号:${this.payData[index].id}<br>付款日期：${this.payData[index].pay_date}<br>付款金额：${this.payData[index].pay_money}<br>付款人：${this.payData[index].pay_name}<br>付款账户：${this.payData[index].pay_account}<br>付款条目：${this.payData[index].pay_list}<br>备注：${this.payData[index].pay_remarks}<br>状态：${this.payData[index].state}`
+        content: `编号:${this.payData[index].id}<br>付款日期：${this.payData[index].payDate}<br>付款金额：${this.payData[index].payMoney}<br>付款人：${this.payData[index].payName}<br>付款账户：${this.payData[index].payAccount}<br>付款条目：${this.payData[index].payList}<br>备注：${this.payData[index].payRemarks}<br>状态：${this.payData[index].state}`
       });
     },
     // del payee and get the data which is from back-end
     remove(index) {
-      this.payData.splice(index, 1);
+      this.$http
+        .delete(
+          "http://localhost:8021/pay/deletePay?id=" + this.payData[index].id
+        )
+        .then(res => {
+          if (res.data.data) {
+            this.$Message.success("删除成功!");
+            this.payData.splice(index, 1);
+            this.getPayData();
+          } else {
+            this.$Message.error(res.data.data);
+          }
+        });
     },
-    // send the check's msg to the back-end
-    // invoke API
+    // check
     check(index) {
       if (this.payData[index].state == "待审核") {
         this.$Message.error("已提交审核，请等待总经理审批");
       } else {
-        this.$Message.success("提交成功，待总经理审批");
-        this.payData[index].state = "待审核";
+        this.$http
+          .get(
+            "http://localhost:8021/pay/updatePay?id=" +
+              this.payData[index].id +
+              "&state='待审核'"
+          )
+          .then(res => {
+            if (res.data.data == 1) {
+              this.payData[index].state = "待审核";
+              this.$Message.success("提交成功，请等待总经理审批");
+            }
+          });
       }
     },
     // batch check
@@ -110,6 +113,15 @@ export default {
         ),
         data: this.payData.filter((payData, index) => index < 9)
       });
+    },
+    // 获取数据
+    getPayData() {
+      this.$http
+        .get("http://localhost:8021/pay/getAllPay?skip=1&pageCount=10")
+        .then(res => {
+          this.payData = res.data.data[0];
+          this.dataLength = res.data.data[1];
+        });
     }
   },
   computed: {
@@ -131,39 +143,31 @@ export default {
       }
       columns.push({
         title: "付款单编号",
+        width: 100,
         tooltip: true,
         key: "id"
       });
       columns.push({
         title: "付款日期",
-        key: "pay_date",
+        key: "payDate",
+        width: 150,
         sortable: true
       });
       columns.push({
         title: "付款金额",
         width: 120,
-        key: "pay_money",
+        key: "payMoney",
         sortable: true
       });
       columns.push({
         title: "付款人",
-        key: "pay_name",
+        key: "payName",
         sortable: true
       });
       columns.push({
         title: "付款账户",
-        key: "pay_account",
+        key: "payAccount",
         sortable: true
-      });
-      columns.push({
-        title: "条目",
-        tooltip: true,
-        key: "pay_list"
-      });
-      columns.push({
-        title: "备注",
-        tooltip: true,
-        key: "pay_remarks"
       });
       columns.push({
         title: "审核状态",

@@ -21,7 +21,7 @@
       </Col>
       <Col span="8">
         <span class="expand-key">银行账号数量:</span>
-        <span class="expand-value">{{ row.Bank_account }}个</span>
+        <span class="expand-value">{{ row.bankAccount }}个</span>
       </Col>
     </Row>
   </div>

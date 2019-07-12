@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import bus from '../../reuse/bus'
 export default {
   data() {
     return {
