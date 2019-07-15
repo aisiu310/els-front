@@ -3,7 +3,23 @@
     <div class="header">
       <div class="word">成本管理（付款单）</div>
       <!-- search box -->
-      <div class="search"></div>
+      <div class="search">
+        <DatePicker
+          type="date"
+          :format="date"
+          placeholder="Select date"
+          style="width: 150px"
+          @on-change="beginTime"
+        ></DatePicker>
+        <DatePicker
+          type="date"
+          :formate="date"
+          placeholder="Select date"
+          style="width: 150px"
+          @on-change="endTime"
+        ></DatePicker>
+        <Button type="primary" shape="circle" @click="searchByTime()">查询</Button>
+      </div>
 
       <div class="button">
         <Button type="primary" shape="circle" @click="calculate = true">成本结算</Button>
@@ -94,6 +110,8 @@ export default {
     return {
       modal: false,
       calculate: false,
+      begin: "",
+      end: "",
       check_arr: "",
       del_arr: "",
       formItem: {
@@ -128,15 +146,6 @@ export default {
     // calculate the payee
     calculate_pay() {},
     // check order
-    // check() {
-    //   //   alert(this.check_id);
-    //   this.$http
-    //     .get("http://192.168.2.229:9527/yuantu/mydept/stu/get/15130801")
-    //     .then(res => {
-    //       console.log(res);
-    //     });
-    // },
-    // check order
     check() {
       var check_id = [];
       for (var i = 0; i < this.check_arr.length; i++) {
@@ -153,6 +162,34 @@ export default {
       }
       console.log(del_id);
       // window.location.reload();
+    },
+    beginTime(val) {
+      this.begin = val;
+    },
+    endTime(val) {
+      this.end = val;
+    },
+    // 搜索一段时间内的付款单
+    searchByTime() {
+      let time = [this.begin, this.end];
+      bus.$emit("getByPayTime", time); //将时间段传到pay_table中
+      if (begin == null || end == null) {
+        this.$Message.error("请选择日期！");
+      } else {
+        this.$http
+          .get(
+            "http://localhost:8021/pay/getPayByTime?begin=" +
+              this.begin +
+              "&end=" +
+              this.end +
+              "&skip=1&pageCount=10"
+          )
+          .then(res => {
+            if (res.data.data) {
+              bus.$emit("payByTimeData", res.data);
+            }
+          });
+      }
     }
   }
 };
@@ -175,12 +212,12 @@ export default {
   margin-top: 0.3%;
 }
 .search {
-  width: 30%;
+  width: 37%;
   height: auto;
 }
 
 .button {
-  width: 47%;
+  width: 40%;
   height: auto;
   text-align: right;
   margin-right: 3%;
