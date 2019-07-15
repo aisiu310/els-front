@@ -1,27 +1,17 @@
-<template>                        
+<template>
   <div class="finance">
     <div class="navigator">
-      <div class="divide"></div>
+      <!-- <div class="divide"></div> -->
       <div class="work_list">
-        <Menu
-          :theme="theme"
-          :active-name="['4-1']"
-          :width="100"
-          :accordion="true"
-        >
-          <Submenu name="1">
-            <template slot="title">账户管理</template>
-            <MenuItem name="1-1" to="/finance/init">初期建账</MenuItem>
-            <MenuItem name="1-2" to="/finance/bank">账号管理</MenuItem>
+        <Menu :theme="theme" :width="100" :open-names="['2']" :accordion="true">
+          <MenuItem name="1" to="/warehouse/show">库存展示</MenuItem>
+          <Submenu name="2">
+            <template slot="title">出/入库管理</template>
+            <MenuItem name="2-1" to="/warehouse/out_warehouse">出库</MenuItem>
+            <MenuItem name="2-2" to="/warehouse/in_warehouse">入库</MenuItem>
           </Submenu>
-          <MenuItem name="2" to="/finance/payee">结算管理</MenuItem>
-          <MenuItem name="3" to="/finance/pay">成本管理</MenuItem>
-          <Submenu name="4">
-            <template slot="title">统计报表</template>
-            <MenuItem name="4-1" to="/finance/business_graph">经营情况表</MenuItem>
-            <MenuItem name="4-2" to="/finance/cost_benefit">成本收益表</MenuItem>
-          </Submenu>
-          <MenuItem name="5" to="/finance/log">查看日志</MenuItem>
+          <MenuItem name="3" to="/warehouse/check">库存盘点</MenuItem>
+          <MenuItem name="4" to="/warehouse/warn">库存警戒线</MenuItem>
         </Menu>
       </div>
       <div class="divide"></div>

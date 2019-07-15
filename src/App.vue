@@ -2,8 +2,7 @@
   <div id="app">
     <!-- <router-link to="login"></router-link>
     <router-link to="shop"></router-link>
-    <router-link to="sender_header"></router-link> -->
-
+    <router-link to="sender_header"></router-link>-->
     <router-view></router-view>
   </div>
 </template>
@@ -19,7 +18,6 @@ export default {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 
   border: 0px;
   /* text-align: center;
