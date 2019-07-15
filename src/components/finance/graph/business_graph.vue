@@ -2,6 +2,23 @@
   <div>
     <div class="header">
       <div class="word">经营情况表</div>
+      <div>
+        <DatePicker
+          type="date"
+          :format="date"
+          placeholder="Select date"
+          style="width: 200px"
+          @on-change="beginTime"
+        ></DatePicker>
+        <DatePicker
+          type="date"
+          :formate="date"
+          placeholder="Select date"
+          style="width: 200px"
+          @on-change="endTime"
+        ></DatePicker>
+        <Button type="primary" shape="circle" @click="searchByTime()">查询</Button>
+      </div>
     </div>
     <hr class="common" />
     <div class="histogram">
@@ -24,12 +41,13 @@ let echarts = require("echarts/lib/echarts");
 export default {
   data() {
     return {
-      payAnalyze: [],
-      payNumber:[]
+      payNumber: [],
+      begin: "",
+      end: ""
     };
   },
   mounted() {
-    this.getData();
+    this.getPayData();
     this.payee();
     this.pay();
     this.myChart();
@@ -58,21 +76,20 @@ export default {
     },
     pay() {
       let pay = echarts.init(document.getElementById("pay"));
-      console.log(this.payNumber)
       pay.setOption({
         title: {
           text: "付款单"
         },
         xAxis: {
           type: "category",
-          data: this.payAnalyze[0]
+          data: ["07/08", "07/09", "07/10", "07/11", "07/12", "07/13", "07/14"]
         },
         yAxis: {
           type: "value"
         },
         series: [
           {
-            data: this.payNumber,
+            data: [120, 132, 101, 134, 90, 230, 210],
             type: "bar"
           }
         ]
@@ -127,19 +144,26 @@ export default {
         ]
       });
     },
-    getData() {
+    getPayData() {
       this.$http
         .get(
           "http://localhost:8021/pay/calculate?begin=2019-07-03&end=2019-07-13"
         )
-        .then(res => {
-          this.payAnalyze = res.data.data;
-          console.log(this.payAnalyze[1][0]);
-          var res = [240, 488, 2000, 2000, 3200, 200, 240];
-          for(let i = 0; i< this.payAnalyze[1].length; i++){
-            this.payNumber[i] = this.payAnalyze[1][i];
-          }
-        });
+        .then(res => {});
+    },
+    beginTime(val) {
+      this.begin = val;
+    },
+    endTime(val) {
+      this.end = val;
+    },
+    searchByTime() {
+      if (begin == null || end == null) {
+        this.$Message.error("请选择日期！");
+      } else {
+        alert(this.begin);
+        alert(this.end);
+      }
     }
   }
 };
