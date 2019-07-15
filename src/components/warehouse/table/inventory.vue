@@ -4,8 +4,11 @@
 
     <div class="bottom">
       <div class="print">
-        <Button type="primary" @click="exportData(1)" v-if="time != null">
+        <Button type="primary" @click="exportData()" v-if="time != null">
           <Icon type="ios-download-outline"></Icon>打印原数据
+        </Button>
+        <Button type="primary" @click="update()" v-if="area != null">
+          <Icon type="md-refresh" />更新库存信息
         </Button>
       </div>
       <div class="anotherPage">
@@ -224,6 +227,10 @@ export default {
       this.$refs.table.exportCsv({
         filename: "盘点数据"
       });
+    },
+    // update inventory data through in/out
+    update(){
+      
     }
   }
 };
