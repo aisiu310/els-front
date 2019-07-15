@@ -76,9 +76,8 @@ export default {
     };
   },
   created(){ 
-      Bus.$emit('setBusiness','雨花台');
-      Bus.$emit('setName','楚岩');
-      Bus.$emit('setNumber','12121');    
+      // Bus.$emit('setBusiness','雨花台');
+      sessionStorage.setItem("business", '雨花台营业厅');  
   },
   methods: {
     Input(val) {
