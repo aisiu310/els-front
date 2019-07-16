@@ -178,7 +178,7 @@ export default {
         {
           id: 12312132,
           orderCode: 12156,
-          in_date: "2016-10-03",
+          inDate: "2016-10-03",
           destination: "南京",
           area: "汽运区",
           rowNumber: 1,
@@ -367,7 +367,7 @@ export default {
           { label: "待审核", value: "待审核" },
           { label: "审核通过", value: "审核通过" },
           { label: "审核不通过", value: "审核不通过" },
-          { label: "已处理", value: "已处理" }
+          { label: "已处理-", value: "已处理" }
         ],
         filterMethod(value, row) {
           return row.state.indexOf(value) > -1;

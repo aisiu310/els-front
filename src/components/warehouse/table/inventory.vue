@@ -4,12 +4,15 @@
 
     <div class="bottom">
       <div class="print">
-        <Button type="primary" @click="exportData(1)" v-if="time != null">
+        <Button type="primary" @click="exportData()" v-if="time != null">
           <Icon type="ios-download-outline"></Icon>打印原数据
+        </Button>
+        <Button type="primary" @click="update()" v-if="area != null">
+          <Icon type="md-refresh" />更新库存信息
         </Button>
       </div>
       <div class="anotherPage">
-        <Page :total="dataLength" show-elevator @on-change="changePage" />
+        <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
       </div>
     </div>
   </div>
@@ -21,6 +24,7 @@ export default {
   data() {
     return {
       dataLength: 0,
+      currentPage: 1,
       columns: [
         {
           type: "index",
@@ -57,173 +61,61 @@ export default {
         },
         {
           title: "容量",
-          key: "capacity",
+          key: "state",
+          width: 100,
           sortable: true
         }
       ],
-      data: [],
-      data1: [
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        },
-        {
-          lastTime: "2019-07-15 15:11:00",
-          frame: 1,
-          rowNumber: 1,
-          status: 1,
-          orderList: "123456,123444,222333,222123",
-          capacity: 4
-        }
-      ]
+      data: []
     };
   },
   props: ["area", "time"],
+  // watch: {
+  //   area(val, oldVal) {
+  //     console.log(val);
+  //   }
+  // },
   mounted() {
-    this.dataLength = this.data1.length;
-    this.data = this.data1.slice(0, 10);
+    this.initData();
   },
   methods: {
+    // divide page
     changePage(val) {
-      // alert(this.area);
-      this.data = this.data1.slice((val - 1) * 10, val * 10);
+      let self = this;
+      this.$axios
+        .get(
+          "http://localhost:8031/inventory/getInventory?area=" +
+            self.area +
+            "&inventoryName=南京中转中心仓库&skipCount=" +
+            val
+        )
+        .then(res => {
+          self.data = res.data.data[0];
+        });
     },
+    // export data to excel
     exportData(type) {
       this.$refs.table.exportCsv({
         filename: "盘点数据"
       });
+    },
+    // update inventory data through in/out
+    update() {
+      alert(this.area);
+    },
+    // init data
+    initData() {
+      let self = this;
+      this.$axios
+        .get(
+          "http://localhost:8031/inventory/getInventory?area=" +
+            self.area +
+            "&inventoryName=南京中转中心仓库&skipCount=1"
+        )
+        .then(res => {
+          self.data = res.data.data[0];
+          self.dataLength = res.data.data[1];
+        });
     }
   }
 };

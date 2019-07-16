@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <Tabs @on-click="showInventory">
+      <Tabs value="航运区">
         <TabPane label="航运区" icon="ios-jet" name="航运区">
           <inventory area="航运区"></inventory>
         </TabPane>
@@ -24,12 +24,6 @@ import inventory from "../table/inventory";
 export default {
   components: {
     inventory
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    showInventory(name) {}
   }
 };
 </script>
