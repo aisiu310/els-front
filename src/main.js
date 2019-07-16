@@ -5,16 +5,10 @@ import vueResource from 'vue-resource'
 import 'iview/dist/styles/iview.css'
 
 // import router from './router'
+
 // import router from './router/zxy-test'
 // import router from './router/finance'
-
-import router from './router/zxy-test'
-// import router from './router/finance'
-// import router from './router/sender'
-
-
-// import router from './router'
-// import router from './router/finance'
+import router from './router/warehouse'
 
 import '@/permission.js'
 import global from '@/utils/global' //全局
@@ -36,14 +30,14 @@ Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
 Vue.use(iView)
 Vue.use(vueResource)
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: {
-    App
-  },
-  template: '<App/>'
+    el: '#app',
+    router,
+    components: {
+        App
+    },
+    template: '<App/>'
 })

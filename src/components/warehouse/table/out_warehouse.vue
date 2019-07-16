@@ -39,8 +39,8 @@
                 <Option value="汽车">汽车</Option>
               </Select>
             </FormItem>
-            <FormItem label="中转单编号" prop="tranferId">
-              <Input v-model="formValidate.tranferId" type="number" placeholder="请输入中转单编号"></Input>
+            <FormItem label="中转单编号" prop="transferId">
+              <Input v-model="formValidate.transferId" type="number" placeholder="请输入中转单编号"></Input>
             </FormItem>
             <FormItem>
               <Button type="primary" @click="handleSubmit('formValidate')">新建</Button>
@@ -59,100 +59,31 @@
         :stripe="showStripe"
         :show-header="showHeader"
         :size="tableSize"
-        :data="in_warehouse_data"
+        :data="out_warehouse_data"
         :columns="tableColumns"
         @on-select="batchSelect"
         @on-select-cancel="batchSelect"
+        @on-select-all-cancel="batchSelect"
+        @on-select-all="batchSelect"
       ></Table>
     </div>
     <div class="page">
-      <Page :total="dataLength" show-elevator @on-change="changePage" />
+      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
   </div>
 </template>
 
 <script>
+import { api } from "../api/api";
 export default {
   data() {
     return {
       modal: false,
       dataLength: 0,
+      currentPage: 1,
       delSelection: [],
       // out_warehouse data
-      in_warehouse_data: [
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 1212312356,
-          outDate: "2016-10-03",
-          destination: "南京",
-          loadingType: "汽车",
-          tranferId: 11231212323,
-          state: "待审核"
-        }
-      ],
+      out_warehouse_data: [],
       // list for table
       showBorder: true,
       showStripe: true,
@@ -166,7 +97,7 @@ export default {
         outDate: new Date(),
         destination: "",
         loadingType: "",
-        tranferId: ""
+        transferId: ""
       },
       // new form rule for check
       ruleValidate: {
@@ -199,7 +130,7 @@ export default {
             trigger: "blur"
           }
         ],
-        tranferId: [
+        transferId: [
           {
             required: true,
             message: "中转单不能为空",
@@ -209,14 +140,28 @@ export default {
       }
     };
   },
-  mounted() {},
+  mounted() {
+    this.initData(this.currentPage);
+  },
   methods: {
     handleSubmit(name) {
+      let self = this;
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
+          api
+            .addData(this.formValidate)
+            .then(res => {
+              if (res == 1) {
+                this.initData(this.currentPage);
+                this.$Message.success("新建成功！");
+                this.modal = false;
+              } else {
+                this.$Message.success("新建失败！");
+              }
+            })
+            .catch(error => {
+              alert("服务器出错");
+            });
         }
       });
     },
@@ -224,18 +169,51 @@ export default {
       this.$refs[name].resetFields();
     },
     // divide page
-    changePage() {},
-    // batch delete
+    changePage(page) {
+      this.initData(page);
+    },
+    //get this list of id in order to batch delete
     batchSelect(selection, row) {
-      //   console.log(selection);
-      //   console.log(row);
       this.delSelection = selection;
     },
+    //batch delete
     batchDelete() {
-      console.log(this.delSelection);
+      var idList = this.delSelection;
+      var id = [];
+      for (var i = 0; i < idList.length; i++) {
+        id[i] = idList[i].id;
+      }
+      api.batchDelete(id).then(res => {
+        if (res <= 0) {
+          this.$Message.warning("删除失败！");
+        } else {
+          this.initData(this.currentPage);
+          this.$Message.warning("删除成功！");
+        }
+      });
     },
     selectDate(val) {
       alert(val);
+    },
+    // get data from db
+    initData(val) {
+      api.initData(val).then(res => {
+        this.out_warehouse_data = res[0];
+        this.dataLength = res[1];
+      });
+    },
+    // submit to check
+    check(index) {
+      if (this.out_warehouse_data[index].state == "未提交审核") {
+        api.checkData(this.out_warehouse_data[index].id).then(res => {
+          if (res == 1) {
+            this.initData(this.currentPage);
+            this.$Message.success("提交成功，待经理审核");
+          }
+        });
+      } else {
+        this.$Message.warning("已经提交，待经理审核");
+      }
     }
   },
   computed: {
@@ -257,7 +235,7 @@ export default {
         title: "出库日期",
         key: "outDate",
         sortable: true,
-        width: 120
+        width: 150
       });
       columns.push({
         title: "目的地",
@@ -280,7 +258,8 @@ export default {
       });
       columns.push({
         title: "中转单编号",
-        key: "tranferId"
+        key: "transferId",
+        tooltip: true
       });
       columns.push({
         title: "审核状态",
