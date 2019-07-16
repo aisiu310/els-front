@@ -4,6 +4,9 @@
       <div id="navigator-bar">
         <div id="navigator-bar-item">
           <ul>
+            <li v-for="(item,index) in meuns">
+              <p>{{item.meta}}</p>
+            </li>
             <li>
               <router-link to="/courie/sender_list">
                 <div @click="Input('寄件')">寄件</div>
@@ -46,6 +49,8 @@
 </template>
 
 <script>
+import { log } from "util";
+
 export default {
   data() {
     return {
@@ -57,15 +62,17 @@ export default {
       depart: "快递员",
       name: "基建"
     };
+    meuns: "";
+  },
+  created() {
+    this.meuns = sessionStorage.getItem("test");
+    let GetRole = sessionStorage.getItem("userRole");
+    console.log(GetRole);
+    console.log($global);
   },
   methods: {
     Input(val) {
       this.name = val;
-    },
-    mounted() {
-      this.$root.Bus.$on("change", val => {
-        this.name = val;
-      });
     }
   }
 };

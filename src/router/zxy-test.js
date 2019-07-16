@@ -39,19 +39,17 @@ import payee from '@/components/finance/settle_accounts'
 Vue.use(Router)
 
 export default new Router({
-
-
   routes: [{
-      path: 'login',
+      path: '/',
       component: login,
       meta: {
-        roles: ['manager', 'courie']
+        roles: ['manager', 'admin']
       }
     },
     {
       path: '/transit_layout',
       name: 'transit_layout',
-      redirect: '/transit_arrive_list',
+      redirect: '/transit_layout/transit_arrive_list',
       component: transit_layout,
       children: [{
           path: 'transit_arrive_list',

@@ -98,7 +98,7 @@
                     <DatePicker
                       type="date"
                       placeholder="Select date"
-                      :options="options1"
+                      :options="option"
                       v-model="formItem.date"
                     ></DatePicker>
                   </Col>
@@ -161,6 +161,7 @@
 <script>
 import qs from "qs";
 import { linkSync, link } from "fs";
+import { error } from "util";
 export default {
   data() {
     const transportationIdRule = (rule, value, callback) => {
@@ -173,7 +174,7 @@ export default {
     return {
       currentPage: 1,
       pageSize: 10,
-      options1: {
+      option: {
         shortcuts: [
           {
             text: "Today",
@@ -407,13 +408,13 @@ export default {
         .then(response => {
           // console.log(response);
           if (response.data.status === 200) {
-            this.getLoadCarList();
+            this.getLoadCarList(this.currentPage, this.pageSize);
             this.$Message.success("修改成功");
           } else {
             this.$Message.error("没有获取到数据");
           }
         })
-        .catch(function(error) {
+        .catch(error => {
           self.$Message.error("请求超时,请检查连接信息");
         });
       this.editIndex = -1;
@@ -457,7 +458,7 @@ export default {
           .put("http://192.168.2.229/loadcar/modifyStateList?state=1", list)
           .then(response => {
             if (response.data.status === 200) {
-              this.getLoadCarList();
+              this.getLoadCarList(this.currentPage, this.pageSize);
               this.$Message.success("提交成功");
             } else {
               this.$Message.error("提交失败");

@@ -3,21 +3,32 @@
     <Tabs>
       <TabPane label="接收管理" icon="md-clipboard">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
-          <template slot-scope="{row,index}" slot="date">
-            <input type="text" v-model="editDate" v-if="editIndex === index" />
-            <span v-else>{{row.date}}</span>
+          <template slot-scope="{row,index}" hidden slot="date">
+            <input type="text" />
+            <span>{{row.id}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="number">
-            <input type="text" v-model="editNumber" v-if="editIndex === index" />
-            <span v-else>{{row.number}}</span>
+          <template slot-scope="{row,index}" slot="code">
+            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
+            <span v-else>{{row.code}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="address">
-            <input type="text" v-model="editAddress" v-if="editIndex === index" />
-            <span v-else>{{row.address}}</span>
+          <template slot-scope="{row,index}" slot="arriveDate">
+            <input type="text" v-model="editItem.arriveDate" v-if="editIndex === index" />
+            <span v-else>{{row.arriveDate}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="transferId">
+            <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
+            <span v-else>{{row.transferId}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="placeOfDeparture">
+            <input type="text" v-model="editItem.placeOfDeparture" v-if="editIndex === index" />
+            <span v-else>{{row.placeOfDeparture}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="goodsState">
+            <input type="text" v-model="editItem.goodsState" v-if="editIndex === index" />
+            <span v-else>{{row.goodsState}}</span>
           </template>
           <template slot-scope="{row,index}" slot="state">
-            <input type="text" v-model="editState" v-if="editIndex === index" />
-            <span v-else>{{row.state}}</span>
+            <span>{{row.state}}</span>
           </template>
           <template slot-scope="{ row }" slot="date">
             <strong>{{ row.date }}</strong>
@@ -63,22 +74,30 @@
             @on-ok="submitform('formItem')"
             @on-cancle="cancle"
           >
-            <Form :model="formItem" :label-width="80">
-              <FormItem label="DatePicker">
+            <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
+              <FormItem label="营业厅编号" prop="code">
+                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
+              </FormItem>
+              <FormItem label="到达日期" prop="arriveDate">
                 <Row>
                   <Col span="11">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.date"></DatePicker>
+                    <DatePicker
+                      type="date"
+                      placeholder="Select date"
+                      :options="option"
+                      v-model="formItem.arriveDate"
+                    ></DatePicker>
                   </Col>
                 </Row>
               </FormItem>
-              <FormItem label="Address">
-                <Input v-model="formItem.input" placeholder="Enter something..."></Input>
+              <FormItem label="中转单编号" prop="transferId">
+                <Input v-model="formItem.transferId" placeholder="Enter something..."></Input>
               </FormItem>
-              <FormItem label="State">
-                <Select v-model="formItem.select">
-                  <Option value="arrive">arrive</Option>
-                  <Option value="transfer">transfer</Option>
-                </Select>
+              <FormItem label="出发地" prop="placeOfDeparture">
+                <Input v-model="formItem.placeOfDeparture" placeholder="Enter something..."></Input>
+              </FormItem>
+              <FormItem label="货物状态" prop="goodsState">
+                <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
               </FormItem>
             </Form>
           </Modal>
@@ -117,13 +136,39 @@ export default {
     return {
       currentPage: 1,
       pageSize: 10,
+      option: {
+        shortcuts: [
+          {
+            text: "Today",
+            value() {
+              return new Date();
+            },
+            onClick: picker => {
+              this.$Message.info("Click today");
+            }
+          },
+          {
+            text: "Yesterday",
+            value() {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              return date;
+            },
+            onClick: picker => {
+              this.$Message.info("Click yesterday");
+            }
+          }
+        ]
+      },
       formItem: {
-        date: "",
-        input: "",
-        select: ""
+        code: "025000",
+        arriveDate: "2019-7-16",
+        transferId: "111",
+        placeOfDeparture: "拉文克劳",
+        goodsState: "破损"
       },
       ruleValidate: {
-        date: [
+        arriveDate: [
           {
             required: true,
             message: "日期不能为空",
@@ -138,48 +183,50 @@ export default {
       sel: [],
       data: [],
       editIndex: -1, // 当前聚焦的输入框的行数
-      editDate: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
-      editNumber: "", // 第二列输入框
-      editAddress: "", // 第三列输入框
-      editState: "", // 第四列输入框
+      editItem: {
+        id: "",
+        code: "",
+        arriveDate: "",
+        transferId: "",
+        placeOfDeparture: "",
+        goodsState: ""
+      },
       sum: 0,
       columns: [
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
         {
           type: "selection",
           width: 60,
           align: "center"
         },
         {
-          title: "ArriveDate",
-          slot: "date",
+          title: "营业厅编号",
+          slot: "code"
+        },
+        {
+          title: "到达日期",
+          slot: "arriveDate",
           sortable: true
         },
         {
-          title: "Number",
-          slot: "number",
-          sortable: true
+          title: "中转单编号",
+          slot: "transferId"
         },
         {
-          title: "Address",
-          slot: "address"
+          title: "出发地",
+          slot: "placeOfDeparture"
         },
         {
-          title: "State",
-          slot: "state",
-          filters: [
-            {
-              label: "arrive",
-              value: "arrive"
-            },
-            {
-              label: "transfer",
-              value: "transfer"
-            }
-          ],
-          filterMultiple: true,
-          filterMethod(value, row) {
-            return row.state.indexOf(value) > -1;
-          }
+          title: "货物状态（损坏、完整、丢失）",
+          slot: "goodsState"
+        },
+        {
+          title: "审核状态",
+          slot: "state"
         },
         {
           title: "操作",
@@ -189,92 +236,24 @@ export default {
     };
   },
   mounted() {
-    // this.getArriveList();
-    this.data = [
-      {
-        date: "2016-10-03",
-        number: 1,
-        address: "New York No. 1 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-01",
-        number: 2,
-        address: "London No. 1 Lake Park",
-        state: "transfer"
-      },
-      {
-        date: "2016-10-02",
-        number: 3,
-        address: "Sydney No. 1 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 4,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 5,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 6,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 7,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 8,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 9,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 10,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      },
-      {
-        date: "2016-10-04",
-        number: 11,
-        address: "Ottawa No. 2 Lake Park",
-        state: "arrive"
-      }
-    ];
-    this.sum = data.length;
-    is.getLoadCarList(this.currentPage, this.pageSize);
+    this.getArriveList(this.currentPage, this.pageSize);
   },
   methods: {
     getArriveList(currentPage, pageSize) {
       const self = this;
       this.$axios
-        .get(" http://192.168.2.229/order/getPaymentInfoList", {
+        .get(" http://192.168.2.229/arrive/getArriveList", {
           params: {
-            hallCode: "025000",
-            date: "2019-07-12"
+            code: "025000",
+            currentPage: currentPage,
+            pageCount: pageSize
           }
         })
         .then(response => {
+          console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data;
-            self.sum = response.data.length;
+            self.data = response.data.data[0];
+            self.sum = response.data.data[1];
           }
         })
         .catch(function(error) {
@@ -282,28 +261,28 @@ export default {
         });
     },
     handleEdit(row, index) {
-      this.editDate = row.date;
-      this.editNumber = row.number;
-      this.editAddress = row.address;
-      this.editState = row.state;
+      this.editItem.id = row.id;
+      this.editItem.code = row.code;
+      this.editItem.arriveDate = row.arriveDate;
+      this.editItem.transferId = row.transferId;
+      this.editItem.placeOfDeparture = row.placeOfDeparture;
+      this.editItem.goodsState = row.goodsState;
       this.editIndex = index;
     },
     handleSave(index) {
+      const self = this;
       this.$axios
-        .post("url", {
-          params: {
-            a: this.editDate,
-            b: this.editNumber,
-            c: this.editAddress,
-            d: this.editState
-          }
-        })
+        .put("http://192.168.2.229/arrive/modifyArriveById", self.editItem)
         .then(response => {
+          console.log(response);
           if (response.data) {
-            this.getArriveList();
+            this.getArriveList(this.currentPage, this.pageSize);
+            this.$Message.success("修改成功");
+          } else {
+            this.$Message.error("没有获取到数据");
           }
         })
-        .catch(function(error) {
+        .catch(error => {
           alert("请求超时,请检查连接信息");
         });
       this.editIndex = -1;
@@ -315,25 +294,27 @@ export default {
     remove(sel) {
       const self = this;
       var list = [];
+      console.log(self.sel);
       if (sel.length > 0) {
-        this.modal_loading = true;
+        self.modal_loading = true;
         sel.forEach(element => {
           list.push(element.id);
         });
+        console.log(list);
         this.$axios
-          .delete(" http://192.168.2.229/order/getPaymentInfoList", {
+          .delete("http://192.168.2.229/arrive/removeArriveFake", {
             data: list
           })
           .then(response => {
-            if (response.data === 200) {
-              this.modal_loading = false;
-              this.modaldelet = false;
-              this.getArriveList();
-              this.$Message.success("删除成功");
+            if (response.data) {
+              self.modal_loading = false;
+              self.modaldelet = false;
+              self.getArriveList(self.currentPage, self.pageSize);
+              self.$Message.success("删除成功");
             } else {
-              this.$Message.error("没有获取到数据");
-              this.modal_loading = false;
-              this.modaldelet = false;
+              self.$Message.warning(response.data.msg);
+              self.modal_loading = false;
+              self.modaldelet = false;
             }
           })
           .catch(function(error) {
@@ -351,14 +332,15 @@ export default {
     },
     submitform(formItem) {
       const self = this;
+      console.log(self.formItem);
       self.$refs[formItem].validate(valid => {
         if (valid) {
           self.$axios
-            .post("url", self.formItem)
+            .post("http://192.168.2.229/arrive/addArrive", self.formItem)
             .then(response => {
               if (response.data.status === 200) {
+                self.getArriveList(this.currentPage, this.pageSize);
                 self.$Message.success("添加成功");
-                self.getArriveList();
               } else {
                 self.$Message.warning(response.data.msg);
               }
@@ -394,6 +376,12 @@ export default {
 }
 #arrive_list_add {
   border: 0px solid rebeccapurple;
+  margin: 10px;
+  width: auto;
+  height: auto;
+  float: left;
+}
+#submit_for_check {
   margin: 10px;
   width: auto;
   height: auto;

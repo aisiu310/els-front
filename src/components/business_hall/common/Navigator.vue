@@ -21,12 +21,12 @@
             </li>
             <li>
               <router-link to="/business_hall/business_car_info">
-                <div @click="Input('车辆信息管理')">车辆信息管理</div>
+                <div @click="Input('车辆管理')">车辆管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_driver_info">
-                <div @click="Input('司机信息管理')">司机信息管理</div>
+                <div @click="Input('司机管理')">司机管理</div>
               </router-link>
             </li>
             <li>

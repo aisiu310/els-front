@@ -38,7 +38,7 @@
             <label class="miss">忘记密码</label>
           </a>
           &nbsp;&nbsp;&nbsp;
-          <Button type="primary" @click="login('z')">登录</Button>
+          <Button type="primary" @click="login()">登录</Button>
         </FormItem>
       </Form>
     </div>
@@ -62,8 +62,8 @@ export default {
       checkCode: "",
       logisticId: "",
       formInline: {
-        user: "",
-        password: "",
+        user: "admin",
+        password: "admin",
         authcode: ""
       },
       ruleInline: {
@@ -105,7 +105,7 @@ export default {
 
   methods: {
     // 登录验证
-    login(data) {
+    login() {
       if (
         !this.formInline.user ||
         !this.formInline.password ||
@@ -115,9 +115,10 @@ export default {
       } else {
         if (this.formInline.authcode == this.checkCode) {
           this.$Message.success("登录成功！");
+          sessionStorage.setItem("userRole", "admin");
           this.$router.push({
-            name: "sender_index",
-            params: { user: this.formInline.user }
+            name: "Navigator"
+            // params: { user: this.formInline.user }
           });
         } else {
           this.$Message.error("验证码错误！");

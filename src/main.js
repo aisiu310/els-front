@@ -16,6 +16,10 @@ import router from './router/zxy-test'
 // import router from './router'
 // import router from './router/finance'
 
+import '@/permission.js'
+import global from '@/utils/global' //全局
+Vue.prototype.$global = global
+
 import qs from 'qs'
 Vue.prototype.$qs = qs
 
@@ -28,7 +32,7 @@ Vue.prototype.$echartsGL = echartsgl //引入组件,作为全局变量
 import axios from 'axios'
 Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; // 配置请求头（推荐）
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; // 配置请求头（推荐）
 
 Vue.use(iView)
 Vue.use(vueResource)

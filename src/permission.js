@@ -1,31 +1,37 @@
 // 取到需要权限判断的路由表
-import {permissionRouter,fixedRouter} from '@/router'
+import {
+  permissionRouter,
+  fixedRouter
+} from '@/router'
 import router from '@/router'
 var addRouFlag = false
 
-
 router.beforeEach((to, from, next) => {
   // 取到用户的角色
-  let GetRole = localStorage.getItem("userRole")
+  let GetRole = sessionStorage.getItem("userRole")
 
   // 如果登录了
-  if (GetRole !== 'unload') {
+  if (GetRole !== 'unload' && to.path != '/login') {
     next() //next()方法后的代码也会执行
     // 1.如果路由表 没根据角色进行筛选,就筛选一次
-    
-    console.log(2,GetRole)
-    
+
+    // console.log(2, GetRole)
+
     if (!addRouFlag) {
       addRouFlag = true
       var getRoutes = baseRoleGetRouters(permissionRouter, GetRole.split(","))
-      
-      console.log(3,getRoutes)
+
+      console.log(3, getRoutes)
       // 3.利用global属性，让渲染菜单的组件sideMeuns.vue重新生成左侧菜单
       global.antRouter = fixedRouter.concat(getRoutes)
+      console.log(4, global.antRouter)
+      // sessionStorage.setItem('test', global.antRouter)
       // 4.将生成好的路由addRoutes
       router.addRoutes(fixedRouter.concat(getRoutes))
       // 5.push之后，会重新进入到beforeEach的钩子里,直接进入第一个if判断
-      router.push({ path: to.path })
+      router.push({
+        path: to.path
+      })
     }
   } else {
     // 用户没登录，跳转到登录页面
