@@ -15,6 +15,7 @@ export default new Router({
     routes: [{
         path: '/warehouse',
         name: 'warehouse',
+        redirect: '/warehouse/show',
         component: warehouse,
         children: [{
                 path: 'in_warehouse',
