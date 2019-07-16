@@ -18,7 +18,7 @@
         <Modal title="新建入库单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
             <FormItem label="快递单号" prop="orderCode">
-              <Input v-model="formValidate.orderCode" placeholder="请输入快递单号"></Input>
+              <Input v-model="formValidate.orderCode" placeholder="请输入快递单号" type="number" max="10"></Input>
             </FormItem>
             <FormItem label="入库日期">
               <Row>
@@ -70,10 +70,12 @@
         :columns="tableColumns"
         @on-select="batchSelect"
         @on-select-cancel="batchSelect"
+        @on-select-all-cancel="batchSelect"
+        @on-select-all="batchSelect"
       ></Table>
     </div>
     <div class="page">
-      <Page :total="dataLength" show-elevator @on-change="changePage" />
+      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
   </div>
 </template>
@@ -84,120 +86,10 @@ export default {
     return {
       modal: false,
       dataLength: 0,
+      currentPage: 1,
       delSelection: [],
       // in_warehouse data
-      in_warehouse_data: [
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "未提交审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "审核通过"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "未提交审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "审核不通过"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "未提交审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "未提交审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "待审核"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "审核通过"
-        },
-        {
-          id: 12312132,
-          orderCode: 12156,
-          inDate: "2016-10-03",
-          destination: "南京",
-          area: "汽运区",
-          rowNumber: 1,
-          frame: 1,
-          status: 1,
-          state: "未提交审核"
-        }
-      ],
+      in_warehouse_data: [],
       // list for table
       showBorder: true,
       showStripe: true,
@@ -207,28 +99,28 @@ export default {
       tableSize: "default",
       // new form data
       formValidate: {
-        order_code: "",
-        in_date: new Date(),
+        orderCode: "",
+        inDate: new Date(),
         destination: "",
         area: "",
         frame: "",
-        row_number: "",
+        rowNumber: "",
         status: ""
       },
       // new form rule for check
       ruleValidate: {
-        order_code: [
+        orderCode: [
           {
             required: true,
             message: "订单编号不能为空",
             trigger: "blur"
           }
         ],
-        in_date: [
+        inDate: [
           {
             required: true,
-            type: "date",
             message: "请选择日期",
+            type: "date",
             trigger: "change"
           }
         ],
@@ -253,7 +145,7 @@ export default {
             trigger: "blur"
           }
         ],
-        row_number: [
+        rowNumber: [
           {
             required: true,
             message: "请输入排号",
@@ -270,14 +162,29 @@ export default {
       }
     };
   },
-  mounted() {},
+  mounted() {
+    this.initData(this.currentPage);
+  },
   methods: {
     handleSubmit(name) {
+      let self = this;
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
+          this.$axios
+            .post(
+              "http://localhost:8031/inInventory/addInInventory",
+              self.formValidate
+            )
+            .then(res => {
+              if (res.data.data == 1) {
+                self.modal = false;
+                self.$Message.success("新建成功");
+                self.initData(self.currentPage);
+              }
+            })
+            .catch(error => {
+              self.$Message.error("网络超时");
+            });
         }
       });
     },
@@ -285,18 +192,67 @@ export default {
       this.$refs[name].resetFields();
     },
     // divide page
-    changePage() {},
-    // batch delete
+    changePage(page) {
+      this.initData(page);
+    },
+    //get this list of id in order to batch delete
     batchSelect(selection, row) {
-      //   console.log(selection);
-      //   console.log(row);
       this.delSelection = selection;
     },
+    //batch delete
     batchDelete() {
-      console.log(this.delSelection);
+      var idList = this.delSelection;
+      var id = [];
+      for (var i = 0; i < idList.length; i++) {
+        id[i] = idList[i].id;
+      }
+      this.$axios
+        .delete("http://localhost:8031/inInventory/batchDelete", { data: id })
+        .then(res => {
+          if (res.data.data <= 0) {
+            this.$Message.warning("删除失败！");
+          } else {
+            this.initData(this.currentPage);
+            this.$Message.warning("删除成功！");
+          }
+        });
     },
+    //search data by date
     selectDate(val) {
       alert(val);
+    },
+    // get data from db
+    initData(val) {
+      let self = this;
+      self.$axios
+        .get(
+          "http://localhost:8031/inInventory/getInInventory?skipCount=" + val
+        )
+        .then(res => {
+          self.in_warehouse_data = res.data.data[0];
+          self.dataLength = res.data.data[1];
+        });
+    },
+    // submit to check
+    check(index) {
+      if (this.in_warehouse_data[index].state == "未提交审核") {
+        let self = this;
+        this.$axios
+          .get("http://localhost:8031/inInventory/checkInInventory", {
+            params: {
+              state: "待审核",
+              id: self.in_warehouse_data[index].id
+            }
+          })
+          .then(res => {
+            if (res.data.data == 1) {
+              self.$Message.success("提交成功，待经理审核！");
+              self.in_warehouse_data[index].state = "待审核";
+            }
+          });
+      } else {
+        this.$Message.warning("已经提交，待经理审核");
+      }
     }
   },
   computed: {
@@ -317,6 +273,7 @@ export default {
       columns.push({
         title: "入库日期",
         key: "inDate",
+        width: 150,
         sortable: true
       });
       columns.push({

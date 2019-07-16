@@ -5,16 +5,10 @@ import vueResource from 'vue-resource'
 import 'iview/dist/styles/iview.css'
 
 // import router from './router'
+
 // import router from './router/zxy-test'
 // import router from './router/finance'
-
-import router from './router/zxy-test'
-// import router from './router/finance'
-// import router from './router/sender'
-
-
-// import router from './router'
-// import router from './router/finance'
+import router from './router/warehouse'
 
 import qs from 'qs'
 Vue.prototype.$qs = qs
@@ -32,14 +26,14 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 Vue.use(iView)
 Vue.use(vueResource)
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: {
-    App
-  },
-  template: '<App/>'
+    el: '#app',
+    router,
+    components: {
+        App
+    },
+    template: '<App/>'
 })
