@@ -26,12 +26,12 @@
             </li>
             <li>
               <router-link to="/business_hall/business_driver_info">
-               <div @click="Input('司机信息管理')">司机信息管理</div>
+                <div @click="Input('司机信息管理')">司机信息管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_receipt_list_test">
-               <div @click="Input('收款管理')">收款管理</div>
+                <div @click="Input('收款管理')">收款管理</div>
               </router-link>
             </li>
           </ul>
@@ -54,45 +54,44 @@
     </div>
     <div id="main">
       <!-- <p>{{name}}</p>
-      <hr /> -->
+      <hr />-->
       <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import Bus from '../../reuse/bus';
-const axios = require("axios");
+import Bus from "../../reuse/bus";
 export default {
   data() {
     return {
-      info:"test",
+      info: "test",
       name: "车辆管理",
-      job:"业务员",
-      ename:"楚岩",
-      date:"2019-7-9",
-      depart:"营业厅",
+      job: "业务员",
+      ename: "楚岩",
+      date: "2019-7-9",
+      depart: "营业厅",
       name: "车辆装车"
     };
   },
-  created(){ 
-      // Bus.$emit('setBusiness','雨花台');
-      sessionStorage.setItem("business", '雨花台营业厅');  
+  created() {
+    // Bus.$emit('setBusiness','雨花台');
+    sessionStorage.setItem("business", "雨花台营业厅");
   },
   methods: {
     Input(val) {
       this.name = val;
     },
-    test(){    
-      Bus.$on('setBusiness',content =>{
-            alert(content);
-        })
+    test() {
+      Bus.$on("setBusiness", content => {
+        alert(content);
+      });
     },
-    mounted(){
-    	this.$root.Bus.$on('change',(val) => {
-    		this.name = val
-    	})
-    },
+    mounted() {
+      this.$root.Bus.$on("change", val => {
+        this.name = val;
+      });
+    }
   }
 };
 </script>

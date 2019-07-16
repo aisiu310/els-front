@@ -15,7 +15,13 @@
           </Input>
         </FormItem>
         <FormItem prop="password">
-          <Input type="password" v-model="formInline.password" placeholder="密码" :minlength="6" :maxlength="20">
+          <Input
+            type="password"
+            v-model="formInline.password"
+            placeholder="密码"
+            :minlength="6"
+            :maxlength="20"
+          >
             <Icon type="ios-lock-outline" slot="prepend"></Icon>
           </Input>
         </FormItem>
@@ -32,7 +38,7 @@
             <label class="miss">忘记密码</label>
           </a>
           &nbsp;&nbsp;&nbsp;
-          <Button type="primary" @click="login('formInline')">登录</Button>
+          <Button type="primary" @click="login('z')">登录</Button>
         </FormItem>
       </Form>
     </div>
@@ -65,14 +71,14 @@ export default {
           {
             required: true,
             message: "请输入用户名",
-            trigger: "blur",
+            trigger: "blur"
           }
         ],
         password: [
           {
             required: true,
             message: "请输入密码",
-            trigger: "blur",
+            trigger: "blur"
           },
           {
             type: "string",
@@ -100,20 +106,23 @@ export default {
   methods: {
     // 登录验证
     login(data) {
-      if(!this.formInline.user || !this.formInline.password || !this.formInline.authcode){
+      if (
+        !this.formInline.user ||
+        !this.formInline.password ||
+        !this.formInline.authcode
+      ) {
         this.$Message.error("用户名、密码、验证码不能为空");
-      }else {
-        if (this.formInline.authcode == this.checkCode) {
-        this.$Message.success("登录成功！");
-        this.$router.push({
-          name: "sender_index",
-          params: { user: this.formInline.user }
-        });
       } else {
-        this.$Message.error("验证码错误！");
+        if (this.formInline.authcode == this.checkCode) {
+          this.$Message.success("登录成功！");
+          this.$router.push({
+            name: "sender_index",
+            params: { user: this.formInline.user }
+          });
+        } else {
+          this.$Message.error("验证码错误！");
+        }
       }
-      }
-      
     },
     // 忘记密码
     miss() {

@@ -83,9 +83,22 @@
           </Modal>
         </div>
 
+        <div id="submit_for_check">
+          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+        </div>
+
         <div style="margin: 10px;overflow: hidden">
           <div style="float: right;">
-            <Page :total="sum" @on-change="changePage" show-elevator show-total></Page>
+            <Page
+              :total="sum"
+              @on-change="changePage"
+              @on-page-size-change="changePageSize"
+              show-sizer
+              :courent="currentPage"
+              :page-size="pageSize"
+              show-elevator
+              show-total
+            ></Page>
           </div>
         </div>
       </TabPane>

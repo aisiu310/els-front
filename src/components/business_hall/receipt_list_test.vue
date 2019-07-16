@@ -73,7 +73,7 @@
       </TabPane>
 
       <TabPane label="收款单" icon="ios-paper">
-        <Table stripe border :columns="columns" :data="receipt" @on-selection-change="select">
+        <Table stripe border :columns="columns" :data="receiptlist" @on-selection-change="select">
           <template slot-scope="{row,index}" slot="driverid">
             <input type="text" v-model="editDriverId" v-if="editIndex === index" />
             <span v-else>{{row.driverid}}</span>
@@ -108,7 +108,7 @@
           </template>
         </Table>
 
-         <Button type="error" id="delete_button" @click="modaldelet = true">删除</Button>
+        <Button type="error" id="delete_button" @click="modaldelet = true">删除</Button>
         <Modal v-model="modaldelet" width="360">
           <p slot="header" style="color:#f60;text-align:center">
             <Icon type="ios-information-circle"></Icon>
@@ -129,10 +129,15 @@
           </div>
         </Modal>
 
-
         <div id="arrive_list_add">
           <Button type="primary" @click="modal2 = true">添加</Button>
-          <Modal v-model="modal2" title="添加" v-bind="formItem" @on-ok="submitform('formItem')" @on-cancle="cancle">
+          <Modal
+            v-model="modal2"
+            title="添加"
+            v-bind="formItem"
+            @on-ok="submitform('formItem')"
+            @on-cancle="cancle"
+          >
             <Form :model="formItem" :label-width="80">
               <FormItem label="DatePicker">
                 <Row>
@@ -155,9 +160,22 @@
           </Modal>
         </div>
 
+        <div id="submit_for_check">
+          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+        </div>
+
         <div style="margin: 10px;overflow: hidden">
           <div style="float: right;">
-            <Page :total="sum" @on-change="changePage" show-elevator show-total></Page>
+            <Page
+              :total="sum"
+              @on-change="changePage"
+              @on-page-size-change="changePageSize"
+              show-sizer
+              :courent="currentPage"
+              :page-size="pageSize"
+              show-elevator
+              show-total
+            ></Page>
           </div>
         </div>
       </TabPane>
@@ -247,6 +265,7 @@ export default {
     };
   },
   mounted() {
+    this.receiptlist = [{}];
     this.courier = [
       {
         courier_name: "褚岩",
@@ -501,7 +520,7 @@ export default {
         .catch(function(error) {
           alert("请求超时,请检查连接信息");
         });
-    }   
+    }
   }
 };
 </script>
