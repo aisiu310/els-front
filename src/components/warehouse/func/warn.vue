@@ -11,7 +11,7 @@
           <label class="just_word">库存警戒线：</label>
         </div>
         <div class="lll">
-          <Slider v-model="warehouse_warn_line" show-input @on-change="setNewWarnLine"></Slider>
+          <Slider v-model="warehouse_warn_line" show-input @on-change="setWarnLine"></Slider>
         </div>
       </div>
     </div>
@@ -19,24 +19,42 @@
 </template>
 
 <script>
+import { api } from "../api/api"
 export default {
   data() {
     return {
-      warehouse_capacity: 65,
+      warehouse_capacity: 0,
       warehouse_warn_line: 0
     };
   },
   mounted() {
-    this.warehouse_warn_line = 90;
+    this.getCurrentCapacity("南京中转中心仓库");
+    this.getCurrentWarnLine("南京中转中心仓库");
+    if(this.warehouse_capacity > this.warehouse_warn_line){
+      this.$Message.error("库存容量超出警戒线！");
+    }
   },
   methods: {
-    setNewWarnLine(val) {
-      var flag = confirm("是否确认修改？");
-      if (flag == true) {
-        this.warehouse_warn_line = val;
-      } else {
-        this.$Message.warning("取消修改！");
-      }
+    setWarnLine(val) {
+      api.setInventoryLine("南京中转中心仓库", val).then(res=>{
+          if(res == 1){
+            this.$Message.success("设置成功！");
+          }else{
+            this.$Message.error("设置失败！");
+          }
+      })
+    },
+    // as function name
+    getCurrentCapacity(inventoryName){
+      api.getInventoryCapacity(inventoryName).then(res =>{
+        this.warehouse_capacity = res;
+      })
+    },
+    // as function name
+    getCurrentWarnLine(inventoryName){
+      api.getWarnLine(inventoryName).then(res =>{
+        this.warehouse_warn_line = res;
+      })
     }
   }
 };

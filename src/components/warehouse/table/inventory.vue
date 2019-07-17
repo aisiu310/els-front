@@ -1,17 +1,8 @@
 <template>
   <div>
     <Table :columns="columns" :data="data" :stripe="true" ref="table"></Table>
-
     <div class="bottom">
-      <div class="print">
-        <Button type="primary" @click="exportData()" v-if="time != null">
-          <Icon type="ios-download-outline"></Icon>打印原数据
-        </Button>
-        <Button type="primary" @click="update()" v-if="area != null">
-          <Icon type="md-refresh" />更新库存信息
-        </Button>
-      </div>
-      <div class="anotherPage">
+      <div class="page">
         <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
       </div>
     </div>
@@ -19,7 +10,7 @@
 </template>
 
 <script>
-import bus from "../../reuse/bus";
+import { api } from "../api/api"
 export default {
   data() {
     return {
@@ -69,53 +60,22 @@ export default {
       data: []
     };
   },
-  props: ["area", "time"],
-  // watch: {
-  //   area(val, oldVal) {
-  //     console.log(val);
-  //   }
-  // },
+  props: ["area"],
   mounted() {
-    this.initData();
+    this.initData(this.currentPage);
   },
   methods: {
     // divide page
     changePage(val) {
-      let self = this;
-      this.$axios
-        .get(
-          "http://localhost:8031/inventory/getInventory?area=" +
-            self.area +
-            "&inventoryName=南京中转中心仓库&skipCount=" +
-            val
-        )
-        .then(res => {
-          self.data = res.data.data[0];
-        });
-    },
-    // export data to excel
-    exportData(type) {
-      this.$refs.table.exportCsv({
-        filename: "盘点数据"
-      });
-    },
-    // update inventory data through in/out
-    update() {
-      alert(this.area);
+      this.initData(val);
     },
     // init data
-    initData() {
+    initData(page) {
       let self = this;
-      this.$axios
-        .get(
-          "http://localhost:8031/inventory/getInventory?area=" +
-            self.area +
-            "&inventoryName=南京中转中心仓库&skipCount=1"
-        )
-        .then(res => {
-          self.data = res.data.data[0];
-          self.dataLength = res.data.data[1];
-        });
+      api.getInventory(self.area, "南京中转中心仓库", page).then(res=>{
+        self.data = res[0];
+        self.dataLength = res[1];
+      })
     }
   }
 };

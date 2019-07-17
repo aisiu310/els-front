@@ -7,7 +7,7 @@
           type="daterange"
           placement="bottom-end"
           placeholder="搜索时间段内的出库单"
-          style="width: 200px"
+          style="width: 300px"
           :clearable="true"
           @on-change="selectDate"
         ></DatePicker>

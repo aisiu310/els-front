@@ -7,7 +7,7 @@
           type="daterange"
           placement="bottom-end"
           placeholder="搜索时间段内的出库单"
-          style="width: 200px"
+          style="width: 300px"
           :clearable="true"
           @on-change="selectDate"
         ></DatePicker>
@@ -69,16 +69,19 @@
     </div>
     <div class="page">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
+      <span class>共{{dataLength}}条</span>
     </div>
   </div>
 </template>
 
 <script>
 import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       modal: false,
+      dateTime: [],
       dataLength: 0,
       currentPage: 1,
       delSelection: [],
@@ -170,7 +173,13 @@ export default {
     },
     // divide page
     changePage(page) {
-      this.initData(page);
+      let flag = this.dateTime;
+      if (flag == ",") {
+        this.initData(page);
+      } else {
+        this.currentPage = page;
+        this.getDataByTime(flag[0], flag[1]);
+      }
     },
     //get this list of id in order to batch delete
     batchSelect(selection, row) {
@@ -193,7 +202,14 @@ export default {
       });
     },
     selectDate(val) {
-      alert(val);
+      this.dateTime = val;
+      if (val == ",") {
+        this.initData(this.currentPage);
+      } else {
+        let begin = val[0];
+        let end = val[1];
+        this.getDataByTime(begin, end);
+      }
     },
     // get data from db
     initData(val) {
@@ -214,6 +230,15 @@ export default {
       } else {
         this.$Message.warning("已经提交，待经理审核");
       }
+    },
+    // get data between time
+    getDataByTime(begin, end) {
+      api.getDataBetweenTime(begin, end, this.currentPage).then(res => {
+        if (res != null) {
+          this.out_warehouse_data = res[0];
+          this.dataLength = res[1];
+        }
+      });
     }
   },
   computed: {
