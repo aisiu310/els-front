@@ -100,9 +100,9 @@ const api = {
         }
     },
     // Get Inventory information All
-    async getAllInventory(inventoryName, limitTime, skipCount) {
+    async getAllInventory(inventoryName, limitTime) {
         try {
-            let parameter = QS.stringify({ inventoryName: inventoryName, limitTime: limitTime, skipCount: skipCount });
+            let parameter = QS.stringify({ inventoryName: inventoryName, limitTime: limitTime });
             let res = await axois.get(url.getAllURL + parameter);
             return res.data.data;
         } catch (error) {

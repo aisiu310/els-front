@@ -4,12 +4,18 @@
       <div class="word">库存盘点</div>
       <div class="middle"></div>
       <div class="button">
-        <DatePicker type="date" v-model="limitTime" placeholder="请选择截止日期,不包括截止日期" style="width: 300px" @on-change="getDate"></DatePicker>
+        <DatePicker
+          type="date"
+          v-model="limitTime"
+          placeholder="请选择截止日期,不包括截止日期"
+          style="width: 300px"
+          @on-change="getDate"
+        ></DatePicker>
       </div>
     </div>
     <hr />
     <div>
-      <Table :columns="columns" :data="data" :stripe="true" ref="table"></Table>
+      <Table :columns="columns" :data="checkData" :stripe="true" ref="table"></Table>
       <div class="bottom">
         <div class="print">
           <Button type="primary" size="large" @click="exportData()">
@@ -87,7 +93,8 @@ export default {
           sortable: true
         }
       ],
-      data: []
+      data: [],
+      checkData: []
     };
   },
   mounted() {
@@ -97,23 +104,24 @@ export default {
     // export to excel
     exportData(type) {
       this.$refs.table.exportCsv({
-        filename: "盘点数据"
+        filename: "盘点数据.xls"
       });
     },
     // init data
-    getAllInventory(page) {
+    getAllInventory() {
       let self = this;
-      api.getAllInventory("南京中转中心仓库", self.limitTime, page).then(res => {
+      api.getAllInventory("南京中转中心仓库", self.limitTime).then(res => {
         self.data = res;
+        self.checkData = self.data.slice(0, 10);
         self.dataLength = self.data.length;
       });
     },
-    getDate(val){
+    getDate(val) {
       // alert(this.limitTime);
     },
     // divide page
-    changePage(val){
-      this.getAllInventory(val);
+    changePage(val) {
+      this.checkData = this.data.slice((val - 1) * 10, val * 10);
     }
   }
 };
