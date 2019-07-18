@@ -12,7 +12,13 @@ const url = {
     getWarnLine: api + "/inventory/getWarnLine?",
     // Inventory
     getURL: api + "/inventory/getInventory?",
-    getAllURL: api + "/inventory/getAllInventory?"
+    getAllURL: api + "/inventory/getAllInventory?",
+    // inInventory: 
+    in_addURL: api + "/inInventory/addInInventory",
+    in_delURL: api + "/inInventory/batchDelete",
+    in_checkURL: api + "/inInventory/checkInInventory",
+    in_getURL: api + "/inInventory/getInInventory?",
+    in_getByTimeURL: api + "/inInventory/getInInventoryByTime?",
 
 }
 export { url }

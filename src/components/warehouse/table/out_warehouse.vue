@@ -96,6 +96,7 @@ export default {
       tableSize: "default",
       // new form data
       formValidate: {
+        inventoryName: "南京中转中心仓库",
         orderCode: "",
         outDate: new Date(),
         destination: "",
@@ -152,7 +153,7 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           api
-            .addData(this.formValidate)
+            .addData(url.out_addURL, this.formValidate)
             .then(res => {
               if (res == 1) {
                 this.initData(this.currentPage);
@@ -174,7 +175,7 @@ export default {
     // divide page
     changePage(page) {
       let flag = this.dateTime;
-      if (flag == ",") {
+      if (flag == "," || flag.length == 0) {
         this.initData(page);
       } else {
         this.currentPage = page;
@@ -192,7 +193,7 @@ export default {
       for (var i = 0; i < idList.length; i++) {
         id[i] = idList[i].id;
       }
-      api.batchDelete(id).then(res => {
+      api.batchDelete(url.out_delURL, id).then(res => {
         if (res <= 0) {
           this.$Message.warning("删除失败！");
         } else {
@@ -213,7 +214,7 @@ export default {
     },
     // get data from db
     initData(val) {
-      api.initData(val).then(res => {
+      api.initData(url.out_getURL, val).then(res => {
         this.out_warehouse_data = res[0];
         this.dataLength = res[1];
       });
@@ -221,24 +222,28 @@ export default {
     // submit to check
     check(index) {
       if (this.out_warehouse_data[index].state == "未提交审核") {
-        api.checkData(this.out_warehouse_data[index].id).then(res => {
-          if (res == 1) {
-            this.initData(this.currentPage);
-            this.$Message.success("提交成功，待经理审核");
-          }
-        });
+        api
+          .checkData(url.out_checkURL, this.out_warehouse_data[index].id)
+          .then(res => {
+            if (res == 1) {
+              this.initData(this.currentPage);
+              this.$Message.success("提交成功，待经理审核");
+            }
+          });
       } else {
         this.$Message.warning("已经提交，待经理审核");
       }
     },
     // get data between time
     getDataByTime(begin, end) {
-      api.getDataBetweenTime(begin, end, this.currentPage).then(res => {
-        if (res != null) {
-          this.out_warehouse_data = res[0];
-          this.dataLength = res[1];
-        }
-      });
+      api
+        .getDataBetweenTime(url.out_getByTimeURL, begin, end, this.currentPage)
+        .then(res => {
+          if (res != null) {
+            this.out_warehouse_data = res[0];
+            this.dataLength = res[1];
+          }
+        });
     }
   },
   computed: {

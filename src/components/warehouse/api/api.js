@@ -4,10 +4,10 @@ import { url } from './url'
 
 const api = {
     // init data from server
-    async initData(page) {
+    async initData(URL, page) {
         try {
             let skip = QS.stringify({ skipCount: page });
-            let res = await axois.get(url.out_getURL + skip);
+            let res = await axois.get(URL + skip);
             return res.data.data;
         } catch (error) {
             alert('服务器出错');
@@ -15,9 +15,9 @@ const api = {
         }
     },
     // as function name
-    async batchDelete(idList) {
+    async batchDelete(URL, idList) {
         try {
-            let res = await axois.delete(url.out_delURL, { data: idList });
+            let res = await axois.delete(URL, { data: idList });
             console.log(res.data.msg);
             return res.data.data;
         } catch (error) {
@@ -26,9 +26,9 @@ const api = {
         }
     },
     // as function name
-    async checkData(checkId) {
+    async checkData(URL, checkId) {
         try {
-            let res = await axois.get(url.out_checkURL, { params: { state: '待审核', id: checkId } });
+            let res = await axois.get(URL, { params: { state: '待审核', id: checkId } });
             console.log(res.data.data);
             return res.data.data;
         } catch (error) {
@@ -37,9 +37,9 @@ const api = {
         }
     },
     // as function name
-    async addData(newData) {
+    async addData(URL, newData) {
         try {
-            let res = await axois.post(url.out_addURL, newData);
+            let res = await axois.post(URL, newData);
             console.log(res.data.data);
             return res.data.data;
         } catch (error) {
@@ -48,10 +48,10 @@ const api = {
         }
     },
     // as function name
-    async getDataBetweenTime(begin, end, page) {
+    async getDataBetweenTime(URL, begin, end, page) {
         try {
             let parameter = QS.stringify({ begin: begin, end: end, skipCount: page });
-            let res = await axois.get(url.out_getByTimeURL + parameter);
+            let res = await axois.get(URL + parameter);
             // console.log(res.data.data);
             return res.data.data;
         } catch (error) {
