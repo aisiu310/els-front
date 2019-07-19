@@ -7,15 +7,6 @@
         <!-- init account modal -->
         <Modal v-model="modal" title="新建账本" :styles="{top: '20px'}" :footer-hide="true">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-            <!-- <FormItem label="创建日期">
-              <Row>
-                <Col span="11">
-                  <FormItem prop="date">
-                    <DatePicker type="date" placeholder="Select date" v-model="formValidate.date"></DatePicker>
-                  </FormItem>
-                </Col>
-              </Row>
-            </FormItem>-->
             <FormItem label="账本名称" prop="name">
               <Input v-model="formValidate.name"></Input>
             </FormItem>
@@ -47,18 +38,21 @@
       <Table :columns="columns" :data="data"></Table>
     </div>
     <div class="page">
-      <Page :total="dataLength" show-elevator @on-change="changePage" />
+      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
   </div>
 </template>
 
 <script>
 import expandRow from "./init_expand";
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       data: [],
       dataLength: 0,
+      currentPage: 1,
       modal: false,
       columns: [
         {
@@ -126,7 +120,6 @@ export default {
         }
       ],
       formValidate: {
-        // date: "",
         name: "",
         organization: "",
         personnel: "",
@@ -161,7 +154,7 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    this.initData(this.currentPage);
   },
   methods: {
     show(index) {
@@ -178,30 +171,16 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$http
-            .post(
-              "http://localhost:8021/enterprise/addEnterprise",
-              {
-                id: null,
-                name: this.formValidate.name,
-                date: null,
-                organization: this.formValidate.organization,
-                personnel: this.formValidate.personnel,
-                car: this.formValidate.car,
-                inventory: this.formValidate.inventory,
-                bankAccount: this.formValidate.bankAccount
-              },
-              { emulateJson: true }
-            )
-            .then(res => {
-              if (res.data.data == 1) {
-                this.getData();
-                this.modal = false;
-                this.$Message.success("新建成功");
-              }
-            });
-        } else {
-          this.$Message.error("Fail!");
+          api.addData(url.enterprise_addURL, this.formValidate).then(res => {
+            if (res == 1) {
+              this.initData(this.currentPage);
+              this.modal = false;
+              this.$Message.success("新建成功");
+            } else {
+              this.modal = false;
+              this.$Message.error("Fail!");
+            }
+          });
         }
       });
     },
@@ -211,25 +190,13 @@ export default {
     },
     // page
     changePage(val) {
-      this.$http
-        .get(
-          "http://localhost:8021/enterprise/getAllEnterprise?skipCount=" +
-            val +
-            "&pageCount=10"
-        )
-        .then(res => {
-          this.data = res.data.data[0];
-        });
+      this.initData(val);
     },
-    getData() {
-      this.$http
-        .get(
-          "http://localhost:8021/enterprise/getAllEnterprise?skipCount=1&pageCount=10"
-        )
-        .then(res => {
-          this.data = res.data.data[0];
-          this.dataLength = res.data.data[1];
-        });
+    initData(skipCount) {
+      api.initData(url.enterprise_getURL, skipCount).then(res => {
+        this.data = res[0];
+        this.dataLength = res[1];
+      });
     }
   }
 };

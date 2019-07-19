@@ -35,17 +35,20 @@
       <Table stripe :columns="columns" :data="data"></Table>
     </div>
     <div class="page">
-      <Page :total="dataLength" show-elevator @on-change="changePage" />
+      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
   </div>
 </template>
 
 
 <script>
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       modal: false,
+      currentPage: 1,
       search_value: "",
       columns: [
         {
@@ -136,81 +139,53 @@ export default {
     };
   },
   mounted() {
-    this.$http
-      .get(
-        "http://localhost:8021/bank/getBankAccount?skipCount=1&pageCount=10&name="
-      )
-      .then(res => {
-        this.data = res.data.data[0];
-        this.dataLength = res.data.data[1];
-      });
+    this.initData(this.currentPage);
   },
   methods: {
     // del bank account
     remove(index) {
-      this.$http
-        .delete(
-          "http://localhost:8021/bank/deleteBankAccount?id=" +
-            this.data[index].id
-        )
-        .then(res => {
-          if (res.data.data == 1) {
-            this.data.splice(index, 1);
-          } else {
-            this.$Message.error("删除失败！");
-          }
-        });
+      api.delData(url.bank_delURL, this.data[index].id).then(res=>{
+        if(res == 1){
+          this.$Message.success("删除成功！");
+          this.data.splice(index);
+        }
+      })
     },
     // add bank account
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$http
-            .post(
-              "http://localhost:8021/bank/addBankAccount",
-              {
-                id: null,
-                name: this.bank.name,
-                money: this.bank.money,
-                isRemove: 0
-              },
-              { emulateJson: true }
-            )
-            .then(res => {
-              if (res.data.data == 1) {
-                this.modal = false;
-                this.$Message.success("添加成功！");
-                // history.go(0); // 刷新页面
-              } else {
-                this.$Message.error("添加失败");
-              }
-            });
+          api.addData(url.bank_addURL, this.bank).then(res => {
+            if (res == 1) {
+              this.modal = false;
+              this.$Message.success("添加成功！");
+              this.initData(this.currentPage);
+            }
+          });
         }
       });
     },
     // like search
     search(val) {
-      this.$http
-        .get(
-          "http://localhost:8021/bank/getBankAccount?skipCount=1&pageCount=10&name=" +
-            val
-        )
-        .then(res => {
-          this.data = res.data.data[0];
-        });
+      api.searchBankData(this.currentPage, val).then(res=>{
+        this.data = res[0];
+        this.dataLength = res[1];
+      })
     },
     // page
     changePage(val) {
-      this.$http
-        .get(
-          "http://localhost:8021/bank/getBankAccount?skipCount=" +
-            val +
-            "&pageCount=10&name=" +
-            this.search_value
-        )
-        .then(res => {
-          this.data = res.data.data[0];
-        });
+      if(this.search_value == null){
+        this.initData(val);
+      }else{
+        this.search(val, this.currentPage);
+      }
+    },
+    // get Init Bank Data
+    initData(skipCount) {
+      api.initBankData(skipCount).then(res =>{
+        this.data = res[0];
+        this.dataLength = res[1];
+      })
     }
   }
 };

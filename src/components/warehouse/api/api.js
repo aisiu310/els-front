@@ -40,7 +40,6 @@ const api = {
     async addData(URL, newData) {
         try {
             let res = await axois.post(URL, newData);
-            console.log(res.data.data);
             return res.data.data;
         } catch (error) {
             alert('服务器出错');
