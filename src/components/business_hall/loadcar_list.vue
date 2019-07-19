@@ -98,7 +98,7 @@
                     <DatePicker
                       type="date"
                       placeholder="Select date"
-                      :options="options1"
+                      :options="options"
                       v-model="formItem.date"
                     ></DatePicker>
                   </Col>
@@ -160,6 +160,7 @@
 </template>
 <script>
 import qs from "qs";
+import { api } from "./api";
 import { linkSync, link } from "fs";
 export default {
   data() {
@@ -173,7 +174,7 @@ export default {
     return {
       currentPage: 1,
       pageSize: 10,
-      options1: {
+      options: {
         shortcuts: [
           {
             text: "Today",
@@ -329,18 +330,14 @@ export default {
   methods: {
     getLoadCarList(currentPage, pageSize) {
       const self = this;
-      this.$axios
-        .get(" http://192.168.2.229/loadcar/getLoadingList", {
-          params: {
-            code: "025000",
-            currentPage: currentPage,
-            pageCount: pageSize
-          }
-        })
+      console.log(currentPage, pageSize);
+      api
+        .getLoadCarList(currentPage, pageSize)
         .then(response => {
+          console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data[0];
-            self.sum = response.data.data[1];
+            self.data = response.data.data.list;
+            self.sum = response.data.data.total;
           }
         })
         .catch(error => {

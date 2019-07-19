@@ -160,7 +160,7 @@
 </template>
 <script>
 import qs from "qs";
-import { linkSync, link } from "fs";
+import { linkSync, link, constants } from "fs";
 import { error } from "util";
 export default {
   data() {
@@ -324,19 +324,21 @@ export default {
   },
   mounted() {
     sessionStorage.setItem("accountId", "025000");
-    this.getLoadCarList(this.currentPage, this.pageSize);
+    // this.getLoadCarList(this.currentPage, this.pageSize);
   },
   methods: {
     getLoadCarList(currentPage, pageSize) {
       const self = this;
-      this.$axios
-        .get(" http://192.168.2.229/loadcar/getLoadingList", {
-          params: {
-            code: "025000",
-            currentPage: currentPage,
-            pageCount: pageSize
-          }
-        })
+      // this.$axios
+      //   .get(" http://192.168.2.229/loadcar/getLoadingList", {
+      //     params: {
+      //       code: "025000",
+      //       currentPage: currentPage,
+      //       pageCount: pageSize
+      //     }
+      //   })
+      api
+        .getLoadCarList(currentPage, pageSize)
         .then(response => {
           if (response.data.status === 200) {
             self.data = response.data.data[0];
@@ -423,10 +425,10 @@ export default {
       const self = this;
       self.$refs[formItem].validate(valid => {
         if (valid) {
-          self.$axios
-            .post("http://192.168.2.229/loadcar/addLoading", self.formItem)
+          api
+            .submitform(formItem)
             .then(response => {
-              if (response.data.status === 200) {
+              if (response.data.status) {
                 self.$Message.success("添加成功");
                 self.getLoadCarList();
               } else {

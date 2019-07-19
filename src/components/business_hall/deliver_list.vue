@@ -3,26 +3,38 @@
     <Tabs>
       <TabPane label="派件管理" icon="ios-swap">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
-          <template slot-scope="{row,index}" slot="date">
-            <input type="text" v-model="editDate" v-if="editIndex === index" />
-            <span v-else>{{row.date}}</span>
+          <template slot-scope="{row,index}" hidden slot="id">
+            <span>{{row.id}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="number">
-            <input type="text" v-model="editNumber" v-if="editIndex === index" />
-            <span v-else>{{row.number}}</span>
+          <template slot-scope="{row,index}" slot="code">
+            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
+            <span v-else>{{row.code}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="deliver">
-            <input type="text" v-model="editDeliver" v-if="editIndex === index" />
-            <span v-else>{{row.deliver}}</span>
+          <template slot-scope="{row,index}" slot="deliverDate">
+            <input type="text" v-model="editItem.deliverDate" v-if="editIndex === index" />
+            <span v-else>{{row.deliverDate}}</span>
           </template>
-
+          <template slot-scope="{row,index}" slot="allOrderCode">
+            <input type="text" v-model="editItem.allOrderCode" v-if="editIndex === index" />
+            <span v-else>{{row.allOrderCode}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="courierId">
+            <input type="text" v-model="editItem.courierId" v-if="editIndex === index" />
+            <span v-else>{{row.courierId}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="courier">
+            <input type="text" v-model="editItem.courier" v-if="editIndex === index" />
+            <span v-else>{{row.courier}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="state">
+            <span>{{row.state}}</span>
+          </template>
           <template slot-scope="{ row }" slot="date">
             <strong>{{ row.date }}</strong>
           </template>
-
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button @click="handleSave(index)">save</Button>
+              <Button v-bind="editItem" @click="handleSave(editItem)">save</Button>
               <Button @click="editIndex = -1">cancel</Button>
             </div>
             <div v-else>
@@ -30,61 +42,8 @@
             </div>
           </template>
         </Table>
-
-        <Button type="error" id="delete_button" @click="modaldelet = true">删除</Button>
-        <Modal v-model="modaldelet" width="360">
-          <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>Delete confirmation</span>
-          </p>
-          <div style="text-align:center">
-            <p>这些数据删除后无法恢复、你确定要删除吗？</p>
-          </div>
-          <div slot="footer">
-            <Button
-              type="error"
-              :v-bind="sel"
-              @click="remove(sel)"
-              size="large"
-              long
-              :loading="modal_loading"
-            >Delete</Button>
-          </div>
-        </Modal>
-
-        <div id="arrive_list_add">
-          <Button type="primary" @click="modal = true">添加</Button>
-          <Modal
-            v-model="modal"
-            title="添加"
-            v-bind="formItem"
-            @on-ok="submitform('formItem')"
-            @on-cancle="cancle"
-          >
-            <Form :model="formItem" :label-width="80">
-              <FormItem label="DatePicker">
-                <Row>
-                  <Col span="11">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.date"></DatePicker>
-                  </Col>
-                </Row>
-              </FormItem>
-
-              <FormItem label="Address">
-                <Input v-model="formItem.input" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="State">
-                <Select v-model="formItem.select">
-                  <Option value="arrive">arrive</Option>
-                  <Option value="transfer">transfer</Option>
-                </Select>
-              </FormItem>
-            </Form>
-          </Modal>
-        </div>
-
         <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+          <Button type="success" v-bind="sel" @click="deliverListSubmitForCheck(sel)">提交审核</Button>
         </div>
 
         <div style="margin: 10px;overflow: hidden">
@@ -109,35 +68,24 @@
   </div>
 </template>
 <script>
+import { api } from "./api";
+import { log, error } from "util";
 export default {
   data() {
     return {
-      formItem: {
-        input: "",
-        select: "",
-        date: "",
-        time: ""
-      },
-      ruleValidate: {
-        date: [
-          {
-            required: true,
-            message: "日期不能为空",
-            trigger: "change",
-            type: "date"
-          }
-        ]
-      },
-      modaldelet: false,
-      modal_loading: false,
-      modal: false,
+      currentPage: 1,
+      pageSize: 10,
       sel: [],
-
       data: [],
       editIndex: -1, // 当前聚焦的输入框的行数
-      editDate: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
-      editNumber: "", // 第二列输入框
-      editDeliver: "", // 第三列输入框
+      editItem: {
+        id: "",
+        code: "",
+        deliverDate: "",
+        allOrderCode: "",
+        courierId: "",
+        courier: ""
+      },
       sum: 0,
       columns: [
         {
@@ -146,18 +94,33 @@ export default {
           align: "center"
         },
         {
-          title: "ArriveDate",
-          slot: "date",
-          sortable: true
+          type: "index",
+          width: 60,
+          align: "center"
         },
         {
-          title: "Number",
-          slot: "number",
-          sortable: true
+          title: "营业厅编号",
+          slot: "code"
         },
         {
-          title: "Deliver",
-          slot: "deliver"
+          title: "派送日期",
+          slot: "deliverDate"
+        },
+        {
+          title: "所有订单条形码号",
+          slot: "allOrderCode"
+        },
+        {
+          title: "快递员编号",
+          slot: "courierId"
+        },
+        {
+          title: "快递员",
+          slot: "courier"
+        },
+        {
+          title: "审核状态",
+          slot: "state"
         },
         {
           title: "操作",
@@ -167,143 +130,90 @@ export default {
     };
   },
   mounted() {
-    //this.getdeliverlist();
-    this.data = [
-      {
-        date: "2016-10-03",
-        number: 1,
-        deliver: "New York No. 1 Lake Park"
-      },
-      {
-        date: "2016-10-01",
-        number: 2,
-        deliver: "London No. 1 Lake Park"
-      }
-    ];
-    this.sum = pagedata.length;
+    this.getdeliverlist(this.currentPage, this.pageSize);
   },
   methods: {
     getdeliverlist(currentPage, pageSize) {
-      this.$axios
-        .get(" http://192.168.2.229/order/getPaymentInfoList", {
-          params: {
-            number: "025000",
-            date: "2019-07-12"
+      let self = this;
+      api
+        .getdeliverlist(currentPage, pageSize)
+        .then(response => {
+          if (response.data.status === 200) {
+            self.data = response.data.data[0];
+            self.sum = response.data.data[1];
+            self.$Message.success("加载成功");
           }
         })
-        .then(response => {
-          this.data = response.data.data;
-          this.sum = response.data.length;
-        })
-        .catch(function(error) {
-          alert("请求超时,加载本地数据");
+        .catch(error => {
+          self.$Message.error("请求超时,请检查链接信息");
         });
     },
     handleEdit(row, index) {
-      this.editDate = row.date;
-      this.editNumber = row.number;
-      this.editDeliver = row.deliver;
+      this.editItem.id = row.id;
+      this.editItem.code = row.code;
+      this.editItem.deliverDate = row.deliverDate;
+      this.editItem.allOrderCode = row.allOrderCode;
+      this.editItem.courierId = row.courierId;
+      this.editItem.courier = row.courier;
       this.editIndex = index;
     },
-    handleSave(index) {
-      this.$axios
-        .post("url", {
-          params: {
-            a: this.editDate,
-            b: this.editNumber,
-            c: this.editDeliver
-          }
-        })
+    handleSave(editItem) {
+      let self = this;
+      api
+        .deliverListSave(editItem)
         .then(response => {
-          if (response.data) {
-            this.getdeliverlist();
+          if (response.data.status === 200) {
+            self.getdeliverlist(self.currentPage, self.pageSize);
+            self.$Message.success("修改成功");
+          } else {
+            self.$Message.error("提交失败");
           }
         })
-        .catch(function(error) {
-          alert("请求超时,请检查连接信息");
+        .catch(error => {
+          self.$Message.error("请求超时,请检查连接信息");
         });
       this.editIndex = -1;
     },
     select(selection, row) {
-      // console.log(selection);
       this.sel = selection;
     },
-    remove(sel) {
-      if (sel.length) {
-        this.modal_loading = true;
+    deliverListSubmitForCheck(sel) {
+      const self = this;
+      var list = [];
+      if (sel.length > 0) {
         sel.forEach(element => {
-          this.$axios
-            .delete(" http://192.168.2.229/order/getPaymentInfoList", {
-              params: {
-                number: element.carnumber
-              }
-            })
-            .then(response => {
-              if (response.data) {
-                this.modal_loading = false;
-                this.modaldelet = false;
-                this.$Message.success("Successfully delete");
-                this.getdeliverlist();
-              } else {
-                this.$Message.error("没有获取到数据");
-              }
-            })
-            .catch(function(error) {
-              alert("请求超时,请检查连接信息");
-              this.modal_loading = false;
-              this.modaldelet = false;
-            });
+          if (element.state === 0) {
+            list.push(element.id);
+          }
         });
-      } else {
-        this.$Message.error("你还没有选择");
-        setTimeout(() => {
-          this.modal_loading = false;
-          this.modaldelet = false;
-        }, 100);
-      }
-    },
-    submitform() {
-      if (
-        !(this.formItem.input || this.formItem.date || this.formItem.select)
-      ) {
-        this.$Message.error("输入为空");
-      } else {
-        console.log(this.formItem.date);
-        this.$axios
-          .post("url", {
-            data: {
-              date: this.formItem.date,
-              input: this.formItem.input,
-              select: this.formItem.select
-            }
-          })
+        api
+          .deliverListSubmitForCheck(list)
           .then(response => {
-            if (response.data) {
-              this.getdeliverlist();
+            if (response.data.status === 200) {
+              self.getdeliverlist(self.currentPage, self.pageSize);
+              self.$Message.success("提交成功");
+            } else {
+              self.$Message.error("提交失败");
             }
           })
           .catch(function(error) {
-            this.$Message.error("请求超时,请检查连接信息");
+            self.$Message.error("请求超时,请检查连接信息");
           });
-        this.$Message.success("添加成功");
+      } else {
+        self.$Message.error("你还没有选择");
       }
     },
     cancle() {
       this.$Message.info("取消操作");
     },
-    changePage(val) {
-      // invoke the back-end API limit 10
-      // 后端分页查询
-      this.$axios
-        .get("url", {
-          params: {}
-        })
-        .then(response => {
-          this.data = response.data.data;
-        })
-        .catch(function(error) {
-          alert("请求超时,请检查连接信息");
-        });
+    changePage(page) {
+      console.log(page);
+      // this.currentPage = val;
+      this.getdeliverlist(page, this.pageSize);
+    },
+    changePageSize(pageSize) {
+      // console.log(pageSize);
+      this.getdeliverlist(this.currentPage, pageSize);
     }
   }
 };
