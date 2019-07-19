@@ -4,7 +4,6 @@
       <TabPane label="接收管理" icon="md-clipboard">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
           <template slot-scope="{row,index}" hidden slot="date">
-            <input type="text" />
             <span>{{row.id}}</span>
           </template>
           <template slot-scope="{row,index}" slot="code">
@@ -35,7 +34,7 @@
           </template>
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button @click="handleSave(index)">保存</Button>
+              <Button v-bind="editItem" @click="handleSave(index,editItem)">保存</Button>
               <Button @click="editIndex = -1">取消</Button>
             </div>
             <div v-else>
@@ -130,7 +129,8 @@
   </div>
 </template>
 <script>
-import { error } from "util";
+import { api } from "./api";
+import { error, log } from "util";
 export default {
   data() {
     return {
@@ -241,19 +241,13 @@ export default {
   methods: {
     getArriveList(currentPage, pageSize) {
       const self = this;
-      this.$axios
-        .get(" http://192.168.2.229/arrive/getArriveList", {
-          params: {
-            code: "025000",
-            currentPage: currentPage,
-            pageCount: pageSize
-          }
-        })
+      api
+        .getArriveList(currentPage, pageSize)
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data[0];
-            self.sum = response.data.data[1];
+            self.data = response.data.data.list;
+            self.sum = response.data.data.total;
           }
         })
         .catch(function(error) {
@@ -269,10 +263,14 @@ export default {
       this.editItem.goodsState = row.goodsState;
       this.editIndex = index;
     },
-    handleSave(index) {
+    handleSave(index, editItem) {
       const self = this;
-      this.$axios
-        .put("http://192.168.2.229/arrive/modifyArriveById", self.editItem)
+      console.log(editItem);
+      // this.$axios
+      //   .put(
+      //     "http://192.168.2.229:9001/yuantu/logistics/arrive/modifyArriveById",editItem)
+      api
+        .arriveListSave(editItem)
         .then(response => {
           console.log(response);
           if (response.data) {
@@ -283,30 +281,31 @@ export default {
           }
         })
         .catch(error => {
-          alert("请求超时,请检查连接信息");
+          self.$Message.error(response.date.msg);
         });
       this.editIndex = -1;
     },
     select(selection, row) {
-      // console.log(selection);
       this.sel = selection;
     },
     remove(sel) {
-      const self = this;
-      var list = [];
-      console.log(self.sel);
+      let self = this;
+      // var list = [];
+      // console.log(self.sel);
       if (sel.length > 0) {
         self.modal_loading = true;
-        sel.forEach(element => {
-          list.push(element.id);
-        });
-        console.log(list);
-        this.$axios
-          .delete("http://192.168.2.229/arrive/removeArriveFake", {
-            data: list
-          })
+        //   sel.forEach(element => {
+        //     list.push(element.id);
+        //   });
+        //   console.log(list);
+        //   this.$axios
+        //     .delete("http://192.168.2.229/arrive/removeArriveFake", {
+        //       data: list
+        //     })
+        api
+          .arriveListRemove(sel)
           .then(response => {
-            if (response.data) {
+            if (response.data.status === 200) {
               self.modal_loading = false;
               self.modaldelet = false;
               self.getArriveList(self.currentPage, self.pageSize);
@@ -323,22 +322,23 @@ export default {
             self.modaldelet = false;
           });
       } else {
-        this.$Message.error("你还没有选择");
+        self.$Message.error("你还没有选择");
         setTimeout(() => {
-          this.modal_loading = false;
-          this.modaldelet = false;
+          self.modal_loading = false;
+          self.modaldelet = false;
         }, 100);
       }
     },
     submitform(formItem) {
       const self = this;
-      console.log(self.formItem);
       self.$refs[formItem].validate(valid => {
         if (valid) {
-          self.$axios
-            .post("http://192.168.2.229/arrive/addArrive", self.formItem)
+          // self.$axios
+          //   .post("http://192.168.2.229/arrive/addArrive", self.formItem)
+          api
+            .arriveListSubmitForm(self.formItem)
             .then(response => {
-              if (response.data.status === 200) {
+              if (response.data.status) {
                 self.getArriveList(this.currentPage, this.pageSize);
                 self.$Message.success("添加成功");
               } else {
@@ -357,14 +357,44 @@ export default {
     cancle() {
       this.$Message.info("取消操作");
     },
+    submitforcheck(sel) {
+      const self = this;
+      var list = [];
+      if (sel.length > 0) {
+        sel.forEach(element => {
+          if (element.state === 0) {
+            list.push(element.id);
+          }
+        });
+        // this.$axios
+        //   .put("http://192.168.2.229/loadcar/modifyStateList?state=1", list)
+        api
+          .arriveListSubmitForCheck(list)
+          .then(response => {
+            console.log(response);
+            if (response.data.status === 200) {
+              self.getArriveList(this.currentPage, this.pageSize);
+              self.$Message.success(response.data.msg);
+            } else {
+              self.$Message.error("提交失败");
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            self.$Message.error("请求超时,请检查连接信息111");
+          });
+      } else {
+        self.$Message.error("你还没有选择");
+      }
+    },
     changePage(page) {
       console.log(page);
       // this.currentPage = val;
-      this.getLoadCarList(page, this.pageSize);
+      this.getArriveList(page, this.pageSize);
     },
     changePageSize(pageSize) {
       // console.log(pageSize);
-      this.getLoadCarList(this.currentPage, pageSize);
+      this.getArriveList(this.currentPage, pageSize);
     }
   }
 };

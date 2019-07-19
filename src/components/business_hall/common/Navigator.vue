@@ -1,40 +1,77 @@
 <template>
-  <div>
+<diV>
+  <div class="navi">
+    <!-- <Menu :mode="horizontal" :theme="dark">
+      <MenuItem key="1">
+        <router-link to="/business_hall/business_loadcar_list">
+          <div>装车管理</div>
+        </router-link>
+      </MenuItem>
+      <MenuItem>
+        <router-link to="/business_hall/business_arrive_list">
+          <div>接收管理</div>
+        </router-link>
+      </MenuItem>
+      <MenuItem>
+        <router-link to="/business_hall/business_deliver_list">
+          <div>派件管理</div>
+        </router-link>
+      </MenuItem>
+      <MenuItem>
+        <router-link to="/business_hall/business_car_info">
+          <div>车辆管理</div>
+        </router-link>
+      </MenuItem>
+      <MenuItem>
+        <router-link to="/business_hall/business_driver_info">
+          <div>司机管理</div>
+        </router-link>
+      </MenuItem>
+      <MenuItem>
+        <router-link to="/business_hall/business_receipt_list_test">
+          <div>收款管理</div>
+        </router-link>
+      </MenuItem>
+    </Menu> -->
     <div id="navigator">
       <div id="navigator-bar">
         <div id="navigator-bar-item">
+          
+
           <ul>
             <li>
               <router-link to="/business_hall/business_loadcar_list">
-                <div @click="Input('装车管理')">装车管理</div>
+                <div>装车管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_arrive_list">
-                <div @click="Input('接收管理')">接收管理</div>
+                <div>接收管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_deliver_list">
-                <div @click="Input('派件管理')">派件管理</div>
+                <div>派件管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_car_info">
-                <div @click="Input('车辆管理')">车辆管理</div>
+                <div>车辆管理</div>
               </router-link>
             </li>
             <li>
               <router-link to="/business_hall/business_driver_info">
-                <div @click="Input('司机管理')">司机管理</div>
+                <div>司机管理</div>
               </router-link>
             </li>
             <li>
-              <router-link to="/business_hall/business_receipt_list_test">
-                <div @click="Input('收款管理')">收款管理</div>
+              <router-link to="/business_hall/business_receipt_record">
+                <div>收款管理</div>
               </router-link>
             </li>
           </ul>
+
+
         </div>
       </div>
       <div id="employee-info">
@@ -52,11 +89,12 @@
         </div>
       </div>
     </div>
-    <div id="main">
-      <!-- <p>{{name}}</p>
-      <hr />-->
-      <router-view></router-view>
-    </div>
+  </div>
+  <div id="main">
+    <!-- <p>{{name}}</p>
+    <hr />-->
+    <router-view></router-view>
+  </div>
   </div>
 </template>
 
@@ -66,7 +104,6 @@ export default {
   data() {
     return {
       info: "test",
-      name: "车辆管理",
       job: "业务员",
       ename: "楚岩",
       date: "2019-7-9",
@@ -79,9 +116,9 @@ export default {
     sessionStorage.setItem("business", "雨花台营业厅");
   },
   methods: {
-    Input(val) {
-      this.name = val;
-    },
+    // Input(val) {
+    //   this.name = val;
+    // },
     test() {
       Bus.$on("setBusiness", content => {
         alert(content);
@@ -97,6 +134,9 @@ export default {
 </script>
 
 <style>
+/* .navi{
+  float: left;
+} */
 #main {
   /* border: 4px solid red; */
   margin-left: 16%;
