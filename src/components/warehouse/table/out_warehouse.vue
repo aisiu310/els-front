@@ -7,7 +7,7 @@
           type="daterange"
           placement="bottom-end"
           placeholder="搜索时间段内的出库单"
-          style="width: 200px"
+          style="width: 300px"
           :clearable="true"
           @on-change="selectDate"
         ></DatePicker>
@@ -69,16 +69,19 @@
     </div>
     <div class="page">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
+      <span class>共{{dataLength}}条</span>
     </div>
   </div>
 </template>
 
 <script>
 import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       modal: false,
+      dateTime: [],
       dataLength: 0,
       currentPage: 1,
       delSelection: [],
@@ -93,6 +96,7 @@ export default {
       tableSize: "default",
       // new form data
       formValidate: {
+        inventoryName: "南京中转中心仓库",
         orderCode: "",
         outDate: new Date(),
         destination: "",
@@ -149,7 +153,7 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           api
-            .addData(this.formValidate)
+            .addData(url.out_addURL, this.formValidate)
             .then(res => {
               if (res == 1) {
                 this.initData(this.currentPage);
@@ -170,7 +174,13 @@ export default {
     },
     // divide page
     changePage(page) {
-      this.initData(page);
+      let flag = this.dateTime;
+      if (flag == "," || flag.length == 0) {
+        this.initData(page);
+      } else {
+        this.currentPage = page;
+        this.getDataByTime(flag[0], flag[1]);
+      }
     },
     //get this list of id in order to batch delete
     batchSelect(selection, row) {
@@ -183,7 +193,7 @@ export default {
       for (var i = 0; i < idList.length; i++) {
         id[i] = idList[i].id;
       }
-      api.batchDelete(id).then(res => {
+      api.batchDelete(url.out_delURL, id).then(res => {
         if (res <= 0) {
           this.$Message.warning("删除失败！");
         } else {
@@ -193,11 +203,18 @@ export default {
       });
     },
     selectDate(val) {
-      alert(val);
+      this.dateTime = val;
+      if (val == ",") {
+        this.initData(this.currentPage);
+      } else {
+        let begin = val[0];
+        let end = val[1];
+        this.getDataByTime(begin, end);
+      }
     },
     // get data from db
     initData(val) {
-      api.initData(val).then(res => {
+      api.initData(url.out_getURL, val).then(res => {
         this.out_warehouse_data = res[0];
         this.dataLength = res[1];
       });
@@ -205,15 +222,28 @@ export default {
     // submit to check
     check(index) {
       if (this.out_warehouse_data[index].state == "未提交审核") {
-        api.checkData(this.out_warehouse_data[index].id).then(res => {
-          if (res == 1) {
-            this.initData(this.currentPage);
-            this.$Message.success("提交成功，待经理审核");
-          }
-        });
+        api
+          .checkData(url.out_checkURL, this.out_warehouse_data[index].id)
+          .then(res => {
+            if (res == 1) {
+              this.initData(this.currentPage);
+              this.$Message.success("提交成功，待经理审核");
+            }
+          });
       } else {
         this.$Message.warning("已经提交，待经理审核");
       }
+    },
+    // get data between time
+    getDataByTime(begin, end) {
+      api
+        .getDataBetweenTime(url.out_getByTimeURL, begin, end, this.currentPage)
+        .then(res => {
+          if (res != null) {
+            this.out_warehouse_data = res[0];
+            this.dataLength = res[1];
+          }
+        });
     }
   },
   computed: {

@@ -96,7 +96,6 @@ export default {
   width: 100%;
   margin: 0% 0% 1% 0%;
 }
-
 #navigator {
   /*width: 238px;
 		height: 780px;*/

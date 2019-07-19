@@ -7,7 +7,7 @@
           type="daterange"
           placement="bottom-end"
           placeholder="搜索时间段内的出库单"
-          style="width: 200px"
+          style="width: 300px"
           :clearable="true"
           @on-change="selectDate"
         ></DatePicker>
@@ -81,10 +81,13 @@
 </template>
 
 <script>
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       modal: false,
+      dateTime: [],
       dataLength: 0,
       currentPage: 1,
       delSelection: [],
@@ -99,6 +102,7 @@ export default {
       tableSize: "default",
       // new form data
       formValidate: {
+        inventoryName: "南京中转中心仓库",
         orderCode: "",
         inDate: new Date(),
         destination: "",
@@ -170,20 +174,19 @@ export default {
       let self = this;
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$axios
-            .post(
-              "http://localhost:8031/inInventory/addInInventory",
-              self.formValidate
-            )
+          api
+            .addData(url.in_addURL, this.formValidate)
             .then(res => {
-              if (res.data.data == 1) {
-                self.modal = false;
-                self.$Message.success("新建成功");
-                self.initData(self.currentPage);
+              if (res == 1) {
+                this.initData(this.currentPage);
+                this.$Message.success("新建成功！");
+                this.modal = false;
+              } else {
+                this.$Message.success("新建失败！");
               }
             })
             .catch(error => {
-              self.$Message.error("网络超时");
+              alert("服务器出错");
             });
         }
       });
@@ -193,7 +196,13 @@ export default {
     },
     // divide page
     changePage(page) {
-      this.initData(page);
+      let flag = this.dateTime;
+      if (flag == "," || flag.length == 0) {
+        this.initData(page);
+      } else {
+        this.currentPage = page;
+        this.getDataByTime(flag[0], flag[1]);
+      }
     },
     //get this list of id in order to batch delete
     batchSelect(selection, row) {
@@ -206,53 +215,58 @@ export default {
       for (var i = 0; i < idList.length; i++) {
         id[i] = idList[i].id;
       }
-      this.$axios
-        .delete("http://localhost:8031/inInventory/batchDelete", { data: id })
-        .then(res => {
-          if (res.data.data <= 0) {
-            this.$Message.warning("删除失败！");
-          } else {
-            this.initData(this.currentPage);
-            this.$Message.warning("删除成功！");
-          }
-        });
+      api.batchDelete(url.in_delURL, id).then(res => {
+        if (res <= 0) {
+          this.$Message.warning("删除失败！");
+        } else {
+          this.initData(this.currentPage);
+          this.$Message.warning("删除成功！");
+        }
+      });
     },
     //search data by date
     selectDate(val) {
-      alert(val);
+      this.dateTime = val;
+      if (val == ",") {
+        this.initData(this.currentPage);
+      } else {
+        let begin = val[0];
+        let end = val[1];
+        this.getDataByTime(begin, end);
+      }
     },
     // get data from db
     initData(val) {
-      let self = this;
-      self.$axios
-        .get(
-          "http://localhost:8031/inInventory/getInInventory?skipCount=" + val
-        )
-        .then(res => {
-          self.in_warehouse_data = res.data.data[0];
-          self.dataLength = res.data.data[1];
-        });
+      api.initData(url.in_getURL, val).then(res => {
+        this.in_warehouse_data = res[0];
+        this.dataLength = res[1];
+      });
     },
     // submit to check
     check(index) {
       if (this.in_warehouse_data[index].state == "未提交审核") {
-        let self = this;
-        this.$axios
-          .get("http://localhost:8031/inInventory/checkInInventory", {
-            params: {
-              state: "待审核",
-              id: self.in_warehouse_data[index].id
-            }
-          })
+        api
+          .checkData(url.in_checkURL, this.in_warehouse_data[index].id)
           .then(res => {
-            if (res.data.data == 1) {
-              self.$Message.success("提交成功，待经理审核！");
-              self.in_warehouse_data[index].state = "待审核";
+            if (res == 1) {
+              this.initData(this.currentPage);
+              this.$Message.success("提交成功，待经理审核");
             }
           });
       } else {
         this.$Message.warning("已经提交，待经理审核");
       }
+    },
+    // get data between time
+    getDataByTime(begin, end) {
+      api
+        .getDataBetweenTime(url.in_getByTimeURL, begin, end, this.currentPage)
+        .then(res => {
+          if (res != null) {
+            this.int_warehouse_data = res[0];
+            this.dataLength = res[1];
+          }
+        });
     }
   },
   computed: {
