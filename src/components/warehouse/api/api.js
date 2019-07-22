@@ -10,7 +10,7 @@ const api = {
             let res = await axois.get(URL + skip);
             return res.data.data;
         } catch (error) {
-            alert('服务器出错');
+            // alert('服务器出错');
             console.log(error);
         }
     },
@@ -21,7 +21,7 @@ const api = {
             console.log(res.data.msg);
             return res.data.data;
         } catch (error) {
-            alert('服务器出错');
+            // alert('服务器出错');
             console.log(error);
         }
     },
@@ -32,7 +32,7 @@ const api = {
             console.log(res.data.data);
             return res.data.data;
         } catch (error) {
-            alert('服务器出错');
+            // alert('服务器出错');
             console.log(error);
         }
     },
@@ -42,7 +42,7 @@ const api = {
             let res = await axois.post(URL, newData);
             return res.data.data;
         } catch (error) {
-            alert('服务器出错');
+            // alert('服务器出错');
             console.log(error);
         }
     },
@@ -54,7 +54,7 @@ const api = {
             // console.log(res.data.data);
             return res.data.data;
         } catch (error) {
-            alert('服务器出错');
+            // alert('服务器出错');
             console.log(error);
         }
     },
@@ -65,7 +65,7 @@ const api = {
             let res = await axois.get(url.getCapacity + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错");
+            // alert("服务器出错");
         }
     },
     // set inventory warn line
@@ -75,7 +75,7 @@ const api = {
             let res = await axois.get(url.setWarnLine + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错");
+            // alert("服务器出错");
         }
     },
     // get current inventory warn line
@@ -85,7 +85,7 @@ const api = {
             let res = await axois(url.getWarnLine + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错");
+            // alert("服务器出错");
         }
     },
     // Get Inventory information by area
@@ -95,7 +95,7 @@ const api = {
             let res = await axois.get(url.getURL + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错");
+            // alert("服务器出错");
         }
     },
     // Get Inventory information All
@@ -105,7 +105,7 @@ const api = {
             let res = await axois.get(url.getAllURL + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错");
+            // alert("服务器出错");
         }
     }
 }
