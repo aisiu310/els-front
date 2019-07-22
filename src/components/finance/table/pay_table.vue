@@ -198,7 +198,7 @@ export default {
       columns.push({
         title: "操作",
         key: "action",
-        width: 200,
+        width: 160,
         align: "center",
         render: (h, params) => {
           return h("div", [
@@ -237,21 +237,6 @@ export default {
                 }
               },
               "提交审核"
-            ),
-            h(
-              "Button",
-              {
-                props: {
-                  type: "error",
-                  size: "small"
-                },
-                on: {
-                  click: () => {
-                    this.remove(params.index);
-                  }
-                }
-              },
-              "删除"
             )
           ]);
         }

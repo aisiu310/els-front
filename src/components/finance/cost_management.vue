@@ -6,19 +6,11 @@
       <div class="search">
         <DatePicker
           type="date"
-          :format="date"
-          placeholder="Select date"
-          style="width: 150px"
-          @on-change="beginTime"
+          v-model="limitTime"
+          placeholder="请选择截止日期,不包括截止日期"
+          style="width: 300px"
+          @on-change="searchByTime"
         ></DatePicker>
-        <DatePicker
-          type="date"
-          :formate="date"
-          placeholder="Select date"
-          style="width: 150px"
-          @on-change="endTime"
-        ></DatePicker>
-        <Button type="primary" shape="circle" @click="searchByTime()">查询</Button>
       </div>
 
       <div class="button">
@@ -87,7 +79,6 @@
           </Form>
         </Modal>
 
-        <Button type="success" shape="circle" @click="check()">批量审核</Button>
         <Button type="error" shape="circle" @click="del()">批量删除</Button>
       </div>
     </div>
@@ -110,8 +101,6 @@ export default {
     return {
       modal: false,
       calculate: false,
-      begin: "",
-      end: "",
       check_arr: "",
       del_arr: "",
       formItem: {
@@ -163,14 +152,8 @@ export default {
       console.log(del_id);
       // window.location.reload();
     },
-    beginTime(val) {
-      this.begin = val;
-    },
-    endTime(val) {
-      this.end = val;
-    },
     // 搜索一段时间内的付款单
-    searchByTime() {
+    searchByTime(val) {
       let time = [this.begin, this.end];
       bus.$emit("getByPayTime", time); //将时间段传到pay_table中
       if (begin == null || end == null) {

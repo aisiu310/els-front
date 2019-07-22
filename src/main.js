@@ -1,16 +1,25 @@
 import Vue from 'vue'
-import App from './App'
+import App from './App1'
 import iView from 'iview'
 import store from './store/main'
 import vueResource from 'vue-resource'
 // import 'iview/dist/styles/iview.css'
 import '../my-theme/dist/iview.css';
 
+<<
+<< << < HEAD
 import router from './router'
 
 // import router from './router/zxy-test'
 // import router from './router/finance'
 // import router from './router/warehouse'
+===
+=== =
+// import router from './router'
+import router from './router/warehouse'
+// import router from './router/zxy-test'
+>>>
+>>> > f19155d8055d96906503752968145d6b03de5086
 
 // import '@/permission.js'
 import global from '@/utils/global' //全局
