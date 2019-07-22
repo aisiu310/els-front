@@ -52,7 +52,7 @@
           </template>
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button :v-bind="formItem" @click="handleSave(index)">save</Button>
+              <Button :v-bind="editItem" @click="handleSave(editItem)">save</Button>
               <Button @click="editIndex = -1">cancel</Button>
             </div>
             <div v-else>
@@ -88,7 +88,7 @@
             v-model="modal"
             title="添加"
             v-bind="formItem"
-            @on-ok="submitform('formItem')"
+            @on-ok="submitform(formItem)"
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
@@ -330,11 +330,11 @@ export default {
   methods: {
     getLoadCarList(currentPage, pageSize) {
       const self = this;
-      console.log(currentPage, pageSize);
+      // console.log(currentPage, pageSize);
       api
         .getLoadCarList(currentPage, pageSize)
         .then(response => {
-          console.log(response);
+          // console.log(response);
           if (response.data.status === 200) {
             self.data = response.data.data.list;
             self.sum = response.data.data.total;
@@ -346,20 +346,16 @@ export default {
     },
     select(selection, row) {
       this.sel = selection;
+      // console.log(this.sel);
     },
     remove(sel) {
       const self = this;
-      var list = [];
       if (sel.length > 0) {
         this.modal_loading = true;
-        sel.forEach(element => {
-          list.push(element.id);
-        });
-        this.$axios
-          .delete("http://192.168.2.229/loadcar/removeLoadingFake", {
-            data: list
-          })
+        api
+          .loadCarListRemove(sel)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
               this.modal_loading = false;
               this.modaldelet = false;
@@ -398,10 +394,10 @@ export default {
       this.editItem.status = row.status;
       this.editIndex = index;
     },
-    handleSave(index) {
+    handleSave(editItem) {
       const self = this;
-      this.$axios
-        .put("http://192.168.2.229/loadcar/modifyLoadingById", self.editItem)
+      api
+        .loadcarListSave(editItem)
         .then(response => {
           // console.log(response);
           if (response.data.status === 200) {
@@ -418,14 +414,15 @@ export default {
     },
     submitform(formItem) {
       const self = this;
-      self.$refs[formItem].validate(valid => {
+      self.$refs["formItem"].validate(valid => {
         if (valid) {
-          self.$axios
-            .post("http://192.168.2.229/loadcar/addLoading", self.formItem)
+          api
+            .loadCarListSubmitForm(formItem)
             .then(response => {
+              console.log(response);
               if (response.data.status === 200) {
                 self.$Message.success("添加成功");
-                self.getLoadCarList();
+                self.getLoadCarList(this.currentPage, this.pageSize);
               } else {
                 self.$Message.warning(response.data.msg);
               }
@@ -444,15 +441,9 @@ export default {
     },
     submitforcheck(sel) {
       const self = this;
-      var list = [];
       if (sel.length > 0) {
-        sel.forEach(element => {
-          if (element.state === 0) {
-            list.push(element.id);
-          }
-        });
-        this.$axios
-          .put("http://192.168.2.229/loadcar/modifyStateList?state=1", list)
+        api
+          .loadCarListSubmitForCheck(sel)
           .then(response => {
             if (response.data.status === 200) {
               this.getLoadCarList();
@@ -469,8 +460,6 @@ export default {
       }
     },
     changePage(page) {
-      console.log(page);
-      // this.currentPage = val;
       this.getLoadCarList(page, this.pageSize);
     },
     changePageSize(pageSize) {

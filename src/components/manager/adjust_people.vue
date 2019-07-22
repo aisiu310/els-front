@@ -4,56 +4,40 @@
       <TabPane label="装车单" icon="ios-paper-plane">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
           <template slot-scope="{row,index}" hidden slot="id">
-            <input type="text" v-model="editItem.id" v-if="editIndex === index" />
-            <span v-else>{{row.id}}</span>
+            <span>{{row.id}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="date">
-            <input type="text" v-model="editItem.data" v-if="editIndex === index" />
-            <span v-else>{{row.date}}</span>
+          <template slot-scope="{row,index}" slot="job">
+            <input type="text" v-model="editItem.job" v-if="editIndex === index" />
+            <span v-else>{{row.job}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
+          <template slot-scope="{row,index}" slot="department">
+            <input type="text" v-model="editItem.department" v-if="editIndex === index" />
+            <span v-else>{{row.department}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="transportationId">
-            <input type="text" v-model="editItem.transportationId" v-if="editIndex === index" />
-            <span v-else>{{row.transportationId}}</span>
+          <template slot-scope="{row,index}" slot="name">
+            <input type="text" v-model="editItem.name" v-if="editIndex === index" />
+            <span v-else>{{row.name}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="placeOfArrival">
-            <input type="text" v-model="editItem.placeOfArrival" v-if="editIndex === index" />
-            <span v-else>{{row.placeOfArrival}}</span>
+          <template slot-scope="{row,index}" slot="status">
+            <input type="text" v-model="editItem.status" v-if="editIndex === index" />
+            <span v-else>{{row.status}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="carCode">
-            <input type="text" v-model="editItem.carCode" v-if="editItem.editIndex === index" />
-            <span v-else>{{row.carCode}}</span>
+          <template slot-scope="{row,index}" slot="limit">
+            <input type="text" v-model="editItem.limit" v-if="editItem.editIndex === index" />
+            <span v-else>{{row.limit}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="supervisor">
-            <input type="text" v-model="editItem.supervisor" v-if="editIndex === index" />
-            <span v-else>{{row.supervisor}}</span>
+          <template slot-scope="{row,index}" slot="password">
+            <input type="text" v-model="editItem.password" v-if="editIndex === index" />
+            <span v-else>{{row.password}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="escort">
-            <input type="text" v-model="editItem.escort" v-if="editIndex === index" />
-            <span v-else>{{row.escort}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="freight">
-            <input type="text" v-model="editItem.freight" v-if="editIndex === index" />
-            <span v-else>{{row.freight}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="orderList">
-            <input type="text" v-model="editItem.orderList" v-if="editIndex === index" />
-            <span v-else>{{row.orderList}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="state">
-            <input type="text" v-model="editItem.state" v-if="editIndex === index" />
-            <span v-else>{{row.state}}</span>
-          </template>
+
           <template slot-scope="{ row }" slot="id">
-            <strong>{{ row.date }}</strong>
+            <strong>{{ row.id }}</strong>
           </template>
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button :v-bind="formItem" @click="handleSave(index)">save</Button>
-              <Button @click="editIndex = -1">cancel</Button>
+              <Button :v-bind="formItem" @click="handleSave(formItem)">保存</Button>
+              <Button @click="editIndex = -1">取消保存</Button>
             </div>
             <div v-else>
               <Button @click="handleEdit(row,index)">修改</Button>
@@ -92,20 +76,8 @@
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="装车日期" prop="date">
-                <Row>
-                  <Col span="11">
-                    <DatePicker
-                      type="date"
-                      placeholder="Select date"
-                      :options="options1"
-                      v-model="formItem.date"
-                    ></DatePicker>
-                  </Col>
-                </Row>
-              </FormItem>
-              <FormItem label="营业厅编号" prop="code">
-                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
+              <FormItem label="营业厅编号" prop="job">
+                <Input v-model="formItem.job" placeholder="Enter something..."></Input>
               </FormItem>
               <FormItem label="运输编号" prop="transportationId">
                 <Input v-model="formItem.transportationId" placeholder="Enter something..."></Input>

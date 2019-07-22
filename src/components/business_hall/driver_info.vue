@@ -279,7 +279,7 @@ export default {
     getDriverList(currentPage, pageSize) {
       let self = this;
       api
-        .getDriverList()
+        .getDriverList(currentPage, pageSize)
         .then(response => {
           self.data = response;
           // self.sum = response[1];

@@ -56,6 +56,9 @@
 </template>
 
 <script>
+import mapMatations from "vuex";
+import axios from "axios";
+import { error } from "util";
 export default {
   data() {
     return {
@@ -105,19 +108,45 @@ export default {
 
   methods: {
     // 登录验证
+    ...mapMatations(["setToken"]),
     login() {
+      let self = this;
       if (
-        !this.formInline.user ||
-        !this.formInline.password ||
-        !this.formInline.authcode
+        !self.formInline.user ||
+        !self.formInline.password ||
+        !self.formInline.authcode
       ) {
-        this.$Message.error("用户名、密码、验证码不能为空");
+        self.$Message.error("用户名、密码、验证码不能为空");
       } else {
-        if (this.formInline.authcode == this.checkCode) {
-          this.$Message.success("登录成功！");
-          sessionStorage.setItem("userRole", "admin");
+        if (self.formInline.authcode == self.checkCode) {
+          // self.$axios
+          //   .post("URL", {
+          //     params: {
+          //       name: self.formInline.user,
+          //       password: self.formInline.password
+          //     }
+          //   })
+          //   .then(response => {
+          //     console.log(response.data);
+          //     if (response.data.status === 200) {
+          //       self.$Message.success("登陆成功");
+          //       self.setToken({ token: response.data.token });
+          //       // 这里进行路由表分配
+          //       sessionStorage.setItem("userRole", "admin");
+          //       this.$router.push({
+          //         path: "transit"
+          //         // params: { user: this.formInline.user }
+          //       });
+          //     }
+          //   })
+          //   .catch(error => {
+          //     self.$Message.error("登陆失败，请检查连接信息");
+          //   });
+
+          self.setToken({ token: 123456 });
+          self.$Message.success("登陆成功");
           this.$router.push({
-            name: "Navigator"
+            path: "transit"
             // params: { user: this.formInline.user }
           });
         } else {

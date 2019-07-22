@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import login from '@/components/login/login'
 
+import main from '@/components/transit_center/main'
 import transit_arrive_list from '@/components/transit_center/arrive_list'
 import transit_transfer_list from '@/components/transit_center/transfer_list'
 import transit_loadcar_list from '@/components/transit_center/loadcar_list'
@@ -41,10 +42,27 @@ Vue.use(Router)
 export default new Router({
   routes: [{
       path: '/',
-      component: login,
+      component: transit_arrive_list,
       meta: {
-        roles: ['manager', 'admin']
+        roles: ['manager', 'admin'],
+        "title": "首页",
+        "icon": "dashboard"
       }
+    },
+    {
+      path: '/transit',
+      redirect: '/transit/arriveList',
+      component: main,
+      children: [{
+        path: 'arriveList',
+        component: transit_arrive_list
+      }, {
+        path: 'transferList',
+        component: transit_transfer_list
+      }, {
+        path: 'loadCarList',
+        component: transit_loadcar_list
+      }]
     },
     {
       path: '/transit_layout',

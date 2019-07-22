@@ -2,12 +2,16 @@ import axios from 'axios'
 import qs from 'qs'
 
 const getLoadCarListUrl = 'http://192.168.2.229:9001/yuantu/logistics/loadcar/getLoadingList'
+const loadcarListSaveUrl = 'http://192.168.2.229/yuantu/logistics/loadcar/modifyLoadingById'
+const loadCarListSubmitFormUrl = 'http://192.168.2.229:9001/yuantu/logistics/loadcar/addLoading'
+const loadCarListRemoveUrl = 'http://192.168.2.229/yuantu/logistics/loadcar/removeLoadingFake'
+const loadCarListSubmitForCheckmUrl = 'http://192.168.2.229/loadcar/modifyStateList?state=1'
 
 const getArriveListUrl = "http://192.168.2.229:9001/yuantu/logistics/arrive/getArriveList"
 const arriveListSaveUrl = "http://192.168.2.229:9001/yuantu/logistics/arrive/modifyArriveById"
 const arriveListRemoveUrl = "http://192.168.2.229:9001/yuantu/logistics/arrive/removeArriveFake"
 const arriveListSubmitFormUrl = "http://192.168.2.229:9001/yuantu/logistics/arrive/addArrive"
-const arriveListSubmitForCheckUrl = "http://192.168.2.229:9001/yuantu/logistics/arrive/modifyStateList?state=1"
+const arriveListSubmitForCheckUrl = "http://192.168.2.229:9001/yuantu/logistics/arrive/modifyStateList"
 
 const getdeliverlistUrl = "http://192.168.2.229:9001/yuantu/logistics/distribute/getDistributeList"
 const deliverListSave = "http://192.168.2.229:9001/yuantu/logistics/distribute/modifyDistributeById"
@@ -37,9 +41,37 @@ const api = {
     let response = await axios.post(getLoadCarListUrl, {
       code: "025000",
       currentPage: currentPage,
-      pageCount: pageSize
+      pageSize: pageSize
     });
     return response
+  },
+  async loadcarListSave(editItem) {
+    let response = await axios.put(loadcarListSaveUrl, editItem);
+    return response
+  },
+  async loadCarListSubmitForm(formItem) {
+    let response = await axios.post(loadCarListSubmitFormUrl, formItem)
+    return response
+  },
+  async loadCarListRemove(sel) {
+    var list = [];
+    console.log(sel)
+    sel.forEach(element => {
+      list.push(element.id);
+    });
+    console.log(list)
+    let response = await axios.delete(loadCarListRemoveUrl, list);
+    return response
+  },
+  async loadCarListSubmitForCheck(sel) {
+    let list = []
+    sel.forEach(element => {
+      if (element.state === 0) {
+        list.push(element.id);
+      }
+    });
+    let response = await axios.put(loadCarListSubmitForCheckmUrl, list);
+    return response;
   },
 
   async getArriveList(currentPage, pageSize) {
@@ -70,7 +102,13 @@ const api = {
     return response
   },
   async arriveListSubmitForCheck(list) {
-    let response = await axios.put(arriveListSubmitForCheckUrl, list);
+    let response = await axios.put(arriveListSubmitForCheckUrl,
+
+      {
+        idList: list,
+        state: 1
+      }
+    );
     return response;
   },
   async getdeliverlist(currentPage, pageSize) {
@@ -119,9 +157,10 @@ const api = {
     let response = await axios.get(getDriverListUrl, {
       params: {
         code: 1,
+        currentPage: currentPage,
+        pageCount: pageSize
       }
-      // currentPage: currentPage,
-      // pageCount: pageSize
+
     });
     return response.data.data;
   },
