@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { url } from './url'
+import { checkServerIdentity } from 'tls';
 
 const api = {
     // get bank data
@@ -45,6 +46,26 @@ const api = {
     async delData(URL, id) {
         try {
             let res = await axios.delete(URL + id);
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // batch del
+    async batchDelete(URL, id) {
+        try {
+            let res = await axios.delete(URL, { data: id });
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // check
+    async check(URL, id) {
+        try {
+            let res = await axios.post(URL, { state: '待审核', id: id });
             return res.data.data;
         } catch (error) {
             alert("服务器出错！");

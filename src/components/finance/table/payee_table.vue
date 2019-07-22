@@ -1,18 +1,106 @@
 <template>
   <div>
-    <Table
-      :border="showBorder"
-      :stripe="showStripe"
-      :show-header="showHeader"
-      :size="tableSize"
-      :data="payeeData"
-      :columns="tableColumns"
-      @on-select="mulCheck"
-      @on-select-all="selectAll"
-      ref="payeeTable"
-    ></Table>
+    <div class="header">
+      <div class="word">结算管理（收款单）</div>
+      <div class="search"></div>
+      <div class="button">
+        <Button type="primary" shape="circle" @click="calculateModal = true">收款结算</Button>
+        <!-- calculate payee modal -->
+        <Modal title="收款结算" v-model="calculateModal" :styles="{top: '20px'}" :footer-hide="true">
+          <Form :model="calculate" :label-width="80">
+            <FormItem label="收款日期">
+              <Row>
+                <Col span="11">
+                  <DatePicker type="date" placeholder="选择收款日期" v-model="calculate.date"></DatePicker>
+                </Col>
+              </Row>
+            </FormItem>
+            <FormItem label="所属营业厅">
+              <Select v-model="calculate.code" placeholder="请选择所属营业厅">
+                <Option value="001">鼓楼区</Option>
+                <Option value="002">雨花台区</Option>
+                <Option value="003">秦淮区</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="总金额">
+              <Input
+                v-model="calculate.money"
+                type="number"
+                placeholder="收款总金额"
+                prefix="logo-usd"
+                :disabled="true"
+              ></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click>计算收款金额</Button>
+              <Button style="margin-left: 8px" @click="calculateModal = false">退出</Button>
+            </FormItem>
+          </Form>
+        </Modal>
 
-    <!-- page -->
+        <Button type="primary" shape="circle" @click="payee = true">新建收款单</Button>
+        <!-- add payee modal -->
+        <Modal title="新建收款单" v-model="payee" :styles="{top: '20px'}" :footer-hide="true">
+          <Form :model="formItem" :label-width="80">
+            <FormItem label="所属营业厅">
+              <Select v-model="formItem.code" placeholder="请选择所属营业厅">
+                <Option value="001">鼓楼区</Option>
+                <Option value="002">雨花台区</Option>
+                <Option value="003">秦淮区</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="收款日期">
+              <Row>
+                <Col span="11">
+                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.date"></DatePicker>
+                </Col>
+              </Row>
+            </FormItem>
+            <FormItem label="金额">
+              <Input
+                v-model="formItem.money"
+                type="number"
+                placeholder="请输入收款总金额"
+                prefix="logo-usd"
+              ></Input>
+            </FormItem>
+            <FormItem label="收款快递员">
+              <Input v-model="formItem.courierName" placeholder="请输入收款快递员姓名"></Input>
+            </FormItem>
+            <FormItem label="收款订单号">
+              <Input
+                v-model="formItem.orderList"
+                type="textarea"
+                :autosize="{minRows: 2,maxRows: 5}"
+                placeholder="请输入收款的订单号，以逗号分割"
+              ></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click>新建</Button>
+              <Button style="margin-left: 8px" @click="payee = false">取消</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
+        <Button type="error" shape="circle" @click="batchDelete()">批量删除</Button>
+      </div>
+    </div>
+    <hr class="common" />
+    <div>
+      <Table
+        :border="showBorder"
+        :stripe="showStripe"
+        :show-header="showHeader"
+        :size="tableSize"
+        :data="payeeData"
+        :columns="tableColumns"
+        @on-select="batchSelect"
+        @on-select-cancel="batchSelect"
+        @on-select-all-cancel="batchSelect"
+        @on-select-all="batchSelect"
+        ref="payeeTable"
+      ></Table>
+    </div>
     <div class="expand">
       <div class="excel">
         <Button type="primary" @click="exportData()">
@@ -20,79 +108,51 @@
         </Button>
       </div>
       <div class="page">
-        <Page :total="dataLength" show-elevator @on-change="changePage" />
+        <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
       </div>
     </div>
   </div>
 </template>
+
 <script>
-import bus from "../../reuse/bus";
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
+      //calculate modal switch
+      calculateModal: false,
+      // payee modal switch
+      payee: false,
+      // calculate data
+      calculate: {
+        date: new Date(),
+        code: "",
+        moeny: ""
+      },
+      // add payee data
+      formItem: {
+        code: "",
+        date: new Date(),
+        moeny: "",
+        courierName: "",
+        orderList: ""
+      },
+      // table data
       payeeData: [],
       dataLength: 0,
+      currentPage: 1,
       showBorder: true,
       showStripe: true,
       showHeader: true,
       showCheckbox: true,
-      tableSize: "default"
+      tableSize: "default",
+      // batch delete
+      delSeletion: []
     };
   },
   mounted() {
-    this.$http
-      .get(
-        "http://localhost:8021/receipt/getReceiptList?currentPage=1&pageCount=10"
-      )
-      .then(res => {
-        this.payeeData = res.data.data[0];
-        this.dataLength = res.data.data[1];
-      });
-  },
-  methods: {
-    changePage(val) {
-      // invoke the back-end API limit 10
-      // 后端分页查询
-    },
-    show(index) {
-      this.$Modal.info({
-        title: "付款单信息",
-        content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].state}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courier}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].is_pass}`
-      });
-    },
-    // del payee and get the data which is from back-end
-    remove(index) {
-      this.payeeData.splice(index, 1);
-    },
-    // send the check's msg to the back-end
-    // invoke API
-    check(index) {
-      if (this.payeeData[index].state == "待审核") {
-        this.$Message.error("已提交审核，请等待总经理审批");
-      } else {
-        this.$Message.success("提交成功，待总经理审批");
-        this.payeeData[index].state = "待审核";
-      }
-    },
-    // batch check
-    mulCheck(val, obj) {
-      bus.$emit("payee_batch_check", val);
-      console.log(val);
-    },
-    selectAll(val) {
-      console.log(val);
-      bus.$emit("payee_batch_del", val);
-    },
-    // export data by excel
-    exportData() {
-      this.$refs.payeeTable.exportCsv({
-        filename: "收款单",
-        columns: this.tableColumns.filter(
-          (col, index) => index < 8 && index > 0
-        ),
-        data: this.payeeData.filter((payeeData, index) => index < 10)
-      });
-    }
+    this.initData(this.currentPage);
   },
   computed: {
     tableColumns() {
@@ -114,33 +174,12 @@ export default {
       columns.push({
         title: "收款单编号",
         tooltip: true,
-        key: "id"
-      });
-      columns.push({
-        title: "所属营业厅",
-        key: "code",
-        sortable: true,
-        filters: [
-          {
-            label: "001",
-            value: "001"
-          },
-          {
-            label: "002",
-            value: "002"
-          },
-          {
-            label: "003",
-            value: "003"
-          }
-        ],
-        filterMethod(value, row) {
-          return row.code.indexOf(value) > -1;
-        }
+        key: "id",
+        width: 100
       });
       columns.push({
         title: "收款日期",
-        key: "date",
+        key: "time",
         sortable: true
       });
       columns.push({
@@ -150,7 +189,8 @@ export default {
       });
       columns.push({
         title: "收款快递员 ",
-        key: "courier",
+        key: "courierName",
+        width: 120,
         sortable: true
       });
       columns.push({
@@ -160,7 +200,8 @@ export default {
       });
       columns.push({
         title: "审核状态",
-        key: "is_pass",
+        key: "state",
+        width: 120,
         sortable: true,
         filters: [
           {
@@ -178,6 +219,10 @@ export default {
           {
             label: "审核不通过",
             value: "审核不通过"
+          },
+          {
+            label: "已结算",
+            value: "已结算"
           }
         ],
         filterMethod(value, row) {
@@ -188,7 +233,7 @@ export default {
       columns.push({
         title: "操作",
         key: "action",
-        width: 200,
+        width: 140,
         align: "center",
         render: (h, params) => {
           return h("div", [
@@ -214,7 +259,7 @@ export default {
               "Button",
               {
                 props: {
-                  type: "success",
+                  type: "primary",
                   size: "small"
                 },
                 style: {
@@ -226,52 +271,75 @@ export default {
                   }
                 }
               },
-              "提交审核"
-            ),
-            h(
-              "Button",
-              {
-                props: {
-                  type: "error",
-                  size: "small"
-                },
-                on: {
-                  click: () => {
-                    this.remove(params.index);
-                  }
-                }
-              },
-              "删除"
+              "审核"
             )
           ]);
         }
       });
       return columns;
     }
+  },
+  methods: {
+    addPayee() {},
+    check(index) {
+      let self = this;
+      if (self.payeeData[index].state == "未提交审核") {
+        api.check(url.receipt_checkURL, self.payeeData[index].id).then(res => {
+          if (res == 1) {
+            self.$Message.success("提交成功！待总经理审核！");
+            self.payeeData[index].state = "待审核";
+          }
+        });
+      } else {
+        this.$Message.warning("已提交审核，待经理审核！");
+      }
+    },
+    batchSelect(selection, row) {
+      this.delSeletion = selection;
+    },
+    batchDelete() {
+      let id = [];
+      for (let i = 0; i < this.delSeletion.length; i++) {
+        id[i] = this.delSeletion[i].id;
+      }
+      api.batchDelete(url.receipt_delURL, id).then(res => {
+        if (res != null) {
+          this.initData(this.currentPage);
+          this.$Message.info("删除成功！");
+        }
+      });
+    },
+    // page
+    changePage(val) {
+      this.initData(val);
+    },
+    // get init data
+    initData(skip) {
+      api.initData(url.receipt_getURL, skip).then(res => {
+        this.payeeData = res[0];
+        this.dataLength = res[1];
+      });
+    },
+    // export data by excel
+    exportData() {
+      this.$refs.payeeTable.exportCsv({
+        filename: "收款单",
+        columns: this.tableColumns.filter(
+          (col, index) => index < 8 && index > 0
+        ),
+        data: this.payeeData.filter((payeeData, index) => index < 10)
+      });
+    },
+    show(index) {
+      this.$Modal.info({
+        title: "付款单信息",
+        content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].time}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courierName}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].state}`
+      });
+    }
   }
 };
-</script>                
-
+</script>
 
 <style scoped>
-.expand {
-  width: auto;
-  display: flex;
-}
-
-.excel {
-  width: 50%;
-  height: auto;
-  margin-top: 0.5%;
-  margin-bottom: 0.5%;
-}
-.page {
-  width: 47%;
-  height: auto;
-  text-align: right;
-  margin-top: 0.5%;
-  margin-right: 3%;
-  margin-bottom: 0.5%;
-}
+@import url("../css/finance.css");
 </style>
-

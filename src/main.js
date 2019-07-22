@@ -1,12 +1,12 @@
 import Vue from 'vue'
-import App from './App1'
+import App from './App'
 import iView from 'iview'
 import vueResource from 'vue-resource'
 // import 'iview/dist/styles/iview.css'
 import '../my-theme/dist/iview.css';
 
 // import router from './router'
-import router from './router/warehouse'
+import router from './router/finance'
 // import router from './router/zxy-test'
 
 // import '@/permission.js'
