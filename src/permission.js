@@ -10,6 +10,8 @@ router.beforeEach((to, from, next) => {
   // 取到用户的角色
   let GetRole = sessionStorage.getItem("userRole")
 
+  console.log(GetRole)
+
   // 如果登录了
   if (GetRole !== 'unload' && to.path != '/login') {
     next() //next()方法后的代码也会执行
@@ -25,7 +27,7 @@ router.beforeEach((to, from, next) => {
       // 3.利用global属性，让渲染菜单的组件sideMeuns.vue重新生成左侧菜单
       global.antRouter = fixedRouter.concat(getRoutes)
       console.log(4, global.antRouter)
-      // sessionStorage.setItem('test', global.antRouter)
+      localStorage.setItem('test', global.antRouter)
       // 4.将生成好的路由addRoutes
       router.addRoutes(fixedRouter.concat(getRoutes))
       // 5.push之后，会重新进入到beforeEach的钩子里,直接进入第一个if判断
