@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="header">
       <div class="word">经营情况表</div>
       <div>
@@ -173,22 +173,5 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  width: 100%;
-  height: auto;
-  display: flex;
-  margin-top: 0.5%;
-}
-.word {
-  width: 30%;
-  height: auto;
-  font-size: 16px;
-  color: black;
-  margin-top: 0.3%;
-}
-.common {
-  margin: 5px 0;
-  border-top: 2px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
+@import url("../css/finance.css");
 </style>

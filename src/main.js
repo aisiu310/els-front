@@ -7,7 +7,7 @@ import vueResource from 'vue-resource'
 import '../my-theme/dist/iview.css';
 
 // import router from './router'
-import router from './router/warehouse'
+import router from './router/finance'
 // import router from './router/zxy-test'
 
 import global from '@/utils/global' //全局

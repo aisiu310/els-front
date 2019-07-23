@@ -62,6 +62,13 @@
 }
 
 .body {
-    margin-left: 0.5%;
+    margin-left: 0.8%;
     margin-top: 1%
+}
+
+.histogram {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
 }
