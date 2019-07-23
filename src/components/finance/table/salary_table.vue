@@ -4,12 +4,28 @@
       <div class="word">工资表</div>
       <div class="search"></div>
       <div class="button">
-        <Button type="primary">生成当月工资</Button>
-        <Button type="error">批量删除</Button>
+        <Button type="primary">
+          <Icon type="ios-calculator" size="16" />工资结算
+        </Button>
+        <Button type="error">
+          <Icon type="ios-trash" size="16" />批量删除
+        </Button>
       </div>
     </div>
     <hr class="common" />
-    <Table border :columns="columns" :data="salary"></Table>
+    <div class="select">
+      <Cascader :data="data" v-model="value1" @on-change="organization"></Cascader>
+    </div>
+
+    <Table
+      border
+      :columns="columns"
+      :data="salary"
+      @on-select="batchSelect"
+      @on-select-cancel="batchSelect"
+      @on-select-all-cancel="batchSelect"
+      @on-select-all="batchSelect"
+    ></Table>
     <div class="alonePage">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
@@ -47,7 +63,8 @@ export default {
         },
         {
           title: "基础工资",
-          key: "salary"
+          key: "salary",
+          sortable: true
         },
         {
           title: "提成",
@@ -62,7 +79,7 @@ export default {
           key: "total"
         },
         {
-          title: "Action",
+          title: "操作",
           key: "action",
           width: 130,
           align: "center",
@@ -146,6 +163,27 @@ export default {
           bonus: 300,
           total: 5300
         }
+      ],
+      value1: ["beijing", "gugong"],
+      data: [
+        {
+          value: "beijing",
+          label: "北京",
+          children: [
+            {
+              value: "gugong",
+              label: "故宫"
+            },
+            {
+              value: "tiantan",
+              label: "天坛"
+            },
+            {
+              value: "wangfujing",
+              label: "王府井"
+            }
+          ]
+        }
       ]
     };
   },
@@ -153,12 +191,16 @@ export default {
     update(index) {
       this.$Modal.info({
         title: "User Info",
-        content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
       });
     },
     remove(index) {
       this.salary.splice(index, 1);
-    }
+    },
+    organization(value, selectedData) {
+      // alert(value);
+    },
+    changePage(val) {},
+    batchSelect(selection, row){}
   }
 };
 </script>

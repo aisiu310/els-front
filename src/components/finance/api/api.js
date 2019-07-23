@@ -96,7 +96,7 @@ const api = {
     async checkByGet(URL, id) {
         try {
             let parameter = qs.stringify({ id: id, state: '待审核' })
-            let res = await axios.post(URL + parameter);
+            let res = await axios.get(URL + parameter);
             return res.data.data;
         } catch (error) {
             alert("服务器出错！");
@@ -104,10 +104,10 @@ const api = {
         }
     },
     // get Data for a period time
-    async getDataForTime(URL, begin, end, skip) {
+    async getDataForTime(URL, begin, end, id) {
         try {
-            let parameter = qs.stringify({ begin: beigin, end: end, id: id })
-            let res = await axios.post(URL + parameter);
+            let parameter = qs.stringify({ begin: begin, end: end, id: id })
+            let res = await axios.get(URL + parameter);
             return res.data.data;
         } catch (error) {
             alert("服务器出错！");

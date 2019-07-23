@@ -16,8 +16,9 @@ const url = {
     // pay
     pay_calculateURL: api + "/pay/calculate",
     pay_getURL: api + "/pay/getAllPay?skip=",
-    pay_checkURL: api + "/pay/updatePay?",
+    pay_checkURL: api + "/pay/update?",
     pay_delURL: api + "/pay/batchDelete",
-    pay_getDataForTimeURL: api + "/pay/getReceiptBetweenTime?"
+    pay_getDataForTimeURL: api + "/pay/getReceiptBetweenTime?",
+    pay_addURL: api + "/pay/addPay"
 }
 export { url }
