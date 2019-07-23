@@ -5,18 +5,21 @@ import store from './store/index'
 import vueResource from 'vue-resource'
 // import 'iview/dist/styles/iview.css'
 import '../my-theme/dist/iview.css';
+// invoke baidu map api
+import BaiduMap from 'vue-baidu-map'
+// import baidu map ak
+Vue.use(BaiduMap, {
+    ak: "GBMI8DT2X6mXqHi7fDXc1f1pGABmeg2M"
+})
 
 import router from './router'
 import '@/permission.js'
-<<<<<<< HEAD
 // import router from './router/finance'
 // import router from './router/zxy-test'
 
-import global from '@/utils/global' //全局
-Vue.prototype.$global = global
+// import global from '@/utils/global' //全局
+// Vue.prototype.$global = global
 
-=======
->>>>>>> 97c7cbf04d340a291538f562bcd94defbb7ed6a6
 import qs from 'qs'
 Vue.prototype.$qs = qs
 
@@ -38,7 +41,6 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-<<<<<<< HEAD
     el: '#app',
     router,
     store,
@@ -101,45 +103,3 @@ axios.interceptors.request.use(config => {
         }
     )
 })
-=======
-  el: '#app',
-  router,
-  store,
-  components: {
-    App
-  },
-  template: '<App/>'
-});
-axios.interceptors.request.use(config => {
-    if (store.state.token) {
-      alert('token存在')
-      config.headers.common['post-Token'] = store.state.token
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  });
-
-//respone拦截器
-axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => { //默认除了2XX之外都为错误
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          this.$store.commit('delToken');
-          router.replace({ //跳转到登录页面
-            path: '/login',
-            query: {
-              redirect: router.currentRoute.fullPath
-            } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-          });
-      }
-    }
-    return Promise.reject(error.response);
-  }
-)
->>>>>>> 97c7cbf04d340a291538f562bcd94defbb7ed6a6
