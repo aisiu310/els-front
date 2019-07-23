@@ -93,34 +93,72 @@ Vue.use(router)
 //   routes: fixedRouter
 // })
 
+
+export const fixedRouter = [{
+    path: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/login',
+    component: login
+  }
+]
+export const asynRouter = [{
+    path: '/transit',
+    redirect: '/transit/arriveList',
+    component: main,
+    meta: {
+      title: "中转中心",
+      icon: "el-icon-success",
+      roles: ['admin', 'manager', 'transister'],
+      requireAuth: true
+    },
+    children: [{
+      path: 'arriveList',
+      component: transit_arrive_list,
+      name: '接收管理',
+      meta: {
+        title: "接收单",
+        icon: "ios-navigate",
+        roles: ['admin', 'manager', 'transister'],
+        requireAuth: true
+      },
+    }, {
+      path: 'transferList',
+      component: transit_transfer_list,
+      name: '中转管理',
+      meta: {
+        title: "中转单",
+        icon: "ios-keypad",
+        roles: ['admin', 'manager', 'transister'],
+        requireAuth: true
+      },
+    }, {
+      path: 'loadCarList',
+      component: transit_loadcar_list,
+      name: '装车管理',
+      meta: {
+        title: "装车单",
+        icon: "ios-analytics",
+        roles: ['admin', 'manager', 'transister'],
+        requireAuth: true
+      },
+    }]
+  },
+  // 当页面地址和上面任一地址不匹配，则跳转到404
+  {
+
+    path: '*',
+    redirect: '/404',
+    meta: {
+      title: "统一错误返回页面",
+      icon: "el-icon-success",
+      roles: ['admin', 'manager', 'transister', ''],
+      requireAuth: false
+    },
+  }
+]
+
 export default new router({
-  routes: [{
-      path: '/',
-      redirect: '/login'
-    },
-    {
-      path: '/login',
-      component: login
-    },
-    {
-      path: '/transit',
-      redirect: '/transit/arriveList',
-      component: main,
-      children: [{
-        path: 'arriveList',
-        component: transit_arrive_list
-      }, {
-        path: 'transferList',
-        component: transit_transfer_list
-      }, {
-        path: 'loadCarList',
-        component: transit_loadcar_list
-      }]
-    },
-    // 当页面地址和上面任一地址不匹配，则跳转到404
-    {
-      path: '*',
-      redirect: '/404'
-    }
-  ]
+  routes: fixedRouter
 })

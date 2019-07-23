@@ -182,6 +182,7 @@ export default {
         freight: "",
         orderList: ""
       },
+      ruleValidate: {},
       modaldelet: false,
       modal_loading: false,
       modal: false,

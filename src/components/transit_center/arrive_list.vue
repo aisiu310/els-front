@@ -236,7 +236,7 @@ export default {
     };
   },
   mounted() {
-    this.getArriveList(this.currentPage, this.pageSize);
+    // this.getArriveList(this.currentPage, this.pageSize);
   },
   methods: {
     getArriveList(currentPage, pageSize) {

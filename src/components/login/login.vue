@@ -56,9 +56,10 @@
 </template>
 
 <script>
-import mapMatations from "vuex";
+// import { mapMutations } from "vuex";
 import axios from "axios";
 import { error } from "util";
+import { importDeclaration } from "@babel/types";
 export default {
   data() {
     return {
@@ -105,10 +106,12 @@ export default {
   mounted: function() {
     this.createCode();
   },
-
+  computed: {
+    // 使用对象展开运算符将 setToken 混入 computed 对象中
+    // ...mapMatations(["setToken"])
+  },
   methods: {
     // 登录验证
-    ...mapMatations(["setToken"]),
     login() {
       let self = this;
       if (
@@ -130,8 +133,21 @@ export default {
           //     console.log(response.data);
           //     if (response.data.status === 200) {
           //       self.$Message.success("登陆成功");
-          //       self.setToken({ token: response.data.token });
-          //       // 这里进行路由表分配
+          //  Cookies.set('Token', response.data.token) //登录成功后将token存储在cookie之中
+          //       self.$store.commit("setToken", 123456);
+          // 这里进行二次登陆，获取用户信息,根据用户角色进行路由表分配
+          // self.$axios
+          //   .get("url", {
+          //     token: ""
+          //   })
+          //   .then(response => {
+          //     console.log(response.data);
+          //     if (response.data.status === 200) {
+          //       self.$store.commit("setRole", response.data.role);
+          //       //根据role信息生成路由表
+          //     }
+          //   });
+
           //       sessionStorage.setItem("userRole", "admin");
           //       this.$router.push({
           //         path: "transit"
@@ -142,9 +158,14 @@ export default {
           //   .catch(error => {
           //     self.$Message.error("登陆失败，请检查连接信息");
           //   });
-
-          self.setToken({ token: 123456 });
+          self.$store.commit("setToken", 123456);
+          // self.setToken({ token: 123456 });
           self.$Message.success("登陆成功");
+          console.log(
+            "已获取到token值,token值为",
+            self.$store.state.login.token
+          );
+          self.$store.commit("setRole", "admin");
           this.$router.push({
             path: "transit"
             // params: { user: this.formInline.user }
