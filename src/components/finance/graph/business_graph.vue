@@ -3,57 +3,41 @@
     <div class="header">
       <div class="word">经营情况表</div>
       <div>
-        <DatePicker
-          type="date"
-          :format="date"
-          placeholder="Select date"
-          style="width: 200px"
-          @on-change="beginTime"
-        ></DatePicker>
-        <DatePicker
-          type="date"
-          :formate="date"
-          placeholder="Select date"
-          style="width: 200px"
-          @on-change="endTime"
-        ></DatePicker>
+        <DatePicker type="date" v-model="begin" placeholder="请选择起始日期" style="width: 200px"></DatePicker>
+        <DatePicker type="date" v-model="end" placeholder="请选择截止日期" style="width: 200px"></DatePicker>
         <Button type="primary" shape="circle" @click="searchByTime()">查询</Button>
       </div>
     </div>
     <hr class="common" />
-    <div class="histogram">
-      <div>
-        <div id="payee" :style="{width: '100%', height: '300px'}"></div>
-      </div>
-      <div>
-        <div id="pay" :style="{width: '100%', height: '300px'}"></div>
-      </div>
-    </div>
-    <div class="lineChart">
-      <div id="myChart" :style="{width: '80%', height: '300px'}"></div>
-    </div>
+    <div id="payee" :style="{width: '100%', height: '300px'}"></div>
+    <div id="pay" :style="{width: '100%', height: '300px'}"></div>
+    <div id="myChart" :style="{width: '100%', height: '300px'}"></div>
   </div>
 </template>
 
 <script>
 // 引入基本模板
 let echarts = require("echarts/lib/echarts");
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       payNumber: [],
       begin: "",
-      end: ""
+      end: new Date(),
+      payeeData: [],
+      calculateDate: [],
+      payData: []
     };
   },
   mounted() {
-    this.getPayData();
-    this.payee();
-    this.pay();
-    this.myChart();
+    this.begin = new Date(this.end.getTime() - 1000 * 60 * 60 * 24 * 7 * 3); // define the day which before a week
+    this.getPayData(this.begin, this.end);
+    this.getPayeeData(this.begin, this.end);
   },
   methods: {
-    payee() {
+    payee(date, money) {
       let payee = echarts.init(document.getElementById("payee"));
       payee.setOption({
         title: {
@@ -61,20 +45,26 @@ export default {
         },
         xAxis: {
           type: "category",
-          data: ["07/08", "07/09", "07/10", "07/11", "07/12", "07/13", "07/14"]
+          data: date
         },
         yAxis: {
           type: "value"
         },
         series: [
           {
-            data: [120, 132, 101, 134, 90, 230, 210],
-            type: "bar"
+            data: money,
+            type: "bar",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            }
           }
         ]
       });
     },
-    pay() {
+    pay(date, money) {
       let pay = echarts.init(document.getElementById("pay"));
       pay.setOption({
         title: {
@@ -82,20 +72,26 @@ export default {
         },
         xAxis: {
           type: "category",
-          data: ["07/08", "07/09", "07/10", "07/11", "07/12", "07/13", "07/14"]
+          data: date
         },
         yAxis: {
           type: "value"
         },
         series: [
           {
-            data: [120, 132, 101, 134, 90, 230, 210],
-            type: "bar"
+            data: money,
+            type: "bar",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            }
           }
         ]
       });
     },
-    myChart() {
+    myChart(date, payee, pay) {
       // 基于准备好的dom，初始化echarts实例
       let myChart = echarts.init(document.getElementById("myChart"));
       // 绘制图表
@@ -104,7 +100,13 @@ export default {
           text: "经营情况表"
         },
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
+          axisPointer: {
+            type: "cross",
+            label: {
+              backgroundColor: "#6a7985"
+            }
+          }
         },
         legend: {
           data: ["收款单", "付款单"]
@@ -123,7 +125,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: ["07/08", "07/09", "07/10", "07/11", "07/12", "07/13", "07/14"]
+          data: date
         },
         yAxis: {
           type: "value"
@@ -133,42 +135,42 @@ export default {
             name: "收款单",
             type: "line",
             stack: "总量",
-            data: [120, 132, 101, 134, 90, 230, 210]
+            data: payee
           },
           {
             name: "付款单",
             type: "line",
             stack: "总量",
-            data: [220, 182, 191, 234, 290, 330, 310]
+            data: pay
           }
         ]
       });
     },
-    getPayData() {
-      this.$http
-        .get(
-          "http://localhost:8021/pay/calculate?begin=2019-07-03&end=2019-07-13"
-        )
-        .then(res => {});
+    getPayeeData(begin, end) {
+      api.calculate(url.receipt_calculateURL, begin, end).then(res => {
+        this.payee(res[0], res[1]);
+        this.payeeData = res[1];
+        this.calculateDate = res[0];
+      });
     },
-    beginTime(val) {
-      this.begin = val;
-    },
-    endTime(val) {
-      this.end = val;
+    getPayData(begin, end) {
+      api.calculate(url.pay_calculateURL, begin, end).then(res => {
+        this.pay(res[0], res[1]);
+        this.payData = res[1];
+      });
     },
     searchByTime() {
-      if (begin == null || end == null) {
+      if (this.begin == null || this.end == null) {
         this.$Message.error("请选择日期！");
       } else {
-        alert(this.begin);
-        alert(this.end);
+        this.getPayeeData(this.begin, this.end);
+        this.getPayData(this.begin, this.end);
+        this.myChart(this.calculateDate, this.payeeData, this.payData);
       }
     }
   }
 };
 </script>
-
 
 <style scoped>
 .header {
@@ -188,23 +190,5 @@ export default {
   margin: 5px 0;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.histogram {
-  width: 100%;
-  height: auto;
-  display: flex;
-}
-
-.histogram > div {
-  width: 50%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-}
-
-.lineChart {
-  display: flex;
-  justify-content: center;
 }
 </style>

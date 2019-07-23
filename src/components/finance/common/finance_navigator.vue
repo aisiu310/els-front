@@ -15,7 +15,13 @@
             <MenuItem name="1-2" to="/finance/bank">账号管理</MenuItem>
           </Submenu>
           <MenuItem name="2" to="/finance/payee">结算管理</MenuItem>
-          <MenuItem name="3" to="/finance/pay">成本管理</MenuItem>
+          <Submenu name="3">
+          <template slot="title">成本管理</template>
+            <MenuItem name="3-1" to="/finance/pay">付款单</MenuItem>
+            <MenuItem name="3-2" to="/finance/salary">工资</MenuItem>
+            <MenuItem name="3-3" to="/finance/rent">租金</MenuItem>
+            <MenuItem name="3-4" to="/finance/freight">运费</MenuItem>
+          </Submenu>
           <Submenu name="4">
             <template slot="title">统计报表</template>
             <MenuItem name="4-1" to="/finance/business_graph">经营情况表</MenuItem>

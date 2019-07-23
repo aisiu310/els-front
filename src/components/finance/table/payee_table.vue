@@ -16,10 +16,10 @@
               </Row>
             </FormItem>
             <FormItem label="所属营业厅">
-              <Select v-model="calculate.code" placeholder="请选择所属营业厅">
-                <Option value="001">鼓楼区</Option>
-                <Option value="002">雨花台区</Option>
-                <Option value="003">秦淮区</Option>
+              <Select v-model="calculate.code" placeholder="请选择所属营业厅" @on-change="sum()">
+                <Option value="鼓楼区">鼓楼区</Option>
+                <Option value="雨花台区">雨花台区</Option>
+                <Option value="秦淮区">秦淮区</Option>
               </Select>
             </FormItem>
             <FormItem label="总金额">
@@ -32,7 +32,7 @@
               ></Input>
             </FormItem>
             <FormItem>
-              <Button type="primary" @click>计算收款金额</Button>
+              <Button type="primary" @click="saveSum()">计算收款金额</Button>
               <Button style="margin-left: 8px" @click="calculateModal = false">退出</Button>
             </FormItem>
           </Form>
@@ -128,7 +128,7 @@ export default {
       calculate: {
         date: new Date(),
         code: "",
-        moeny: ""
+        money: ""
       },
       // add payee data
       formItem: {
@@ -335,6 +335,20 @@ export default {
         title: "付款单信息",
         content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].time}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courierName}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].state}`
       });
+    },
+    sum() {
+      api
+        .sumReceipt(
+          url.receipt_sumURL,
+          this.calculate.code,
+          this.calculate.date
+        )
+        .then(res => {
+          this.calculate.money = res;
+        });
+    },
+    saveSum(){
+      this.$Message.info("该模块暂未开发！")
     }
   }
 };

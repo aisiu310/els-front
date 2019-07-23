@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <div class="word">经营情况表</div>
+      <div class="word">成本收益表</div>
     </div>
     <hr class="common" />
     <div class="histogram">
