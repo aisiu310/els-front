@@ -19,10 +19,9 @@
 }
 
 .button {
-    width: 47%;
+    width: 50%;
     height: auto;
     text-align: right;
-    margin-right: 3%;
 }
 
 .common {
@@ -53,17 +52,18 @@
 }
 
 .alonePage {
-    width: 97%;
+    width: 99%;
     height: auto;
     text-align: right;
     margin-top: 0.5%;
-    margin-right: 3%;
+    margin-right: 0.5%;
     margin-bottom: 0.5%;
 }
 
 .body {
     margin-left: 0.8%;
-    margin-top: 1%
+    margin-top: 1%;
+    margin-right: 0.5%;
 }
 
 .histogram {
@@ -71,4 +71,9 @@
     height: auto;
     display: flex;
     justify-content: center;
+}
+
+.select {
+    width: 15%;
+    margin-bottom: 0.3%;
 }

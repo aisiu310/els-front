@@ -1,12 +1,32 @@
 <template>
   <div class="body">
-    <div class="heade">
+    <div class="header">
       <div class="word">租金</div>
       <div class="search"></div>
-      <div class="button"></div>
+      <div class="button">
+        <Button type="primary">
+          <Icon type="ios-calculator" size="16" />工资结算
+        </Button>
+        <Button type="error">
+          <Icon type="ios-trash" size="16" />批量删除
+        </Button>
+      </div>
     </div>
     <hr class="common" />
-    <Table border :columns="columns" :data="rent"></Table>
+    <div class="select">
+      <Select v-model="selectCity" prefix="ios-home" style="width:150px" @on-change="organization">
+        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+    </div>
+    <Table
+      border
+      :columns="columns"
+      :data="rent"
+      @on-select="batchSelect"
+      @on-select-cancel="batchSelect"
+      @on-select-all-cancel="batchSelect"
+      @on-select-all="batchSelect"
+    ></Table>
     <div class="alonePage">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
@@ -21,31 +41,45 @@ export default {
       currentPage: 1,
       columns: [
         {
-          title: "Name",
-          key: "name",
-          render: (h, params) => {
-            return h("div", [
-              h("Icon", {
-                props: {
-                  type: "person"
-                }
-              }),
-              h("strong", params.row.name)
-            ]);
-          }
+          type: "selection",
+          width: 60,
+          align: "center"
         },
         {
-          title: "Age",
-          key: "age"
+          title: "编号",
+          key: "id"
         },
         {
-          title: "Address",
-          key: "address"
+          title: "机构名称",
+          key: "name"
         },
         {
-          title: "Action",
+          title: "隶属",
+          key: "belong"
+        },
+        {
+          title: "租金",
+          key: "rent"
+        },
+        {
+          title: "地址",
+          key: "address",
+          tooltip: true
+        },
+        {
+          title: "期限（/年）",
+          width: 120,
+          key: "lease"
+        },
+
+        {
+          title: "到期时间",
+          key: "due"
+        },
+        {
+          title: "操作",
           key: "action",
-          width: 150,
+          width: 130,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -61,11 +95,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.show(params.index);
+                      this.update(params.index);
                     }
                   }
                 },
-                "View"
+                "修改"
               ),
               h(
                 "Button",
@@ -80,7 +114,7 @@ export default {
                     }
                   }
                 },
-                "Delete"
+                "删除"
               )
             ]);
           }
@@ -88,37 +122,60 @@ export default {
       ],
       rent: [
         {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park"
+          id: "025001",
+          name: "秦淮区",
+          belong: "南京",
+          rent: 5000,
+          address: "New York No. 1 Lake Park",
+          lease: 3,
+          due: "2019-07-23"
         },
         {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park"
+          id: "025002",
+          name: "雨花台区",
+          belong: "南京",
+          rent: 5000,
+          address: "New York No. 1 Lake Park",
+          lease: 3,
+          due: "2019-07-23"
         },
         {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park"
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park"
+          id: "025003",
+          name: "鼓楼区",
+          belong: "南京",
+          rent: 5500,
+          address: "New York No. 1 Lake Park",
+          lease: 3,
+          due: "2019-07-23"
         }
-      ]
+      ],
+      cityList: [
+        {
+          value: "New York",
+          label: "New York"
+        },
+        {
+          value: "London",
+          label: "London"
+        }
+      ],
+      selectCity: ""
     };
   },
   methods: {
-    show(index) {
+    update(index) {
       this.$Modal.info({
-        title: "User Info",
-        content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+        title: "User Info"
       });
     },
     remove(index) {
-      this.data6.splice(index, 1);
+      this.rent.splice(index, 1);
+    },
+    changePage(val) {},
+    batchSelect(selection, row){},
+    organization(selectCity){
+      // alert(selectCity);
+      console.log(this.selectCity);
     }
   }
 };

@@ -3,7 +3,7 @@
     <div class="navigator">
       <!-- <div class="divide"></div> -->
       <div class="work_list">
-        <Menu :theme="theme" :active-name="['4-1']" :width="100" :accordion="true">
+        <Menu :theme="theme" :width="width" :accordion="true">
           <Submenu name="1">
             <template slot="title">账户管理</template>
             <MenuItem name="1-1" to="/finance/init">初期建账</MenuItem>
@@ -49,6 +49,7 @@ export default {
   data() {
     return {
       theme: "light",
+      width: "100%",
       user: {
         employee_id: "1001",
         employee_name: "benny",
@@ -84,6 +85,7 @@ export default {
   font-family: "宋体";
   color: black;
   text-align: center;
+  margin-top: 2%;
 }
 
 a {

@@ -1,12 +1,27 @@
 <template>
   <div class="body">
-    <div class="heade">
+    <div class="header">
       <div class="word">运费</div>
       <div class="search"></div>
-      <div class="button"></div>
+      <div class="button">
+        <Button type="primary">
+          <Icon type="ios-calculator" size="16" />工资结算
+        </Button>
+        <Button type="error">
+          <Icon type="ios-trash" size="16" />批量删除
+        </Button>
+      </div>
     </div>
     <hr class="common" />
-    <Table border :columns="columns" :data="freight"></Table>
+    <Table
+      border
+      :columns="columns"
+      :data="freight"
+      @on-select="batchSelect"
+      @on-select-cancel="batchSelect"
+      @on-select-all-cancel="batchSelect"
+      @on-select-all="batchSelect"
+    ></Table>
     <div class="alonePage">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
@@ -22,17 +37,18 @@ export default {
       columns: [
         {
           title: "Name",
-          key: "name",
-          render: (h, params) => {
-            return h("div", [
-              h("Icon", {
-                props: {
-                  type: "person"
-                }
-              }),
-              h("strong", params.row.name)
-            ]);
-          }
+          key: "name"
+        },
+        {
+          title: "Age",
+          key: "age"
+        },
+        {
+          title: "Address",
+          key: "address"
+        },{
+          title: "Name",
+          key: "name"
         },
         {
           title: "Age",
@@ -45,7 +61,7 @@ export default {
         {
           title: "Action",
           key: "action",
-          width: 150,
+          width: 130,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -61,11 +77,11 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.show(params.index);
+                      this.update(params.index);
                     }
                   }
                 },
-                "View"
+                "修改"
               ),
               h(
                 "Button",
@@ -80,7 +96,7 @@ export default {
                     }
                   }
                 },
-                "Delete"
+                "删除"
               )
             ]);
           }
@@ -111,15 +127,16 @@ export default {
     };
   },
   methods: {
-    show(index) {
+    update(index) {
       this.$Modal.info({
-        title: "User Info",
-        content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+        title: "User Info"
       });
     },
     remove(index) {
       this.data6.splice(index, 1);
-    }
+    },
+    changePage(val) {},
+    batchSelect(selection, row){}
   }
 };
 </script>

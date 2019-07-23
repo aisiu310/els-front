@@ -6,7 +6,6 @@
       <div class="search">
         <DatePicker
           type="daterange"
-          v-model="limitTime"
           placeholder="请选择截止日期,不包括截止日期"
           style="width: 300px"
           @on-change="searchByTime"
@@ -47,29 +46,29 @@
             <FormItem label="付款日期">
               <Row>
                 <Col span="11">
-                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.date"></DatePicker>
+                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.payDate"></DatePicker>
                 </Col>
               </Row>
             </FormItem>
             <FormItem label="付款金额">
-              <Input v-model="formItem.money" type="number" placeholder="请输入付款金额" prefix="logo-usd"></Input>
+              <Input v-model="formItem.payMoney" type="number" placeholder="请输入付款金额" prefix="logo-usd"></Input>
             </FormItem>
             <FormItem label="付款人">
-              <Input v-model="formItem.name" placeholder="请输入付款人姓名"></Input>
+              <Input v-model="formItem.payName" placeholder="请输入付款人姓名"></Input>
             </FormItem>
             <FormItem label="付款账户">
-              <Input v-model="formItem.account" placeholder="请输入付款账户"></Input>
+              <Input v-model="formItem.payAccount" placeholder="请输入付款账户"></Input>
             </FormItem>
             <FormItem label="付款条目">
               <Input
-                v-model="formItem.list"
+                v-model="formItem.payList"
                 type="textarea"
                 :autosize="{minRows: 2,maxRows: 5}"
                 placeholder="请输入付款条目"
               ></Input>
             </FormItem>
             <FormItem label="备注">
-              <Input v-model="formItem.remarks" placeholder="备注"></Input>
+              <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
             </FormItem>
             <FormItem>
               <Button type="primary" @click="add_pay()">新建</Button>
@@ -127,12 +126,12 @@ export default {
       deleteArr: [],
       selectTime: [],
       formItem: {
-        date: "",
-        money: "",
-        name: "",
-        account: "",
-        list: "",
-        remarks: ""
+        payDate: "",
+        payMoney: "",
+        payName: "",
+        payAccount: "",
+        payList: "",
+        payRemarks: ""
       },
       calculate_data: {
         date: "",
@@ -142,7 +141,7 @@ export default {
     };
   },
   mounted() {
-    this.getPayData(this.currentPage);
+    this.initPayData(this.currentPage);
   },
   methods: {
     // init Data
@@ -156,9 +155,9 @@ export default {
     },
     // page
     changePage(val) {
-      if(this.selectTime == null || this.selectTime == ','){
+      if (this.selectTime.length == 0) {
         this.initPayData(val);
-      }else{
+      } else {
         api
           .getDataForTime(
             url.pay_getDataForTimeURL,
@@ -183,20 +182,17 @@ export default {
     },
     // get ths list of id to delete
     deleteSeclection(selection, row) {
-      let id = [];
-      for (let i = 0; i < selection.length; i++) {
-        id[i] = selection[i].id;
-      }
-      this.deleteArr = id;
+      this.deleteArr = selection;
     },
     // del payee and get the data which is from back-end
     batchDel() {
-      console.log(this.deleteArr);
-      api.delData(url.pay_delURL, this.deleteArr).then(res => {
-        if (res != null) {
-          this.initPayData(this.currentPage);
-          this.$Message.success("删除成功！");
-        }
+      let id = [];
+      for (let i = 0; i < this.deleteArr.length; i++) {
+        id[i] = this.deleteArr[i].id;
+      }
+      api.batchDelete(url.pay_delURL, id).then(res => {
+        this.initPayData(this.currentPage);
+        this.$Message.success("删除成功！");
       });
     },
     // check
@@ -224,8 +220,14 @@ export default {
     },
     // add pay modal
     add_pay() {
-      this.$Message.success("创建成功！");
-      this.modal = false;
+      api.addData(url.pay_addURL, this.formItem).then(res => {
+        console.log(res);
+        if (res != null) {
+          this.initPayData(this.currentPage);
+          this.modal = false;
+          this.$Message.success("创建成功！");
+        }
+      });
     },
     // calculate the payee
     calculate_pay() {},
