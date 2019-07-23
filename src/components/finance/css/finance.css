@@ -1,0 +1,74 @@
+.header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin-top: 0.5%;
+}
+
+.word {
+    width: 20%;
+    height: auto;
+    font-size: 16px;
+    color: black;
+    margin-top: 0.3%;
+}
+
+.search {
+    width: 30%;
+    height: auto;
+}
+
+.button {
+    width: 47%;
+    height: auto;
+    text-align: right;
+    margin-right: 3%;
+}
+
+.common {
+    margin: 5px 0;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.expand {
+    width: auto;
+    display: flex;
+}
+
+.excel {
+    width: 50%;
+    height: auto;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+}
+
+.page {
+    width: 47%;
+    height: auto;
+    text-align: right;
+    margin-top: 0.5%;
+    margin-right: 3%;
+    margin-bottom: 0.5%;
+}
+
+.alonePage {
+    width: 97%;
+    height: auto;
+    text-align: right;
+    margin-top: 0.5%;
+    margin-right: 3%;
+    margin-bottom: 0.5%;
+}
+
+.body {
+    margin-left: 0.8%;
+    margin-top: 1%
+}
+
+.histogram {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+}

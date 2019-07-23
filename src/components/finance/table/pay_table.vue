@@ -1,5 +1,87 @@
 <template>
-  <div>
+  <div class="body">
+    <div class="header">
+      <div class="word">成本管理（付款单）</div>
+      <!-- search box -->
+      <div class="search">
+        <DatePicker
+          type="daterange"
+          v-model="limitTime"
+          placeholder="请选择截止日期,不包括截止日期"
+          style="width: 300px"
+          @on-change="searchByTime"
+        ></DatePicker>
+      </div>
+      <div class="button">
+        <Button type="primary" shape="circle" @click="calculate = true">成本结算</Button>
+        <!-- calculate pay modal -->
+        <Modal title="成本结算" v-model="calculate" :styles="{top: '20px'}" :footer-hide="true">
+          <Form :model="calculate_data" :label-width="80">
+            <FormItem label="付款日期">
+              <Row>
+                <Col span="11">
+                  <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.date"></DatePicker>
+                </Col>
+              </Row>
+            </FormItem>
+            <FormItem label="总金额">
+              <Input
+                v-model="formItem.money"
+                type="number"
+                placeholder="付款总金额"
+                prefix="logo-usd"
+                :disabled="true"
+              ></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="calculate_pay()">计算付款金额</Button>
+              <Button style="margin-left: 8px" @click="calculate = false">退出</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
+        <Button type="primary" shape="circle" @click="modal = true">新建付款单</Button>
+        <!-- add payee modal -->
+        <Modal title="新建付款单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
+          <Form :model="formItem" :label-width="80">
+            <FormItem label="付款日期">
+              <Row>
+                <Col span="11">
+                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.date"></DatePicker>
+                </Col>
+              </Row>
+            </FormItem>
+            <FormItem label="付款金额">
+              <Input v-model="formItem.money" type="number" placeholder="请输入付款金额" prefix="logo-usd"></Input>
+            </FormItem>
+            <FormItem label="付款人">
+              <Input v-model="formItem.name" placeholder="请输入付款人姓名"></Input>
+            </FormItem>
+            <FormItem label="付款账户">
+              <Input v-model="formItem.account" placeholder="请输入付款账户"></Input>
+            </FormItem>
+            <FormItem label="付款条目">
+              <Input
+                v-model="formItem.list"
+                type="textarea"
+                :autosize="{minRows: 2,maxRows: 5}"
+                placeholder="请输入付款条目"
+              ></Input>
+            </FormItem>
+            <FormItem label="备注">
+              <Input v-model="formItem.remarks" placeholder="备注"></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="add_pay()">新建</Button>
+              <Button style="margin-left: 8px" @click="modal = false">取消</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
+        <Button type="error" shape="circle" @click="batchDel()">批量删除</Button>
+      </div>
+    </div>
+    <hr class="common" />
     <Table
       :border="showBorder"
       :stripe="showStripe"
@@ -7,11 +89,12 @@
       :size="tableSize"
       :data="payData"
       :columns="tableColumns"
-      @on-select="mulCheck"
-      @on-select-all="selectAll"
+      @on-select="deleteSeclection"
+      @on-select-cancel="deleteSeclection"
+      @on-select-all="deleteSeclection"
+      @on-select-all-cancel="deleteSeclection"
       ref="payTable"
     ></Table>
-
     <!-- page -->
     <div class="expand">
       <div class="excel">
@@ -20,89 +103,114 @@
         </Button>
       </div>
       <div class="page">
-        <Page :total="dataLength" show-elevator @on-change="changePage" />
+        <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import bus from "../../reuse/bus";
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       payData: [],
       dataLength: 0,
+      currentPage: 1,
       showBorder: true,
       showStripe: true,
       showHeader: true,
       showCheckbox: true,
-      tableSize: "default"
+      tableSize: "default",
+      modal: false,
+      calculate: false,
+      deleteArr: [],
+      selectTime: [],
+      formItem: {
+        date: "",
+        money: "",
+        name: "",
+        account: "",
+        list: "",
+        remarks: ""
+      },
+      calculate_data: {
+        date: "",
+        code: "",
+        money: ""
+      }
     };
   },
   mounted() {
-    this.getPayData();
+    this.getPayData(this.currentPage);
   },
   methods: {
-    changePage(val) {
-      // invoke the back-end API limit 10
-      // 后端分页查询
-      this.$http
-        .get(
-          "http://localhost:8021/pay/getAllPay?skip=" + val + "&pageCount=10"
-        )
-        .then(res => {
-          this.payData = res.data.data[0];
-        });
+    // init Data
+    initPayData(page) {
+      api.initData(url.pay_getURL, page).then(res => {
+        if (res != null) {
+          this.payData = res[0];
+          this.dataLength = res[1];
+        }
+      });
     },
+    // page
+    changePage(val) {
+      if(this.selectTime == null || this.selectTime == ','){
+        this.initPayData(val);
+      }else{
+        api
+          .getDataForTime(
+            url.pay_getDataForTimeURL,
+            this.selectTime[0],
+            this.selectTime[1],
+            val
+          )
+          .then(res => {
+            if (res != null) {
+              this.payData = res[0];
+              this.dataLength = res[1];
+            }
+          });
+      }
+    },
+    // show detail pay data
     show(index) {
       this.$Modal.info({
         title: "收款单信息",
         content: `编号:${this.payData[index].id}<br>付款日期：${this.payData[index].payDate}<br>付款金额：${this.payData[index].payMoney}<br>付款人：${this.payData[index].payName}<br>付款账户：${this.payData[index].payAccount}<br>付款条目：${this.payData[index].payList}<br>备注：${this.payData[index].payRemarks}<br>状态：${this.payData[index].state}`
       });
     },
+    // get ths list of id to delete
+    deleteSeclection(selection, row) {
+      let id = [];
+      for (let i = 0; i < selection.length; i++) {
+        id[i] = selection[i].id;
+      }
+      this.deleteArr = id;
+    },
     // del payee and get the data which is from back-end
-    remove(index) {
-      this.$http
-        .delete(
-          "http://localhost:8021/pay/deletePay?id=" + this.payData[index].id
-        )
-        .then(res => {
-          if (res.data.data) {
-            this.$Message.success("删除成功!");
-            this.payData.splice(index, 1);
-            this.getPayData();
-          } else {
-            this.$Message.error(res.data.data);
-          }
-        });
+    batchDel() {
+      console.log(this.deleteArr);
+      api.delData(url.pay_delURL, this.deleteArr).then(res => {
+        if (res != null) {
+          this.initPayData(this.currentPage);
+          this.$Message.success("删除成功！");
+        }
+      });
     },
     // check
     check(index) {
       if (this.payData[index].state == "待审核") {
         this.$Message.error("已提交审核，请等待总经理审批");
       } else {
-        this.$http
-          .get(
-            "http://localhost:8021/pay/updatePay?id=" +
-              this.payData[index].id +
-              "&state='待审核'"
-          )
-          .then(res => {
-            if (res.data.data == 1) {
-              this.payData[index].state = "待审核";
-              this.$Message.success("提交成功，请等待总经理审批");
-            }
-          });
+        api.checkByGet(url.pay_checkURL, this.payData[index].id).then(res => {
+          if (res == 1) {
+            this.payData[index].state = "待审核";
+            this.$Message.success("提交成功，请等待总经理审批");
+          }
+        });
       }
-    },
-    // batch check
-    mulCheck(val, obj) {
-      bus.$emit("pay_batch_check", val);
-      console.log(val);
-    },
-    selectAll(val) {
-      console.log(val);
-      bus.$emit("pay_batch_del", val);
     },
     // export data by excel
     exportData() {
@@ -114,14 +222,33 @@ export default {
         data: this.payData.filter((payData, index) => index < 9)
       });
     },
-    // 获取数据
-    getPayData() {
-      this.$http
-        .get("http://localhost:8021/pay/getAllPay?skip=1&pageCount=10")
-        .then(res => {
-          this.payData = res.data.data[0];
-          this.dataLength = res.data.data[1];
-        });
+    // add pay modal
+    add_pay() {
+      this.$Message.success("创建成功！");
+      this.modal = false;
+    },
+    // calculate the payee
+    calculate_pay() {},
+    // 搜索一段时间内的付款单
+    searchByTime(val) {
+      this.selectTime = val;
+      if (val == "," || val == null) {
+        this.initPayData(this.currentPage);
+      } else {
+        api
+          .getDataForTime(
+            url.pay_getDataForTimeURL,
+            val[0],
+            val[1],
+            this.currentPage
+          )
+          .then(res => {
+            if (res != null) {
+              this.payData = res[0];
+              this.dataLength = res[1];
+            }
+          });
+      }
     }
   },
   computed: {
@@ -189,6 +316,10 @@ export default {
           {
             label: "审核不通过",
             value: "审核不通过"
+          },
+          {
+            label: "已结算",
+            value: "已结算"
           }
         ],
         filterMethod(value, row) {
@@ -236,7 +367,7 @@ export default {
                   }
                 }
               },
-              "提交审核"
+              "审核"
             )
           ]);
         }
@@ -248,24 +379,6 @@ export default {
 </script>
 
 <style scoped>
-.expand {
-  width: auto;
-  display: flex;
-}
-
-.excel {
-  width: 50%;
-  height: auto;
-  margin-top: 0.5%;
-  margin-bottom: 0.5%;
-}
-.page {
-  width: 47%;
-  height: auto;
-  text-align: right;
-  margin-top: 0.5%;
-  margin-right: 3%;
-  margin-bottom: 0.5%;
-}
+@import url("../css/finance.css");
 </style>
 

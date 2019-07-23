@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="top">
       <div class="word">库存盘点</div>
       <div class="middle"></div>

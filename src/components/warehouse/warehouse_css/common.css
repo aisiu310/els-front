@@ -73,3 +73,8 @@ hr {
     height: auto;
     display: flex
 }
+
+.body {
+    margin-top: 1%;
+    margin-left: 0.5%
+}

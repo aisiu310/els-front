@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { url } from './url'
+import { checkServerIdentity } from 'tls';
 
 const api = {
     // get bank data
@@ -45,6 +46,68 @@ const api = {
     async delData(URL, id) {
         try {
             let res = await axios.delete(URL + id);
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // batch del
+    async batchDelete(URL, id) {
+        try {
+            let res = await axios.delete(URL, { data: id });
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // check
+    async check(URL, id) {
+        try {
+            let res = await axios.post(URL, { state: '待审核', id: id });
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // receipt sum
+    async sumReceipt(URL, code, time) {
+        try {
+            let res = await axios.post(URL, { time: time, code: code });
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // calculate  for a time period
+    async calculate(URL, begin, end) {
+        try {
+            let res = await axios.post(URL, { begin: begin, end: end });
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // check by get mothod
+    async checkByGet(URL, id) {
+        try {
+            let parameter = qs.stringify({ id: id, state: '待审核' })
+            let res = await axios.post(URL + parameter);
+            return res.data.data;
+        } catch (error) {
+            alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // get Data for a period time
+    async getDataForTime(URL, begin, end, skip) {
+        try {
+            let parameter = qs.stringify({ begin: beigin, end: end, id: id })
+            let res = await axios.post(URL + parameter);
             return res.data.data;
         } catch (error) {
             alert("服务器出错！");

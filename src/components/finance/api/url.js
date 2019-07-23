@@ -6,7 +6,18 @@ const url = {
     bank_getURL: api + "/bank/getBankAccount",
     // enterprise
     enterprise_getURL: api + "/enterprise/getAllEnterprise?skipCount=",
-    enterprise_addURL: api + "/enterprise/addEnterprise"
-
+    enterprise_addURL: api + "/enterprise/addEnterprise",
+    // receipt
+    receipt_getURL: api + "/receipt/getAllReceipt?skip=",
+    receipt_delURL: api + "/receipt/batchDelete",
+    receipt_checkURL: api + "/receipt/update",
+    receipt_sumURL: api + "/receipt/sum",
+    receipt_calculateURL: api + "/receipt/calculate",
+    // pay
+    pay_calculateURL: api + "/pay/calculate",
+    pay_getURL: api + "/pay/getAllPay?skip=",
+    pay_checkURL: api + "/pay/updatePay?",
+    pay_delURL: api + "/pay/batchDelete",
+    pay_getDataForTimeURL: api + "/pay/getReceiptBetweenTime?"
 }
 export { url }

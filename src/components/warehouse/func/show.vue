@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div>
       <Tabs value="航运区">
         <TabPane label="航运区" icon="ios-jet" name="航运区">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="top">
       <div class="word">入库单</div>
       <div class="middle">

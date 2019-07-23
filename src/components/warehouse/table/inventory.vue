@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <Table :columns="columns" :data="data" :stripe="true" ref="table"></Table>
     <div class="bottom">
       <div class="page">
