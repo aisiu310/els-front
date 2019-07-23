@@ -18,9 +18,10 @@
   left: 20px;
 }
 .layout-nav {
-  width: 420px;
+  border: 10px solid rebeccapurple;
+  width: 820px;
   margin: 0 auto;
-  margin-right: 20px;
+  margin-right: 0px;
 }
 .layout-info {
   border: 1px solid rebeccapurple;
@@ -33,7 +34,7 @@
   <div class="layout">
     <Layout>
       <Header>
-        <Menu mode="horizontal" theme="dark" active-name="onRoutes">
+        <Menu mode="horizontal" theme="dark">
           <div class="layout-logo">
             <p>Express System</p>
           </div>
@@ -74,7 +75,6 @@ export default {
   data() {
     return {
       footerTime: "2011-2019",
-      history1: "历史记录",
       menuItem: "",
       breadCrumb: ""
     };

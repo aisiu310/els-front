@@ -165,9 +165,15 @@ export default {
             "已获取到token值,token值为",
             self.$store.state.login.token
           );
+<<<<<<< HEAD
           self.$store.commit("setRole", "finance");
           this.$router.push({
             path: "finance"
+=======
+          self.$store.commit("setRole", "businesser");
+          this.$router.push({
+            path: "businessHall"
+>>>>>>> 97c7cbf04d340a291538f562bcd94defbb7ed6a6
             // params: { user: this.formInline.user }
           });
         } else {
