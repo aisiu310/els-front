@@ -165,9 +165,9 @@ export default {
             "已获取到token值,token值为",
             self.$store.state.login.token
           );
-          self.$store.commit("setRole", "admin");
+          self.$store.commit("setRole", "finance");
           this.$router.push({
-            path: "transit"
+            path: "finance"
             // params: { user: this.formInline.user }
           });
         } else {

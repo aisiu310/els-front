@@ -30,10 +30,31 @@ import adjust_charge from '@/components/manager/adjust_charge'
 import examine_log from '@/components/manager/examine_log'
 import manager_layout from '@/components/manager/common/manager_layout'
 
-
 import sender_list from '@/components/courie/sender_list'
 import receive_list from '@/components/courie/receive_list'
 import Navigator from '@/components/courie/common/Navigator'
+
+// finance router
+import finance from '@/components/finance/common/finance'
+import pay from '@/components/finance/table/pay_table'
+import payee from '@/components/finance/table/payee_table'
+import init from '@/components/finance/table/init_account_table'
+import bank from '@/components/finance/table/bank_table'
+import salary from "@/components/finance/table/salary_table"
+import rent from "@/components/finance/table/rent_table"
+import freight from "@/components/finance/table/freight_table"
+import business_graph from '@/components/finance/graph/business_graph'
+import cost_benefit from '@/components/finance/graph/cost_benefit'
+import log from '@/components/reuse/log'
+
+// warehouse
+import warehouse from '@/components/warehouse/common/warehouse_index'
+import in_warehouse from '@/components/warehouse/table/in_warehouse'
+import out_warehouse from '@/components/warehouse/table/out_warehouse'
+import warn from '@/components/warehouse/func/warn'
+import show from '@/components/warehouse/func/show'
+import inventory from '@/components/warehouse/table/inventory'
+import check from '@/components/warehouse/func/check'
 
 Vue.use(router)
 
@@ -93,72 +114,165 @@ Vue.use(router)
 //   routes: fixedRouter
 // })
 
-
 export const fixedRouter = [{
-    path: '/',
-    redirect: '/login'
-  },
-  {
-    path: '/login',
-    component: login
-  }
+        path: '/',
+        redirect: '/login'
+    },
+    {
+        path: '/login',
+        component: login
+    }
 ]
-export const asynRouter = [{
-    path: '/transit',
-    redirect: '/transit/arriveList',
-    component: main,
-    meta: {
-      title: "中转中心",
-      icon: "el-icon-success",
-      roles: ['admin', 'manager', 'transister'],
-      requireAuth: true
+export const asynRouter = [
+    // transit
+    {
+        path: '/transit',
+        redirect: '/transit/arriveList',
+        component: main,
+        meta: {
+            title: "中转中心",
+            icon: "el-icon-success",
+            roles: ['admin', 'manager', 'transister'],
+            requireAuth: true
+        },
+        children: [{
+            path: 'arriveList',
+            component: transit_arrive_list,
+            name: '接收管理',
+            meta: {
+                title: "接收单",
+                icon: "ios-navigate",
+                roles: ['admin', 'manager', 'transister'],
+                requireAuth: true
+            },
+        }, {
+            path: 'transferList',
+            component: transit_transfer_list,
+            name: '中转管理',
+            meta: {
+                title: "中转单",
+                icon: "ios-keypad",
+                roles: ['admin', 'manager', 'transister'],
+                requireAuth: true
+            },
+        }, {
+            path: 'loadCarList',
+            component: transit_loadcar_list,
+            name: '装车管理',
+            meta: {
+                title: "装车单",
+                icon: "ios-analytics",
+                roles: ['admin', 'manager', 'transister'],
+                requireAuth: true
+            },
+        }]
     },
-    children: [{
-      path: 'arriveList',
-      component: transit_arrive_list,
-      name: '接收管理',
-      meta: {
-        title: "接收单",
-        icon: "ios-navigate",
-        roles: ['admin', 'manager', 'transister'],
-        requireAuth: true
-      },
-    }, {
-      path: 'transferList',
-      component: transit_transfer_list,
-      name: '中转管理',
-      meta: {
-        title: "中转单",
-        icon: "ios-keypad",
-        roles: ['admin', 'manager', 'transister'],
-        requireAuth: true
-      },
-    }, {
-      path: 'loadCarList',
-      component: transit_loadcar_list,
-      name: '装车管理',
-      meta: {
-        title: "装车单",
-        icon: "ios-analytics",
-        roles: ['admin', 'manager', 'transister'],
-        requireAuth: true
-      },
-    }]
-  },
-  // 当页面地址和上面任一地址不匹配，则跳转到404
-  {
+    // finance
+    {
+        path: '/finance',
+        redirect: '/finance/business_graph',
+        component: finance,
+        children: [{
+                path: 'pay',
+                component: pay
+            }, {
+                path: 'payee',
+                component: payee,
+                roles: ["finance"]
+            },
+            {
+                path: 'init',
+                component: init,
+                roles: ["finance"]
+            },
+            {
+                path: 'bank',
+                component: bank,
+                roles: ["finance"]
+            },
+            {
+                path: 'log',
+                component: log,
+                roles: ["finance"]
+            },
+            {
+                path: 'business_graph',
+                component: business_graph,
+                roles: ["finance"]
+            },
+            {
+                path: 'cost_benefit',
+                component: cost_benefit,
+                roles: ["finance"]
+            },
+            {
+                path: 'salary',
+                component: salary,
+                roles: ["finance"]
+            },
+            {
+                path: 'rent',
+                component: rent,
+                roles: ["finance"]
+            },
+            {
+                path: 'freight',
+                component: freight,
+                roles: ["finance"]
+            }
+        ]
+    },
+    // warehouse
+    {
+        path: '/warehouse',
+        redirect: '/warehouse/show',
+        component: warehouse,
+        children: [{
+                path: 'in_warehouse',
+                component: in_warehouse,
+                roles: ["warehouse"]
+            },
+            {
+                path: 'out_warehouse',
+                component: out_warehouse,
+                roles: ["warehouse"]
+            },
+            {
+                path: 'warn',
+                component: warn,
+                roles: ["warehouse"]
+            },
+            {
+                path: 'show',
+                component: show,
+                roles: ["warehouse"]
+            },
+            {
+                path: 'inventory',
+                component: inventory,
+                roles: ["warehouse"]
+            },
+            {
+                path: 'check',
+                component: check,
+                roles: ["warehouse"]
+            }
+        ]
+    },
+    // 当页面地址和上面任一地址不匹配，则跳转到404
+    {
 
-    path: '*',
-    redirect: '/404',
-    meta: {
-      title: "统一错误返回页面",
-      icon: "el-icon-success",
-      roles: ['admin', 'manager', 'transister', ''],
-      requireAuth: false
-    },
-  }
+        path: '*',
+        redirect: '/404',
+        meta: {
+            title: "统一错误返回页面",
+            icon: "el-icon-success",
+            roles: ['admin', 'manager', 'transister', ''],
+            requireAuth: false
+        },
+    }
 ]
 
 export default new router({
-  routes: fixedRouter
+    routes: fixedRouter
 })

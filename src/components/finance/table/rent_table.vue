@@ -5,7 +5,7 @@
       <div class="search"></div>
       <div class="button">
         <Button type="primary">
-          <Icon type="ios-calculator" size="16" />工资结算
+          <Icon type="ios-calculator" size="16" />租金结算
         </Button>
         <Button type="error">
           <Icon type="ios-trash" size="16" />批量删除

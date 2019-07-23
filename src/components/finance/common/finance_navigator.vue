@@ -9,13 +9,13 @@
             <MenuItem name="1-1" to="/finance/init">初期建账</MenuItem>
             <MenuItem name="1-2" to="/finance/bank">账号管理</MenuItem>
           </Submenu>
-          <MenuItem name="2" to="/finance/payee">结算管理</MenuItem>
+          <MenuItem name="2" to="/finance/payee">营收管理</MenuItem>
           <Submenu name="3">
             <template slot="title">成本管理</template>
             <MenuItem name="3-1" to="/finance/pay">付款单</MenuItem>
-            <MenuItem name="3-2" to="/finance/salary">工资</MenuItem>
-            <MenuItem name="3-3" to="/finance/rent">租金</MenuItem>
-            <MenuItem name="3-4" to="/finance/freight">运费</MenuItem>
+            <MenuItem name="3-2" to="/finance/salary">工资结算</MenuItem>
+            <MenuItem name="3-3" to="/finance/rent">租金结算</MenuItem>
+            <MenuItem name="3-4" to="/finance/freight">运费结算</MenuItem>
           </Submenu>
           <Submenu name="4">
             <template slot="title">统计报表</template>
@@ -24,9 +24,20 @@
           </Submenu>
           <MenuItem name="5" to="/finance/log">查看日志</MenuItem>
         </Menu>
+        <!-- <Menu :theme="theme" :width="width" :accordion="true">
+          <MenuItem
+            :v-bind="menuItem"
+            v-for="(item, index) in menuItem[0].children"
+            :name="item.meta.title"
+            :to="menuItem[0].path +'/'+ item.path"
+            :key="item.meta.title"
+          >{{item.meta.title}}
+          <Submenu v-bind="menuItem" v-if="menuItem[0].children.length != 0"></Submenu>
+          </MenuItem>
+        </Menu> -->
       </div>
       <div class="divide"></div>
-      <!-- <div class="employee_message">
+      <div class="employee_message">
         <div>
           <img src="../../../assets/employee.png" />
         </div>
@@ -34,7 +45,7 @@
         <p>{{user.employee_name}}</p>
         <p>{{user.employee_job}}</p>
         <p>{{user.employee_dept}}</p>
-      </div>-->
+      </div>
       <div class="divide"></div>
     </div>
 
@@ -45,11 +56,13 @@
 </template>
 
 <script>
+import store from "../../../store/index";
 export default {
   data() {
     return {
       theme: "light",
       width: "100%",
+      menuItem: "",
       user: {
         employee_id: "1001",
         employee_name: "benny",
@@ -60,6 +73,8 @@ export default {
   },
   created() {
     // this.employee_name = this.$route.query.user;
+    this.menuItem = store.state.login.menu;
+    // console.log("这里是待展示导航菜单", this.menuItem);
   }
 };
 </script>
