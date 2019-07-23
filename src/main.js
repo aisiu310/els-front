@@ -1,15 +1,24 @@
 import Vue from 'vue'
 import App from './App'
 import iView from 'iview'
-import store from './store/main'
+import store from './store/index'
 import vueResource from 'vue-resource'
 // import 'iview/dist/styles/iview.css'
 import '../my-theme/dist/iview.css';
 
+<<<<<<< HEAD
+
+import router from './router'
+
+// import router from './router/zxy-test'
+
+import '@/permission.js'
+=======
 // import router from './router'
 import router from './router/finance'
 // import router from './router/zxy-test'
 
+>>>>>>> b0f65e7ac138801d2941f51541934212c5c6a146
 import global from '@/utils/global' //全局
 Vue.prototype.$global = global
 
@@ -25,6 +34,7 @@ Vue.prototype.$echartsGL = echartsgl //引入组件,作为全局变量
 import axios from 'axios'
 Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
+Vue.prototype.$store = store
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; // 配置请求头（推荐）
 
 Vue.use(iView)
@@ -42,6 +52,15 @@ new Vue({
     template: '<App/>'
 })
 
+<<<<<<< HEAD
+
+axios.interceptors.request.use(config => {
+  if (store.state.token) {
+    alert('token存在')
+    config.headers.common['post-Token'] = store.state.token
+  }
+  return config;
+=======
 router.beforeEach((to, from, next) => {
     if (to.path === '/login') { //若要跳转的页面是登录界面
         next(); //直接跳转
@@ -63,6 +82,7 @@ axios.interceptors.request.use(config => {
         config.headers.common['post-Token'] = store.state.token
     }
     return config;
+>>>>>>> b0f65e7ac138801d2941f51541934212c5c6a146
 }, error => {
     return Promise.reject(error);
 });

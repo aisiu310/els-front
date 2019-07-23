@@ -33,33 +33,30 @@
   <div class="layout">
     <Layout>
       <Header>
-        <Menu mode="horizontal" theme="dark" active-name="1">
+        <Menu mode="horizontal" theme="dark" active-name="onRoutes">
           <div class="layout-logo">
             <p>Express System</p>
           </div>
           <div class="layout-nav">
-            <MenuItem name="1">
-              <Icon type="ios-navigate"></Icon>
-
-              <router-link to="/transit/arriveList">接收管理</router-link>
-            </MenuItem>
-            <MenuItem name="2">
-              <Icon type="ios-keypad"></Icon>
-              <router-link to="/transit/transferList">中转管理</router-link>
-            </MenuItem>
-            <MenuItem name="3">
-              <Icon type="ios-analytics"></Icon>
-              <router-link to="/transit/loadCarList">装车管理</router-link>
+            <MenuItem
+              :v-bind="menuItem"
+              v-for="(item, index) in menuItem[0].children"
+              :name="item.meta.title"
+              :to="menuItem[0].path +'/'+ item.path"
+              :key="item.meta.title"
+            >
+              <Icon :type="item.meta.icon"></Icon>
+              {{item.meta.title}}
             </MenuItem>
           </div>
           <div class="layout-info"></div>
         </Menu>
       </Header>
       <Content :style="{padding: '0 50px'}">
-        <Breadcrumb :style="{margin: '20px 0'}">
+        <Breadcrumb :style="{margin: '20px 0'}" v-bind="menuItem">
           <BreadcrumbItem>物流管理系统</BreadcrumbItem>
-          <BreadcrumbItem>中转中心业务员</BreadcrumbItem>
-          <BreadcrumbItem>{{item}}</BreadcrumbItem>
+          <BreadcrumbItem :to="menuItem[0].path">{{menuItem[0].meta.title}}</BreadcrumbItem>
+          <BreadcrumbItem>{{breadCrumb}}</BreadcrumbItem>
         </Breadcrumb>
         <Card>
           <div style="min-height: 700px;">
@@ -72,24 +69,29 @@
   </div>
 </template>
 <script>
-import arriveList from "./arrive_list";
-import loadCarList from "./loadcar_list";
-import transferList from "./transfer_list";
+import store from "../../store/index";
 export default {
-  components: {
-    arriveList,
-    loadCarList,
-    transferList
-  },
   data() {
     return {
-      item: "接收管理",
       footerTime: "2011-2019",
-      history1: "历史记录"
+      history1: "历史记录",
+      menuItem: "",
+      breadCrumb: ""
     };
   },
   mounted() {
-    this.getAllInfo();
+    this.breadCrumb = store.state.login.breadCrumb;
+    console.log("这里是面包屑导航条", this.breadCrumb);
+  },
+  computed: {
+    // 首次进入页面时展开当前页面所属的菜单
+    onRoutes() {
+      return this.$route.path;
+    }
+  },
+  created() {
+    this.menuItem = store.state.login.menu;
+    console.log("这里是待展示导航菜单", this.menuItem);
   },
   methods: {
     Input(val) {
