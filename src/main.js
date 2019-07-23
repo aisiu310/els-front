@@ -6,22 +6,11 @@ import vueResource from 'vue-resource'
 // import 'iview/dist/styles/iview.css'
 import '../my-theme/dist/iview.css';
 
-<<<<<<< HEAD
-
 import router from './router'
 
 // import router from './router/zxy-test'
 
 import '@/permission.js'
-=======
-// import router from './router'
-import router from './router/finance'
-// import router from './router/zxy-test'
-
->>>>>>> b0f65e7ac138801d2941f51541934212c5c6a146
-import global from '@/utils/global' //全局
-Vue.prototype.$global = global
-
 import qs from 'qs'
 Vue.prototype.$qs = qs
 
@@ -43,68 +32,43 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-    el: '#app',
-    router,
-    store,
-    components: {
-        App
-    },
-    template: '<App/>'
-})
-
-<<<<<<< HEAD
-
-axios.interceptors.request.use(config => {
-  if (store.state.token) {
-    alert('token存在')
-    config.headers.common['post-Token'] = store.state.token
-  }
-  return config;
-=======
-router.beforeEach((to, from, next) => {
-    if (to.path === '/login') { //若要跳转的页面是登录界面
-        next(); //直接跳转
-    } else if (to.meta.requireAuth) { //若要跳转的页面是个人界面
-        let token = localStorage.getItem('token'); //获取本地存储的token值
-        console.log(1, token)
-        if (token === null || token === '') { //若token为空则验证不成功，跳转到登录页面
-            next('/login');
-        } else { //不为空则验证成功
-            next();
-        }
-    } else {
-        next();
-    }
+  el: '#app',
+  router,
+  store,
+  components: {
+    App
+  },
+  template: '<App/>'
 });
-
 axios.interceptors.request.use(config => {
     if (store.state.token) {
-        config.headers.common['post-Token'] = store.state.token
+      alert('token存在')
+      config.headers.common['post-Token'] = store.state.token
     }
     return config;
->>>>>>> b0f65e7ac138801d2941f51541934212c5c6a146
-}, error => {
+  },
+  error => {
     return Promise.reject(error);
-});
+  });
 
 //respone拦截器
 axios.interceptors.response.use(
-    response => {
-        return response;
-    },
-    error => { //默认除了2XX之外都为错误
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    this.$store.commit('delToken');
-                    router.replace({ //跳转到登录页面
-                        path: '/login',
-                        query: {
-                            redirect: router.currentRoute.fullPath
-                        } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-                    });
-            }
-        }
-        return Promise.reject(error.response);
+  response => {
+    return response;
+  },
+  error => { //默认除了2XX之外都为错误
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          this.$store.commit('delToken');
+          router.replace({ //跳转到登录页面
+            path: '/login',
+            query: {
+              redirect: router.currentRoute.fullPath
+            } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+          });
+      }
     }
+    return Promise.reject(error.response);
+  }
 )
