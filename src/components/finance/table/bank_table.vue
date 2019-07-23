@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="header">
       <div class="word">账户管理</div>
       <div class="search">
@@ -34,7 +34,7 @@
     <div>
       <Table stripe :columns="columns" :data="data"></Table>
     </div>
-    <div class="page">
+    <div class="alonePage">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
   </div>
@@ -192,41 +192,5 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  width: 100%;
-  height: auto;
-  display: flex;
-  margin-top: 0.5%;
-}
-.word {
-  width: 30%;
-  height: auto;
-  font-size: 16px;
-  color: black;
-  margin-top: 0.3%;
-}
-.search {
-  width: 40%;
-  height: auto;
-  text-align: center;
-}
-.button {
-  width: 30%;
-  height: auto;
-  text-align: right;
-  margin-right: 0.5%;
-}
-.common {
-  margin: 5px 0;
-  border-top: 2px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-.page {
-  width: 97%;
-  height: auto;
-  text-align: right;
-  margin-top: 0.5%;
-  margin-right: 3%;
-  margin-bottom: 0.5%;
-}
+@import url("../css/finance.css");
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="header">
       <div class="word">成本管理（付款单）</div>
       <!-- search box -->

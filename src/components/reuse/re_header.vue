@@ -49,7 +49,8 @@ export default {
   width: 100%;
   height: 35px;
   display: flex;
-  background-color: black;
+  background-color:dodgerblue;
+  box-shadow: #666 0px 0px 8px;
 }
 
 .logo {

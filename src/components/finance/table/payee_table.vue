@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="header">
       <div class="word">结算管理（收款单）</div>
       <div class="search"></div>

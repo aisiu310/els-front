@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      theme: "dark",
+      theme: "light",
       user: {
         employee_id: "1001",
         employee_name: "benny",
@@ -60,7 +60,10 @@ export default {
 
 .navigator {
   width: 16%;
-  background-color: black;
+  background-color: white;
+  margin-top: 1%;
+  border-radius: 8px;
+  box-shadow: #666 0px 0px 8px;
 }
 
 .work_list {
@@ -68,12 +71,12 @@ export default {
   height: auto;
   font-size: 16px;
   font-family: "宋体";
-  color: white;
+  color: black;
   text-align: center;
 }
 
 a {
-  color: white;
+  color: black;
 }
 
 .divide {
@@ -85,7 +88,7 @@ a {
   width: 100%;
   height: auto;
   font-size: 14px;
-  color: white;
+  color: black;
   text-align: center;
 }
 
