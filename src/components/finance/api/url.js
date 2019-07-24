@@ -1,4 +1,4 @@
-const api = "http://localhost:8021"
+const api = "http://localhost:9001/yuantu/finance"
 const url = {
     // bank url
     bank_addURL: api + "/bank/addBankAccount",

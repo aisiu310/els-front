@@ -12,7 +12,7 @@
       </Table>
     </div>
     <div class="page">
-      <Page :total="dataTotal" show-elevator @on-change="change" :page-size="5" />
+      <Page :total="dataTotal" show-elevator @on-change="change" :page-size="pageSize" />
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ export default {
   data() {
     return {
       dataTotal: 0,
+      pageSize: 5,
       columns: [
         {
           type: "index",
@@ -38,26 +39,26 @@ export default {
         },
         {
           title: "下单时间",
-          key: "order_time",
+          key: "orderTime",
           width: 150,
           tooltip: true,
           sortable: true
         },
         {
           title: "寄件人",
-          key: "sender_name"
+          key: "senderName"
         },
         {
           title: "收件人",
-          key: "addressee_name"
+          key: "addresseeName"
         },
         {
           title: "揽件快递员",
-          key: "courier_name"
+          key: "courierName"
         },
         {
           title: "费用",
-          key: "total_fee"
+          key: "totalFee"
         },
         {
           title: "Action",
@@ -71,299 +72,218 @@ export default {
         {
           id: "1231231231",
           code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
           remarks: "无",
           type: "特快",
-          packing_fee: "12",
+          packingFee: "12",
           freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
+        },
+        {
+           id: "1231231231",
+          code: "1231231231",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
+          remarks: "无",
+          type: "特快",
+          packingFee: "12",
+          freight: "23",
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
+        },
+        {
+           id: "1231231231",
+          code: "1231231231",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
+          remarks: "无",
+          type: "特快",
+          packingFee: "12",
+          freight: "23",
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
+        },
+        {
+           id: "1231231231",
+          code: "1231231231",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
+          remarks: "无",
+          type: "特快",
+          packingFee: "12",
+          freight: "23",
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
+        },
+        {
+           id: "1231231231",
+          code: "1231231231",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
+          remarks: "无",
+          type: "特快",
+          packingFee: "12",
+          freight: "23",
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
+        },
+        {
+           id: "1231231231",
+          code: "1231231231",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
+          remarks: "无",
+          type: "特快",
+          packingFee: "12",
+          freight: "23",
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
+        },
+        {
+           id: "1231231231",
+          code: "1231231231",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
+          remarks: "无",
+          type: "特快",
+          packingFee: "12",
+          freight: "23",
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
         },
         {
           id: "1231231231",
           code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
+          courierId: "123",
+          courierName: "小明",
+          senderName: "小红",
+          senderRegion: "南京",
+          senderDetailAddress: "雨花台软件大道",
+          senderPhone: "12345678912",
+          addresseeName: "小黑",
+          addresseeRegion: "北京",
+          addresseeDetailAddress: "五道口",
+          addresseePhone: "12312345565",
+          goodsSize: "书信",
+          goodsCount: "123",
+          goodsWeight: "123",
           remarks: "无",
           type: "特快",
-          packing_fee: "12",
+          packingFee: "12",
           freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
-        },
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courier_id: "123",
-          courier_name: "小明",
-          sender_name: "小红",
-          sender_region: "南京",
-          sender_detail_address: "雨花台软件大道",
-          sender_phone: "12345678912",
-          addressee_name: "小黑",
-          addressee_region: "北京",
-          addressee_detail_address: "五道口",
-          addressee_phone: "12312345565",
-          goods_size: "书信",
-          goods_count: "123",
-          goods_weight: "123",
-          remarks: "无",
-          type: "特快",
-          packing_fee: "12",
-          freight: "23",
-          total_fee: "35",
-          order_time: "2019/07/10 12：01",
-          contract_time: "2019/07/10 12：01",
-          payment_time: "2019/07/10 12：01",
-          true_addressee_name: "",
-          receipt_date: ""
+          totalFee: "35",
+          orderTime: "2019/07/10 12：01",
+          contractTime: "2019/07/10 12：01",
+          paymentTime: "2019/07/10 12：01",
+          trueAddresseeName: "",
+          receiptDate: ""
         }
       ]
     };
@@ -393,28 +313,28 @@ export default {
         title: "订单信息",
         content: `编号：${this.data[index].id}<br>
                 条形码号：${this.data[index].code}<br>
-                快递员编号：${this.data[index].courier_id}<br>
-                快递员姓名：${this.data[index].courier_name}<br>
-                寄件人姓名：${this.data[index].sender_name}<br>
-                寄件人所属区域：${this.data[index].sender_region}<br>
-                寄件人地址：${this.data[index].sender_detail_address}<br>
-                寄件人手机号：${this.data[index].sender_phone}<br>
-                收件人姓名：${this.data[index].addressee_name}<br>
-                收件人所属区域：${this.data[index].addressee_region}<br>
-                收件人地址：${this.data[index].addressee_detail_address}<br>
-                收件人手机号：${this.data[index].addressee_phone}<br>
-                货物类型：${this.data[index].goods_size}<br>
-                货物重量：${this.data[index].goods_weight}<br>
+                快递员编号：${this.data[index].courierId}<br>
+                快递员姓名：${this.data[index].courierName}<br>
+                寄件人姓名：${this.data[index].senderName}<br>
+                寄件人所属区域：${this.data[index].senderRegion}<br>
+                寄件人地址：${this.data[index].senderDetailAddress}<br>
+                寄件人手机号：${this.data[index].senderPhone}<br>
+                收件人姓名：${this.data[index].addresseeName}<br>
+                收件人所属区域：${this.data[index].addresseeRegion}<br>
+                收件人地址：${this.data[index].addresseeDetailAddress}<br>
+                收件人手机号：${this.data[index].addresseePhone}<br>
+                货物类型：${this.data[index].goodsSize}<br>
+                货物重量：${this.data[index].goodsWeight}<br>
                 特殊备注：${this.data[index].remarks}<br>
                 快递类型：${this.data[index].type}<br>
-                包装费用：${this.data[index].package_fee}<br>
+                包装费用：${this.data[index].packingFee}<br>
                 运费：${this.data[index].freight}<br>
-                总费用：${this.data[index].total_fee}<br>
-                下单时间：${this.data[index].order_time}<br>
-                预约时间：${this.data[index].contract_time}<br>
-                付款时间：${this.data[index].payment_time}<br>
-                实际收件人：${this.data[index].true_addressee_name}<br>
-                签收时间：${this.data[index].receipt_date}`
+                总费用：${this.data[index].totalFee}<br>
+                下单时间：${this.data[index].orderTime}<br>
+                预约时间：${this.data[index].contractTime}<br>
+                付款时间：${this.data[index].paymentTime}<br>
+                实际收件人：${this.data[index].trueAddresseeName}<br>
+                签收时间：${this.data[index].receiptDate}`
       });
     },
     remove(index) {
@@ -428,8 +348,5 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  margin-right: 1%;
-  text-align: right;
-}
+@import url("../css/sender.css");
 </style>

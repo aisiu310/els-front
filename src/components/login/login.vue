@@ -52,6 +52,18 @@
         :maxlength="10"
       />
     </div>
+    <div v-if="show" class="position">
+      <baidu-map
+        class="bm-view"
+        :center="position"
+        :zoom="15"
+        :scroll-wheel-zoom="true"
+        @click="show()"
+      >
+        <bm-marker :position="position" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
+        <!-- <bm-panorama></bm-panorama> -->
+      </baidu-map>
+    </div>
   </div>
 </template>
 
@@ -63,6 +75,7 @@ import { importDeclaration } from "@babel/types";
 export default {
   data() {
     return {
+      show: false,
       checkCode: "",
       logisticId: "",
       formInline: {
@@ -99,7 +112,9 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      // { lng: 116.404, lat: 39.915 }
+      position: "南京鼓楼区苏宁大厦"
     };
   },
 
@@ -233,10 +248,15 @@ export default {
       var reg = /^[0-9]*$/;
       if (!data || !reg.test(data)) {
         this.$Message.error("请输入合法10位订单号，订单号为纯数字");
+        this.show = false;
       } else {
         this.$Message.success("查询成功！");
         // invoke the back-end API
+        this.show = true;
       }
+    },
+    show() {
+      alert("nihao!");
     }
   }
 };
@@ -305,4 +325,15 @@ export default {
   color: white;
   text-align: center;
 }
+.bm-view {
+  width: 300px;
+  height: 300px;
+}
+
+.position {
+  position: relative;
+  margin-left: 10%;
+  padding-top: 11%;
+}
+
 </style>

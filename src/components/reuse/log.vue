@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <div class="header">
       <div class="word">操作日志</div>
       <div class="search">
@@ -124,6 +124,10 @@ export default {
 
 
 <style scoped>
+.body{
+  margin-top: 1%;
+  margin-left: 0.5%;
+}
 .header {
   width: 100%;
   height: auto;

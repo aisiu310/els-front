@@ -1,0 +1,167 @@
+.send {
+    width: 80%;
+    height: auto;
+    margin-left: 10%;
+    margin-top: 1%;
+    /* border-radius: 8px;
+    box-shadow: #666 0px 0px 8px; */
+}
+
+.content {
+    width: 80%;
+    color: black;
+    font-size: 24px;
+    font-family: "楷体";
+}
+
+.send_up {
+    width: 100%;
+    height: 270px;
+    display: flex;
+}
+
+.send_up>div {
+    width: 50%;
+    height: 270px;
+}
+
+.send_down {
+    width: 100%;
+    height: 130px;
+    display: flex;
+}
+
+.send_down>div {
+    width: 50%;
+    height: 130px;
+}
+
+.expand {
+    margin-left: 50px;
+}
+
+header {
+    width: 80%;
+    height: 50px;
+    margin-left: 10%;
+    display: flex;
+}
+
+.logo {
+    width: 30%;
+    height: 40px;
+    color: black;
+    font-family: "Brush Script Std";
+    font-size: 32px;
+    text-align: center;
+}
+
+.menu {
+    width: 50%;
+    height: 40px;
+    display: flex;
+}
+
+.username {
+    width: 20%;
+    height: 40px;
+    position: relative;
+    margin-left: 15%;
+}
+
+.username div {
+    width: 60%;
+    height: 20px;
+    position: relative;
+    margin-top: 10%;
+}
+
+.middle {
+    width: 80%;
+    height: 160px;
+    margin-left: 10%;
+    margin-top: 1%;
+    display: flex;
+}
+
+.detail {
+    width: 30%;
+    height: 160px;
+}
+
+.portrait {
+    width: 100px;
+    height: 100px;
+    margin-left: 30%;
+    margin-top: 10px;
+    border-radius: 90px;
+}
+
+.portrait img {
+    border-radius: 90px;
+}
+
+.detail p {
+    width: 60%;
+    height: 20px;
+    margin-left: 18%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.slideshow {
+    width: 70%;
+    height: 160px;
+}
+
+.search {
+    width: 80%;
+    height: auto;
+    margin-left: 10%;
+    margin-top: 1%;
+    text-align: center;
+}
+
+.search_order {
+    display: none;
+}
+
+.icon {
+    display: flex
+}
+
+.icon_one {
+    width: 50%;
+    height: auto;
+}
+
+.icon_two {
+    width: 50%;
+    height: auto;
+    text-align: right;
+    margin-right: 0.5%;
+}
+
+.body {
+    width: 80%;
+    height: auto;
+    margin-left: 10%;
+    margin-top: 1%;
+    display: flex;
+}
+
+.left {
+    width: 20%;
+    height: auto;
+}
+
+.right {
+    width: 80%;
+    height: auto;
+}
+
+.page {
+    margin-right: 1%;
+    text-align: right;
+    margin-bottom: 0.5%;
+}

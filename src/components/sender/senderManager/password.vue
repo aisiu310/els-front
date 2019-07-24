@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class="password_body">
     <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
       <FormItem label="新密码" prop="passwd">
         <Input type="password" v-model="formCustom.passwd"></Input>
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style scoped>
-.body{
+.password_body{
     width: 40%;
     height: auto;
     margin-left: 30%

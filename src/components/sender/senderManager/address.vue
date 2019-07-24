@@ -203,9 +203,5 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  margin-right: 1%;
-  text-align: right;
-  margin-bottom: 0.5%;
-}
+@import url("../css/sender.css");
 </style>
