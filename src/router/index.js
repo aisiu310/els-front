@@ -52,6 +52,16 @@ import show from '@/components/warehouse/func/show'
 import inventory from '@/components/warehouse/table/inventory'
 import check from '@/components/warehouse/func/check'
 
+// sender
+import sender from '@/components/sender/sender_index'
+import sender_detail from '@/components/sender/sender_detail'
+import orderManage from '@/components/sender/orderManager/orderManage'
+import order_table from '@/components/sender/orderManager/order_table'
+import senderManage from '@/components/sender/senderManager/senderManage'
+import address from '@/components/sender/senderManager/address'
+import person from '@/components/sender/senderManager/person'
+import password from '@/components/sender/senderManager/password'
+
 Vue.use(router)
 
 // // 固定的路由表
@@ -119,6 +129,47 @@ export const fixedRouter = [{
     }
 ]
 export const asynRouter = [
+    // sender
+    {
+        path: '/sender',
+        redirect: '/sender/sender_detail',
+        component: sender,
+        children: [{
+                path: 'sender_detail',
+                component: sender_detail,
+                roles: ["sender"]
+            },
+            {
+                path: 'orderManage',
+                component: orderManage,
+                children: [{
+                    path: 'order_table',
+                    component: order_table,
+                    roles: ["sender"]
+                }]
+            },
+            {
+                path: 'senderManage',
+                component: senderManage,
+                children: [{
+                        path: 'address',
+                        component: address,
+                        roles: ["sender"]
+                    },
+                    {
+                        path: 'person',
+                        component: person,
+                        roles: ["sender"]
+                    },
+                    {
+                        path: 'password',
+                        component: password,
+                        roles: ["sender"]
+                    }
+                ]
+            }
+        ]
+    },
     // transit
     {
         path: '/transit',

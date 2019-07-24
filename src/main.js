@@ -14,8 +14,6 @@ Vue.use(BaiduMap, {
 
 import router from './router'
 import '@/permission.js'
-// import router from './router/finance'
-// import router from './router/zxy-test'
 
 // import global from '@/utils/global' //全局
 // Vue.prototype.$global = global
