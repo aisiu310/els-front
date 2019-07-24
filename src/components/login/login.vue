@@ -180,7 +180,7 @@ export default {
             "已获取到token值,token值为",
             self.$store.state.login.token
           );
-          self.$store.commit("setRole", "courier");
+          self.$store.commit("setRole", "sender");
           this.$router.push({
             path: self.$store.state.login.role
             //params:{user:this.formInline.user}

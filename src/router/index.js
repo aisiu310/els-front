@@ -323,6 +323,140 @@ export const asynRouter = [{
             }
         ]
     },
+    // sender
+    {
+        path: '/sender',
+        redirect: '/sender/sender_detail',
+        component: sender,
+        children: [{
+                path: 'sender_detail',
+                component: sender_detail,
+                roles: ['sender']
+            },
+            {
+                path: 'orderManage',
+                component: orderManage,
+                children: [{
+                    path: 'order_table',
+                    component: order_table,
+                    roles: ['sender']
+                }]
+            },
+            {
+                path: 'senderManage',
+                component: senderManage,
+                children: [{
+                        path: 'address',
+                        component: address,
+                        roles: ['sender']
+                    },
+                    {
+                        path: 'person',
+                        component: person,
+                        roles: ['sender']
+                    },
+                    {
+                        path: 'password',
+                        component: password,
+                        roles: ['sender']
+                    }
+                ]
+            }
+        ]
+    },
+    // finance
+    {
+        path: '/finance',
+        redirect: '/finance/business_graph',
+        component: finance,
+        children: [{
+                path: 'pay',
+                roles: ['finance'],
+                component: pay
+            }, {
+                path: 'payee',
+                roles: ['finance'],
+                component: payee
+            },
+            {
+                path: 'init',
+                roles: ['finance'],
+                component: init
+            },
+            {
+                path: 'bank',
+                roles: ['finance'],
+                component: bank
+            },
+            {
+                path: 'log',
+                roles: ['finance'],
+                component: log
+            },
+            {
+                path: 'business_graph',
+                roles: ['finance'],
+                component: business_graph
+            },
+            {
+                path: 'cost_benefit',
+                roles: ['finance'],
+                component: cost_benefit
+            },
+            {
+                path: 'salary',
+                roles: ['finance'],
+                component: salary
+            },
+            {
+                path: 'rent',
+                roles: ['finance'],
+                component: rent
+            },
+            {
+                path: 'freight',
+                roles: ['finance'],
+                component: freight
+            }
+        ]
+    },
+    // warehouse
+    {
+        path: '/warehouse',
+        redirect: '/warehouse/show',
+        component: warehouse,
+        children: [{
+                path: 'in_warehouse',
+                roles: ["warehouse"],
+                component: in_warehouse
+            },
+            {
+                path: 'out_warehouse',
+                roles: ["warehouse"],
+                component: out_warehouse
+            },
+            {
+                path: 'warn',
+                roles: ["warehouse"],
+                component: warn
+            },
+            {
+                path: 'show',
+                roles: ["warehouse"],
+                component: show
+            },
+            {
+                path: 'inventory',
+                roles: ["warehouse"],
+                component: inventory
+            },
+            {
+                path: 'check',
+                roles: ["warehouse"],
+                component: check
+            }
+        ]
+    },
     // 当页面地址和上面任一地址不匹配，则跳转到404
     {
 
