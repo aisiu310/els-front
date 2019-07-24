@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import router from 'vue-router'
-
+//layout login 
 import main from '../layout/main'
 import error from '@/components/reuse/error'
 import login from '@/components/login/login'
-
+//transister
 import transit_arrive_list from '@/components/transit_center/arrive_list'
 import transit_transfer_list from '@/components/transit_center/transfer_list'
 import transit_loadcar_list from '@/components/transit_center/loadcar_list'
-
+//business_hall
 import business_loadcar_list from '@/components/business_hall/loadcar_list'
 import business_arrive_list from '@/components/business_hall/arrive_list'
 import business_deliver_list from '@/components/business_hall/deliver_list'
@@ -16,20 +16,17 @@ import business_car_info from '@/components/business_hall/car_info'
 import business_driver_info from '@/components/business_hall/driver_info'
 import business_receipt_list from '@/components/business_hall/receipt_list'
 import business_receipt_record from '@/components/business_hall/receipt_record'
-
-
+//manager
 import manager_check_list from '@/components/manager/check_list'
 import manager_adjust_people from '@/components/manager/adjust_people'
 import manager_adjust_organ from '@/components/manager/adjust_organ'
 import manager_adjust_salary from '@/components/manager/adjust_salary'
 import manager_adjust_charge from '@/components/manager/adjust_charge'
 import manager_examine_log from '@/components/manager/examine_log'
-
-
-// import sender_list from '@/components/courie/sender_list'
-// import receive_list from '@/components/courie/receive_list'
-// import retreat_list from '@/components/courie/retreat_list'
-
+//courier
+import courier_sender_list from '@/components/courier/sender_list'
+import courier_collect_list from '@/components/courier/collect_list'
+import courier_retreat_list from '@/components/courier/retreat_list'
 // finance router
 import finance from '@/components/finance/common/finance'
 import pay from '@/components/finance/table/pay_table'
@@ -42,7 +39,6 @@ import freight from "@/components/finance/table/freight_table"
 import business_graph from '@/components/finance/graph/business_graph'
 import cost_benefit from '@/components/finance/graph/cost_benefit'
 import log from '@/components/reuse/log'
-
 // warehouse
 import warehouse from '@/components/warehouse/common/warehouse_index'
 import in_warehouse from '@/components/warehouse/table/in_warehouse'
@@ -51,7 +47,6 @@ import warn from '@/components/warehouse/func/warn'
 import show from '@/components/warehouse/func/show'
 import inventory from '@/components/warehouse/table/inventory'
 import check from '@/components/warehouse/func/check'
-
 // sender
 import sender from '@/components/sender/sender_index'
 import sender_detail from '@/components/sender/sender_detail'
@@ -63,7 +58,6 @@ import person from '@/components/sender/senderManager/person'
 import password from '@/components/sender/senderManager/password'
 
 Vue.use(router)
-
 export const fixedRouter = [{
         path: '/',
         redirect: '/login'
@@ -73,125 +67,48 @@ export const fixedRouter = [{
         component: login
     }
 ]
-export const asynRouter = [
-    // sender
-    {
-        path: '/sender',
-        redirect: '/sender/sender_detail',
-        component: sender,
-        children: [{
-                path: 'sender_detail',
-                component: sender_detail,
-                roles: ["sender"]
-            },
-            {
-                path: 'orderManage',
-                component: orderManage,
-                children: [{
-                    path: 'order_table',
-                    component: order_table,
-                    roles: ["sender"]
-                }]
-            },
-            {
-                path: 'senderManage',
-                component: senderManage,
-                children: [{
-                        path: 'address',
-                        component: address,
-                        roles: ["sender"]
-                    },
-                    {
-                        path: 'person',
-                        component: person,
-                        roles: ["sender"]
-                    },
-                    {
-                        path: 'password',
-                        component: password,
-                        roles: ["sender"]
-                    }
-                ]
-            }
-        ]
-    },
-    // transit
-    {
+export const asynRouter = [{
         path: '/transit',
         redirect: '/transit/arriveList',
         component: main,
         meta: {
             title: "中转中心",
             icon: "el-icon-success",
-            roles: ['admin', 'manager', 'transister'],
+            roles: ['transister'],
             requireAuth: true
         },
         children: [{
-                path: 'arriveList',
-                component: transit_arrive_list,
-                name: '接收管理',
-                meta: {
-                    title: "接收单",
-                    icon: "ios-navigate",
-                    roles: ['admin', 'manager', 'transister'],
-                    requireAuth: true
-                },
-            }, {
-                path: 'transferList',
-                component: transit_transfer_list,
-                name: '中转管理',
-                meta: {
-                    title: "中转单",
-                    icon: "ios-keypad",
-                    roles: ['admin', 'manager', 'transister'],
-                    requireAuth: true
-                },
+            path: 'arriveList',
+            component: transit_arrive_list,
+            name: '接收管理',
+            meta: {
+                title: "接收单",
+                icon: "ios-navigate",
+                roles: ['transit'],
+                requireAuth: true
             },
-            {
-                path: 'loadCarList',
-                component: transit_loadcar_list,
-                name: '装车管理',
-                meta: {
-                    title: "装车单",
-                    icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'transister'],
-                    requireAuth: true
-                },
-
-            }, {
-                path: 'arriveList',
-                component: transit_arrive_list,
-                name: '接收管理',
-                meta: {
-                    title: "接收单",
-                    icon: "ios-navigate",
-                    roles: ['admin', 'manager', 'transister'],
-                    requireAuth: true
-                },
-            }, {
-                path: 'transferList',
-                component: transit_transfer_list,
-                name: '中转管理',
-                meta: {
-                    title: "中转单",
-                    icon: "ios-keypad",
-                    roles: ['admin', 'manager', 'transister'],
-                    requireAuth: true
-                },
-            }, {
-                path: 'loadCarList',
-                component: transit_loadcar_list,
-                name: '装车管理',
-                meta: {
-                    title: "装车单",
-                    icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'transister'],
-                    requireAuth: true
-                },
-            }
-        ]
+        }, {
+            path: 'transferList',
+            component: transit_transfer_list,
+            name: '中转管理',
+            meta: {
+                title: "中转单",
+                icon: "ios-keypad",
+                roles: ['transit'],
+                requireAuth: true
+            },
+        }, {
+            path: 'loadCarList',
+            component: transit_loadcar_list,
+            name: '装车管理',
+            meta: {
+                title: "装车单",
+                icon: "ios-analytics",
+                roles: ['transit'],
+                requireAuth: true
+            },
+        }]
     },
-    // businessHall
     {
         path: '/businessHall',
         redirect: '/businessHall/businessLoadcarList',
@@ -199,7 +116,7 @@ export const asynRouter = [
         meta: {
             title: "营业厅",
             icon: "el-icon-success",
-            roles: ['admin', 'manager', 'businesser'],
+            roles: ['businessHall'],
             requireAuth: true
         },
         children: [{
@@ -209,7 +126,7 @@ export const asynRouter = [
                 meta: {
                     title: "装车单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
@@ -220,7 +137,7 @@ export const asynRouter = [
                 meta: {
                     title: "到达单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
@@ -231,7 +148,7 @@ export const asynRouter = [
                 meta: {
                     title: "派件单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
@@ -242,7 +159,7 @@ export const asynRouter = [
                 meta: {
                     title: "车辆信息",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
@@ -253,7 +170,7 @@ export const asynRouter = [
                 meta: {
                     title: "司机信息",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
@@ -264,7 +181,7 @@ export const asynRouter = [
                 meta: {
                     title: "收款单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
@@ -275,239 +192,147 @@ export const asynRouter = [
                 meta: {
                     title: "收款记录",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager', 'businesser'],
+                    roles: ['businessHall'],
                     requireAuth: true
                 },
             },
         ]
     },
-    // manager
     {
         path: '/manager',
         name: '总经理',
-        redirect: '/manager/check_list',
+        redirect: '/manager/checkList',
         component: main,
         meta: {
             title: "总经理",
             icon: "ios-analytics",
-            roles: ['admin', 'manager'],
+            roles: ['manager'],
             requireAuth: true
         },
         children: [{
                 path: 'checkList',
                 name: '单据审批',
-                component: check_list,
+                component: manager_check_list,
                 meta: {
                     title: "单据审批",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager'],
+                    roles: ['manager'],
                     requireAuth: true
                 },
             },
             {
                 path: 'adjustPeople',
                 name: '人员调整',
-                component: adjust_people,
+                component: manager_adjust_people,
                 meta: {
-                    title: "单据审批",
+                    title: "人员调整",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager'],
+                    roles: ['manager'],
                     requireAuth: true
                 },
             },
             {
                 path: 'adjustOrgan',
                 name: '机构调整',
-                component: adjust_organ,
+                component: manager_adjust_organ,
                 meta: {
                     title: "机构调整",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager'],
+                    roles: ['manager'],
                     requireAuth: true
                 },
             },
             {
                 path: 'adjustSalary',
                 name: '薪水调整',
-                component: adjust_salary,
+                component: manager_adjust_salary,
                 meta: {
                     title: "薪水调整",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager'],
+                    roles: ['manager'],
                     requireAuth: true
                 },
             },
             {
                 path: 'adjustCharge',
                 name: '收费策略',
-                component: adjust_charge,
+                component: manager_adjust_charge,
                 meta: {
                     title: "收费策略",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager'],
+                    roles: ['manager'],
                     requireAuth: true
                 },
             },
             {
                 path: 'examineLog',
                 name: '检查日志',
-                component: examine_log,
+                component: manager_examine_log,
                 meta: {
                     title: "检查日志",
                     icon: "ios-analytics",
-                    roles: ['admin', 'manager'],
+                    roles: ['manager'],
                     requireAuth: true
                 },
             },
         ]
     },
-    // courier
     {
-        path: '/courie',
+        path: '/courier',
         name: '快递员',
-        redirect: '/courie/sender_list',
+        redirect: '/courier/senderList',
         component: main,
         meta: {
             title: "快递员",
             icon: "ios-analytics",
-            roles: ['admin', 'courie'],
+            roles: ['courier'],
             requireAuth: true
         },
         children: [{
                 path: 'senderList',
                 name: '派件管理',
-                component: sender_list,
+                component: courier_sender_list,
                 meta: {
                     title: "派件单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'courie'],
+                    roles: ['courier'],
                     requireAuth: true
                 },
             },
             {
                 path: 'receiveList',
-                name: '接收管理',
-                component: receive_list,
+                name: '揽件管理',
+                component: courier_collect_list,
                 meta: {
-                    title: "接收单",
+                    title: "揽件单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'courie'],
+                    roles: ['courier'],
                     requireAuth: true
                 },
             },
             {
                 path: 'retreatList',
                 name: '退件管理',
-                component: retreat_list,
+                component: courier_retreat_list,
                 meta: {
                     title: "退件单",
                     icon: "ios-analytics",
-                    roles: ['admin', 'courie'],
+                    roles: ['courier'],
                     requireAuth: true
                 },
             }
         ]
     },
-    // finance
-    {
-        path: '/finance',
-        redirect: '/finance/business_graph',
-        component: finance,
-        children: [{
-                path: 'pay',
-                component: pay
-            }, {
-                path: 'payee',
-                component: payee,
-                roles: ["finance"]
-            },
-            {
-                path: 'init',
-                component: init,
-                roles: ["finance"]
-            },
-            {
-                path: 'bank',
-                component: bank,
-                roles: ["finance"]
-            },
-            {
-                path: 'log',
-                component: log,
-                roles: ["finance"]
-            },
-            {
-                path: 'business_graph',
-                component: business_graph,
-                roles: ["finance"]
-            },
-            {
-                path: 'cost_benefit',
-                component: cost_benefit,
-                roles: ["finance"]
-            },
-            {
-                path: 'salary',
-                component: salary,
-                roles: ["finance"]
-            },
-            {
-                path: 'rent',
-                component: rent,
-                roles: ["finance"]
-            },
-            {
-                path: 'freight',
-                component: freight,
-                roles: ["finance"]
-            }
-        ]
-    },
-    // warehouse
-    {
-        path: '/warehouse',
-        redirect: '/warehouse/show',
-        component: warehouse,
-        children: [{
-                path: 'in_warehouse',
-                component: in_warehouse,
-                roles: ["warehouse"]
-            },
-            {
-                path: 'out_warehouse',
-                component: out_warehouse,
-                roles: ["warehouse"]
-            },
-            {
-                path: 'warn',
-                component: warn,
-                roles: ["warehouse"]
-            },
-            {
-                path: 'show',
-                component: show,
-                roles: ["warehouse"]
-            },
-            {
-                path: 'inventory',
-                component: inventory,
-                roles: ["warehouse"]
-            },
-            {
-                path: 'check',
-                component: check,
-                roles: ["warehouse"]
-            }
-        ]
-    },
     // 当页面地址和上面任一地址不匹配，则跳转到404
     {
+
         path: '*',
         redirect: '/404',
+        component: error,
         meta: {
             title: "统一错误返回页面",
             icon: "el-icon-success",
-            roles: ['admin', 'manager', 'transister', ''],
+            roles: ['admin', 'manager', 'transist', 'businessHall'],
             requireAuth: false
         },
     }
