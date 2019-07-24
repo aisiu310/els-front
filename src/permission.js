@@ -7,36 +7,6 @@ import store from './store/index'
 var addRouFlag = false
 
 router.beforeEach((to, from, next) => {
-<<<<<<< HEAD
-  next()
-  // 取到用户的角色
-  let GetRole = sessionStorage.getItem("role")
-  // let GetRole = store.state.login.role;
-
-  store.commit('setBreadCrumb', to.name)
-  console.log('存储面包屑导航条', store.state.login.breadCrumb)
-
-  console.log('目标页面', to);
-  console.log('起始页面', from);
-  console.log('根据token拉取用户角色:', GetRole, '生成路由', );
-  // 如果登录了
-  if (GetRole && to.path != '/login') {
-    // 如果路由表 没根据角色进行筛选,就筛选一次
-    if (!addRouFlag) {
-      addRouFlag = true
-      var getRoutes = baseRoleGetRouters(asynRouter, GetRole.split(","))
-      store.commit('setMenu', getRoutes)
-      console.log("这是匹配好的路由表:", getRoutes);
-      router.addRoutes(getRoutes)
-      router.push({
-        path: to.path
-      })
-    }
-  } else {
-    // 用户没登录，跳转到登录页面
-    if (to.path === '/') {
-      next()
-=======
     next()
         // 取到用户的角色
         // let GetRole = sessionStorage.getItem("userRole")
@@ -61,7 +31,6 @@ router.beforeEach((to, from, next) => {
                 path: to.path
             })
         }
->>>>>>> ad6d8a27e7a01b99bba0513487d0aa33f85ab957
     } else {
         // 用户没登录，跳转到登录页面
         if (to.path === '/') {

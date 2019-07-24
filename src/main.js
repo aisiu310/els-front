@@ -7,7 +7,7 @@ import vueResource from 'vue-resource'
 import '../my-theme/dist/iview.css';
 // invoke baidu map api
 import BaiduMap from 'vue-baidu-map'
-// import baidu map ak
+// import baidu map aky
 Vue.use(BaiduMap, {
     ak: "GBMI8DT2X6mXqHi7fDXc1f1pGABmeg2M"
 })
