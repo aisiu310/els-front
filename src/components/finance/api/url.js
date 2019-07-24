@@ -23,6 +23,8 @@ const url = {
     pay_addURL: api + "/pay/addPay",
     // rent
     rent_getCityURL: rent + "/employeeSalary/queryAllDepartment",
-    rent_getOrganizationURL: rent + "/organization/queryOrganizationCountByBelong?belong="
+    rent_getOrganizationURL: rent + "/organization/queryOrganizationByBelong?belong=",
+    rent_updateRentURL: rent + "/organization/modifyOrganizationByFinance",
+    rent_totalRentURL: rent + "/organization/queryRentByBelong?belong=",
 }
 export { url }

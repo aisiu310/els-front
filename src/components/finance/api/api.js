@@ -126,7 +126,24 @@ const api = {
     async getOrgByCity(URL, city) {
         try {
             let res = await axios.get(URL + city);
-            console.log(res.data)
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // update rent through put
+    async updateRent(URL, obj) {
+        try {
+            let res = await axios.post(URL, obj);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // get total rent for a city
+    async getTotalRent(URL, city) {
+        try {
+            let res = await axios.get(URL + city);
             return res.data.data;
         } catch (error) {
             console.log(error);

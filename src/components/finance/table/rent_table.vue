@@ -4,11 +4,11 @@
       <div class="word">租金</div>
       <div class="search"></div>
       <div class="button">
-        <Button type="primary" @click="modal = true">
+        <Button type="primary" @click="calculate()">
           <Icon type="ios-calculator" size="16" />租金结算
         </Button>
-
-        <Modal title="新建付款单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
+        <!-- calculate rent modal -->
+        <Modal title="租金结算" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
           <Form :model="formItem" :label-width="80">
             <FormItem label="付款日期">
               <Row>
@@ -60,6 +60,20 @@
     <div class="alonePage">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
+    <!-- update rent -->
+    <Modal v-model="rentModal" :styles="{top: '20px'}" @on-ok="updateRent()">
+      <Form ref="formValidate" :model="udpateRentData" :label-width="80">
+        <FormItem label="租金">
+          <Input v-model="udpateRentData.rent" prefix="logo-usd" type="number"></Input>
+        </FormItem>
+        <FormItem label="期限">
+          <Input v-model="udpateRentData.lease"></Input>
+        </FormItem>
+        <FormItem label="到期时间">
+          <Input v-model="udpateRentData.due"></Input>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -70,6 +84,7 @@ export default {
   data() {
     return {
       modal: false,
+      rentModal: false,
       dataLength: 0,
       currentPage: 1,
       columns: [
@@ -84,7 +99,8 @@ export default {
         },
         {
           title: "机构名称",
-          key: "name"
+          key: "name",
+          width: 150
         },
         {
           title: "隶属",
@@ -140,7 +156,7 @@ export default {
         }
       ],
       rent: [],
-      totalRent:[],
+      totalRent: [],
       cityList: [],
       selectCity: "",
       formItem: {
@@ -150,6 +166,12 @@ export default {
         payAccount: "",
         payList: "",
         payRemarks: ""
+      },
+      udpateRentData: {
+        id: "",
+        rent: "",
+        lease: "",
+        due: ""
       }
     };
   },
@@ -158,52 +180,18 @@ export default {
   },
   methods: {
     update(index) {
-      this.$Modal.info({
-        render: h => {
-          return h("div", [
-            h("Input", {
-              props: {
-                value: this.rent[index].rent,
-                placeholder: "请输入新的租金"
-              },
-              on: {
-                input: val => {
-                  this.rent[index].rent = val;
-                }
-              }
-            }),
-            h("Input", {
-              props: {
-                value: this.rent[index].lease,
-                placeholder: "请输入新的期限"
-              },
-              on: {
-                input: val => {
-                  this.rent[index].lease = val;
-                }
-              }
-            }),
-            h("Input", {
-              props: {
-                value: this.rent[index].due,
-                placeholder: "请输入新的到期时间"
-              },
-              on: {
-                input: val => {
-                  this.rent[index].due = val;
-                }
-              }
-            })
-          ]);
-        }
-      });
+      let self = this;
+      self.udpateRentData.id = self.rent[index].id;
+      self.udpateRentData.rent = self.rent[index].rent;
+      self.udpateRentData.lease = self.rent[index].lease;
+      self.udpateRentData.due = self.rent[index].due;
+      self.rentModal = true;
     },
-    remove(index) {
-      this.rent.splice(index, 1);
+    changePage(val) {
+      this.rent = this.totalRent.slice((val - 1) * 10, val * 10);
     },
-    changePage(val) {},
     organization(selectCity) {
-      // console.log(this.selectCity);
+      this.getOrgList(selectCity);
     },
     // as function name
     getCityList() {
@@ -220,15 +208,40 @@ export default {
     },
     // as function name
     getOrgList(city) {
-      api.getOrgByCity(url.rent_getOrganizationURL, city)
-        .then(res => {
-          if (res != null) {
-            // this.rent = res;
-            // console.log(res);
-            this.totalRent = res;
-            this.dataLength = res.length;
-          }
-        });
+      api.getOrgByCity(url.rent_getOrganizationURL, city).then(res => {
+        if (res != null) {
+          // this.rent = res;
+          // console.log(res);
+          this.totalRent = res;
+          this.rent = res.slice(0, 10);
+          this.dataLength = res.length;
+        }
+      });
+    },
+    // invoke api
+    updateRent() {
+      api.updateRent(url.rent_updateRentURL, this.udpateRentData).then(res => {
+        if (res == 1) {
+          this.getOrgList(this.selectCity);
+          this.rentModal = false;
+        } else {
+          alert("修改失败！");
+          this.rentModal = false;
+        }
+      });
+    },
+    // get total rent
+    getTotalRent(city){
+      api.getTotalRent(url.rent_totalRentURL, city).then(res => {
+        if(res != null){
+          this.formItem.payMoney = res;
+        }
+      })
+    },
+    // calculate rent
+    calculate(){
+      this.modal = true;
+      this.getTotalRent(this.selectCity);
     }
   }
 };
