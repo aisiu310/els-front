@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App'
+import App from './App1'
 import iView from 'iview'
 import store from './store/index'
 import vueResource from 'vue-resource'
@@ -12,7 +12,7 @@ Vue.use(BaiduMap, {
     ak: "GBMI8DT2X6mXqHi7fDXc1f1pGABmeg2M"
 })
 
-import router from './router/finance'
+import router from './router/admin'
 import '@/permission.js'
 
 import qs from 'qs'

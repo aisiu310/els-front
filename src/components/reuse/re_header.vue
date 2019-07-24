@@ -23,14 +23,12 @@ export default {
   data() {
     return {
       search_value: "",
-      username: "",
-      check:''
+      username: ""
     };
   },
   mounted() {
-    // this.username = this.$route.params.user;
+    this.username = sessionStorage.getItem("account");
     // invoke the back-end API in order to get An unapproved order
-    this.check = "123";
   },
   methods: {
     search() {
