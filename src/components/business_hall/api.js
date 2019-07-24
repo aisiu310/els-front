@@ -73,7 +73,6 @@ const api = {
     let response = await axios.put(loadCarListSubmitForCheckmUrl, list);
     return response;
   },
-
   async getArriveList(currentPage, pageSize) {
     let response = await axios.post(getArriveListUrl, {
       code: "025000",
@@ -183,8 +182,6 @@ const api = {
     let response = await axios.put(driverListSaveUrl, editItem);
     return response
   },
-
-
   async getCourierList() {
     let response = await axios.post(getCourierListUrl, {
       code: "025000",
@@ -201,8 +198,6 @@ const api = {
     let response = await axios.post(receiptRecordSubmitFormUrl, formItem)
     return response
   },
-
-
   async getReceiptList() {
     let response = await axios.post(getReceiptListUrl, {
       code: "025000",

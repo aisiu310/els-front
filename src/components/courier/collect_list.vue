@@ -1,7 +1,7 @@
 <template>
   <div>
     <Tabs>
-      <TabPane label="装车单" icon="ios-paper-plane">
+      <TabPane label="揽件单" icon="ios-paper-plane">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
           <template slot-scope="{row,index}" hidden slot="id">
             <input type="text" v-model="editItem.id" v-if="editIndex === index" />
@@ -50,90 +50,10 @@
           <template slot-scope="{ row }" slot="id">
             <strong>{{ row.date }}</strong>
           </template>
-          <template slot-scope="{row,index}" slot="action">
-            <div v-if="editIndex === index">
-              <Button :v-bind="formItem" @click="handleSave(index)">save</Button>
-              <Button @click="editIndex = -1">cancel</Button>
-            </div>
-            <div v-else>
-              <Button @click="handleEdit(row,index)">修改</Button>
-            </div>
-          </template>
         </Table>
 
-        <Button type="error" id="delete_button" @click="modaldelet = true">删除</Button>
-        <Modal v-model="modaldelet" width="360">
-          <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>删除确认</span>
-          </p>
-          <div style="text-align:center">
-            <p>这些数据删除后无法恢复、你确定要删除吗？</p>
-          </div>
-          <div slot="footer">
-            <Button
-              type="error"
-              :v-bind="sel"
-              @click="remove(sel)"
-              size="large"
-              long
-              :loading="modal_loading"
-            >Delete</Button>
-          </div>
-        </Modal>
-
-        <div id="arrive_list_add">
-          <Button type="primary" @click="modal = true">添加</Button>
-          <Modal
-            v-model="modal"
-            title="添加"
-            v-bind="formItem"
-            @on-ok="submitform('formItem')"
-            @on-cancle="cancle"
-          >
-            <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="装车日期" prop="date">
-                <Row>
-                  <Col span="11">
-                    <DatePicker
-                      type="date"
-                      placeholder="Select date"
-                      :options="options1"
-                      v-model="formItem.date"
-                    ></DatePicker>
-                  </Col>
-                </Row>
-              </FormItem>
-              <FormItem label="营业厅编号" prop="code">
-                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="运输编号" prop="transportationId">
-                <Input v-model="formItem.transportationId" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="到达地" prop="placeOf Arrival">
-                <Input v-model="formItem.placeOfArrival" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="车牌号" prop="carCode">
-                <Input v-model="formItem.carCode" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="监装员" prop="supervisor">
-                <Input v-model="formItem.supervisor" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="押运员" prop="escort">
-                <Input v-model="formItem.escort" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="运费" prop="freight">
-                <Input v-model="formItem.freight" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="订单号集合" prop="orderList">
-                <Input v-model="formItem.orderList" placeholder="Enter something..."></Input>
-              </FormItem>
-            </Form>
-          </Modal>
-        </div>
-
         <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">揽件</Button>
         </div>
 
         <div style="margin: 10px;overflow: hidden">
@@ -150,10 +70,6 @@
             ></Page>
           </div>
         </div>
-      </TabPane>
-
-      <TabPane label="历史记录" icon="ios-clock-outline">
-        <p>等待程序员小哥开发</p>
       </TabPane>
     </Tabs>
   </div>

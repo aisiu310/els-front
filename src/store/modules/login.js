@@ -16,7 +16,7 @@ const mutations = {
   },
   setToken(state, value) { //添加token
     state.token = value;
-    localStorage.setItem('token', state.token);
+    sessionStorage.setItem('token', state.token);
     // console.log(value)
   },
   delToken(state) {
@@ -33,9 +33,8 @@ const mutations = {
   },
   setRole(state, value) {
     state.role = value;
-    localStorage.setItem("role", state.role); //
+    sessionStorage.setItem("role", state.role); //
   },
-
 }
 export default {
   state,

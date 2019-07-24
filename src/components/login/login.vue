@@ -165,10 +165,10 @@ export default {
             "已获取到token值,token值为",
             self.$store.state.login.token
           );
-          self.$store.commit("setRole", "businesser");
+          self.$store.commit("setRole", "courier");
           this.$router.push({
-            path: "businessHall"
-            // params: { user: this.formInline.user }
+            path: self.$store.state.login.role
+            //params:{user:this.formInline.user}
           });
         } else {
           this.$Message.error("验证码错误！");
