@@ -21,7 +21,7 @@ const mutations = {
   },
   delToken(state) {
     state.token = '';
-    localStorage.removeItem("token"); //删除token
+    sessionStorage.removeItem("token"); //删除token
   },
   setUserName(state, value) {
     state.userName = value;

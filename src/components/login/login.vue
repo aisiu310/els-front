@@ -79,8 +79,8 @@ export default {
       checkCode: "",
       logisticId: "",
       formInline: {
-        user: "admin",
-        password: "admin",
+        user: "els025000001",
+        password: "123456",
         authcode: ""
       },
       ruleInline: {
@@ -137,54 +137,34 @@ export default {
         self.$Message.error("用户名、密码、验证码不能为空");
       } else {
         if (self.formInline.authcode == self.checkCode) {
-          // self.$axios
-          //   .post("URL", {
-          //     params: {
-          //       name: self.formInline.user,
-          //       password: self.formInline.password
-          //     }
-          //   })
-          //   .then(response => {
-          //     console.log(response.data);
-          //     if (response.data.status === 200) {
-          //       self.$Message.success("登陆成功");
-          //  Cookies.set('Token', response.data.token) //登录成功后将token存储在cookie之中
-          //       self.$store.commit("setToken", 123456);
-          // 这里进行二次登陆，获取用户信息,根据用户角色进行路由表分配
-          // self.$axios
-          //   .get("url", {
-          //     token: ""
-          //   })
-          //   .then(response => {
-          //     console.log(response.data);
-          //     if (response.data.status === 200) {
-          //       self.$store.commit("setRole", response.data.role);
-          //       //根据role信息生成路由表
-          //     }
-          //   });
-
-          //       sessionStorage.setItem("userRole", "admin");
-          //       this.$router.push({
-          //         path: "transit"
-          //         // params: { user: this.formInline.user }
-          //       });
-          //     }
-          //   })
-          //   .catch(error => {
-          //     self.$Message.error("登陆失败，请检查连接信息");
-          //   });
-          self.$store.commit("setToken", 123456);
-          // self.setToken({ token: 123456 });
-          self.$Message.success("登陆成功");
-          console.log(
-            "已获取到token值,token值为",
-            self.$store.state.login.token
-          );
-          self.$store.commit("setRole", "sender");
-          this.$router.push({
-            path: self.$store.state.login.role
-            //params:{user:this.formInline.user}
-          });
+          self.$axios
+            .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
+              account: self.formInline.user,
+              password: self.formInline.password
+            })
+            .then(response => {
+              console.log(response.data);
+              if (response.data.status === 200) {
+                self.$Message.success("登陆成功");
+                self.$store.commit("setToken", response.data.data.code);
+                self.$store.commit("setRole", response.data.data.identity);
+                self.$store.commit("setUserName", response.data.data.name);
+                self.$router.push({
+                  path: self.$store.state.login.role
+                });
+              } else {
+                self.$Message.error(response.data.msg);
+              }
+            })
+            .catch(error => {
+              self.$Message.error("服務器異常、檢查連接信息");
+            });
+          // self.$store.commit("setToken", 123456);
+          // self.$Message.success("登陆成功");
+          // self.$store.commit("setRole", "courier");
+          // this.$router.push({
+          //   path: self.$store.state.login.role
+          // });
         } else {
           this.$Message.error("验证码错误！");
         }
@@ -279,7 +259,7 @@ export default {
 }
 
 .login_bg {
-  position:fixed;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

@@ -124,7 +124,6 @@ const api = {
     let response = await axios.post(salaryListSubmitFormUrl, formItem)
     return response
   },
-
   async getChargeList(currentPage, pageSize) {
     let response = await axios.get(getChargeListUrl, {
       GetEmployeePO: {
@@ -153,7 +152,6 @@ const api = {
     return response
   },
 }
-
 export {
   api
 }
