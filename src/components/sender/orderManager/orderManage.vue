@@ -1,58 +1,42 @@
 <template>
-    <div class="body">
+  <div class="body">
     <div class="left">
-     <Menu :active-name="active" :open-names="['1']" :width="200">
-      <Submenu name="1">
-        <template slot="title">
-          <Icon type="ios-briefcase" />订单管理
-        </template>
-        <MenuItem name="1-1" to="/sender/orderManage/order_table">全部订单</MenuItem>
-        <MenuItem name="1-2" to="/sender/orderManage/order_table">待取件</MenuItem>
-        <MenuItem name="1-3" to="/sender/orderManage/order_table">派送中</MenuItem>
-        <MenuItem name="1-4" to="/sender/orderManage/order_table">已签收</MenuItem>
-      </Submenu>
-    </Menu>
+      <Menu :active-name="active" :open-names="['1']" :width="200">
+        <Submenu name="1">
+          <template slot="title">
+            <Icon type="ios-briefcase" />订单管理
+          </template>
+          <MenuItem name="1-1" to="/sender/orderManage/order_table">全部订单</MenuItem>
+          <MenuItem name="1-2" to="/sender/orderManage/order_table">待取件</MenuItem>
+          <MenuItem name="1-3" to="/sender/orderManage/order_table">派送中</MenuItem>
+          <MenuItem name="1-4" to="/sender/orderManage/order_table">已签收</MenuItem>
+        </Submenu>
+      </Menu>
     </div>
     <div class="right">
-        <router-view> </router-view>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import bus from '../../reuse/bus'
+import bus from "../../reuse/bus";
 export default {
-  data(){
-    return{
-      active:''
-    }
+  data() {
+    return {
+      active: ""
+    };
   },
-  mounted(){
-    bus.$on('sendChoice', res =>{
+  mounted() {
+    bus.$on("sendChoice", res => {
       this.active = res;
-    })
+    });
   }
 };
 </script>
 
 
 <style scoped>
-.body {
-  width: 80%;
-  height: auto;
-  margin-left: 10%;
-  margin-top: 1%;
-  display: flex;
-}
-
-.left {
-  width: 20%;
-  height: auto;
-}
-
-.right {
-  width: 80%;
-  height: auto;
-}
+@import url("../css/sender.css");
 </style>
 

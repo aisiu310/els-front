@@ -141,3 +141,27 @@ header {
     text-align: right;
     margin-right: 0.5%;
 }
+
+.body {
+    width: 80%;
+    height: auto;
+    margin-left: 10%;
+    margin-top: 1%;
+    display: flex;
+}
+
+.left {
+    width: 20%;
+    height: auto;
+}
+
+.right {
+    width: 80%;
+    height: auto;
+}
+
+.page {
+    margin-right: 1%;
+    text-align: right;
+    margin-bottom: 0.5%;
+}

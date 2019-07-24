@@ -248,7 +248,7 @@ export default {
       var reg = /^[0-9]*$/;
       if (!data || !reg.test(data)) {
         this.$Message.error("请输入合法10位订单号，订单号为纯数字");
-        this.show =false;
+        this.show = false;
       } else {
         this.$Message.success("查询成功！");
         // invoke the back-end API
@@ -330,9 +330,10 @@ export default {
   height: 300px;
 }
 
-.position{
+.position {
   position: relative;
-  margin-left: 40%;
-  padding-top: 10%;
+  margin-left: 10%;
+  padding-top: 11%;
 }
+
 </style>

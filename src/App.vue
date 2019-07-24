@@ -24,4 +24,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;*/
 }
+
+.BMap_cpyCtrl {
+  display: none;
+}
+.anchorBL {
+  display: none;
+}
 </style>

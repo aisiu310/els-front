@@ -22,13 +22,13 @@
         <div>
           <Form ref="formValidate" :model="send" :rules="ruleValidate" :label-width="80">
             <FormItem label="姓名" prop="name">
-              <Input v-model="send.name" placeholder="Enter your name"></Input>
+              <Input v-model="send.name" placeholder="请输入寄件人姓名"></Input>
             </FormItem>
             <FormItem label="联系方式" prop="phone">
-              <Input v-model="send.phone" placeholder="Enter your phone" :maxlength="11"></Input>
+              <Input v-model="send.phone" placeholder="请输入寄件人地址" :maxlength="11"></Input>
             </FormItem>
             <FormItem label="城市" prop="city">
-              <Select v-model="send.city" placeholder="Select your city">
+              <Select v-model="send.city" placeholder="请选择到达城市">
                 <Option value="北京">北京</Option>
                 <Option value="上海">上海</Option>
                 <Option value="深圳">深圳</Option>
@@ -36,7 +36,7 @@
               </Select>
             </FormItem>
             <FormItem label="地址" prop="address">
-              <Input v-model="send.address" placeholder="Enter detail address"></Input>
+              <Input v-model="send.address" placeholder="请输入详细地址"></Input>
             </FormItem>
           </Form>
         </div>
@@ -61,13 +61,13 @@
         <div>
           <Form ref="formValidate" :model="receipt" :rules="ruleValidate" :label-width="80">
             <FormItem label="姓名" prop="name">
-              <Input v-model="receipt.name" placeholder="Enter your name"></Input>
+              <Input v-model="receipt.name" placeholder="请输入收件人姓名"></Input>
             </FormItem>
             <FormItem label="联系方式" prop="phone">
-              <Input v-model="receipt.phone" placeholder="Enter your phone" :maxlength="11"></Input>
+              <Input v-model="receipt.phone" placeholder="请输入收件人联系方式" :maxlength="11"></Input>
             </FormItem>
             <FormItem label="城市" prop="city">
-              <Select v-model="receipt.city" placeholder="Select your city">
+              <Select v-model="receipt.city" placeholder="请选择到达城市">
                 <Option value="北京">北京</Option>
                 <Option value="上海">上海</Option>
                 <Option value="深圳">深圳</Option>
@@ -75,7 +75,7 @@
               </Select>
             </FormItem>
             <FormItem label="地址" prop="address">
-              <Input v-model="receipt.address" placeholder="Enter detail address"></Input>
+              <Input v-model="receipt.address" placeholder="请输入详细地址"></Input>
             </FormItem>
           </Form>
         </div>

@@ -42,21 +42,5 @@ export default {
 
 
 <style scoped>
-.body {
-  width: 80%;
-  height: auto;
-  margin-left: 10%;
-  margin-top: 1%;
-  display: flex;
-}
-
-.left {
-  width: 20%;
-  height: auto;
-}
-
-.right {
-  width: 80%;
-  height: auto;
-}
+@import url("../css/sender.css");
 </style>
