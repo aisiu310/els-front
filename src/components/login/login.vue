@@ -58,7 +58,7 @@
         :center="position"
         :zoom="15"
         :scroll-wheel-zoom="true"
-        @click="show()"
+        @click="comfirm()"
       >
         <bm-marker :position="position" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
         <!-- <bm-panorama></bm-panorama> -->
@@ -250,12 +250,11 @@ export default {
         this.$Message.error("请输入合法10位订单号，订单号为纯数字");
         this.show = false;
       } else {
-        this.$Message.success("查询成功！");
         // invoke the back-end API
         this.show = true;
       }
     },
-    show() {
+    comfirm() {
       alert("nihao!");
     }
   }
@@ -280,8 +279,12 @@ export default {
 }
 
 .login_bg {
+  position:fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 600px;
+  height: 100%;
+  background-repeat: no-repeat;
   background-image: url(../../assets/login_bg.png);
   /* background-size: 100% auto; */
   background-size: cover;
@@ -335,5 +338,4 @@ export default {
   margin-left: 10%;
   padding-top: 11%;
 }
-
 </style>

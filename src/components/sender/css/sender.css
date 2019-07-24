@@ -3,8 +3,7 @@
     height: auto;
     margin-left: 10%;
     margin-top: 1%;
-    /* border-radius: 8px;
-    box-shadow: #666 0px 0px 8px; */
+    padding-bottom: 1%
 }
 
 .content {
@@ -16,24 +15,24 @@
 
 .send_up {
     width: 100%;
-    height: 270px;
+    height: auto;
     display: flex;
 }
 
 .send_up>div {
     width: 50%;
-    height: 270px;
+    height: auto;
 }
 
 .send_down {
     width: 100%;
-    height: 130px;
+    height: auto;
     display: flex;
 }
 
 .send_down>div {
     width: 50%;
-    height: 130px;
+    height: auto;
 }
 
 .expand {
@@ -103,7 +102,7 @@ header {
 
 .detail p {
     width: 60%;
-    height: 20px;
+    height: auto;
     margin-left: 18%;
     margin-top: 10px;
     text-align: center;
@@ -111,7 +110,7 @@ header {
 
 .slideshow {
     width: 70%;
-    height: 160px;
+    height: auto;
 }
 
 .search {
@@ -164,4 +163,12 @@ header {
     margin-right: 1%;
     text-align: right;
     margin-bottom: 0.5%;
+}
+
+
+/* baidu map */
+
+.bm-view {
+    width: 300px;
+    height: 300px;
 }

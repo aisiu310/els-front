@@ -28,7 +28,7 @@
               <Input v-model="send.phone" placeholder="请输入寄件人地址" :maxlength="11"></Input>
             </FormItem>
             <FormItem label="城市" prop="city">
-              <Select v-model="send.city" placeholder="请选择到达城市">
+              <Select v-model="send.city" placeholder="请选择发送城市">
                 <Option value="北京">北京</Option>
                 <Option value="上海">上海</Option>
                 <Option value="深圳">深圳</Option>
@@ -88,20 +88,20 @@
           <Icon type="ios-send" size="48" />其他服务
         </div>
         <div class="expand">
+          <label>快递方式：</label>
+          <RadioGroup v-model="courie">
+            <Radio label="经济快递"></Radio>
+            <Radio label="普通快递"></Radio>
+            <Radio label="特快"></Radio>
+          </RadioGroup>
+          <br />
+          <br />
           <label>包装方式：</label>
           <RadioGroup v-model="package">
             <Radio label="纸箱"></Radio>
             <Radio label="木箱"></Radio>
             <Radio label="快递袋"></Radio>
             <Radio label="其他"></Radio>
-          </RadioGroup>
-          <br />
-          <br />
-          <label>快递方式：</label>
-          <RadioGroup v-model="courie">
-            <Radio label="经济快递"></Radio>
-            <Radio label="普通快递"></Radio>
-            <Radio label="特快"></Radio>
           </RadioGroup>
         </div>
       </div>
@@ -222,27 +222,19 @@ export default {
     };
   },
   methods: {
-    handleSubmit(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
-        }
-      });
-    },
-    handleReset(name) {
-      this.$refs[name].resetFields();
-    },
+    // pay
     pay() {
       this.$Message.success("下单成功");
     },
+    // access address in order to fill in information quickly
     turnSender(data, index) {
       this.send = data;
     },
     turnReceipt(data, index) {
       this.receipt = data;
-    }
+    },
+    // get total fee by select express type
+    getTotalFee() {}
   },
   // wait for calculate
   watch: {

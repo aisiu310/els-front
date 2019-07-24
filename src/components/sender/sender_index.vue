@@ -95,16 +95,30 @@
     <div>
       <router-view></router-view>
     </div>
+
+    <div v-if="show" class="position">
+      <baidu-map
+        class="bm-view"
+        :center="position"
+        :zoom="15"
+        :scroll-wheel-zoom="true"
+        @click="comfirm()"
+      >
+        <bm-marker :position="position" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
+        <!-- <bm-panorama></bm-panorama> -->
+      </baidu-map>
+    </div>
   </div>
 </template>
 
 <script>
-import bus from '../reuse/bus'
+import bus from "../reuse/bus";
 export default {
   data() {
     return {
       theme: "light",
       username: "sender",
+      show: false,
       search_type: "订单查询",
       // search data
       search_value: "",
@@ -130,10 +144,11 @@ export default {
       } else {
         this.$Message.success("输入成功，等待查询！");
         // invoke  the back-end API
+        this.show = true;
       }
     },
     sendChoice(val) {
-      bus.$emit('sendChoice', val);
+      bus.$emit("sendChoice", val);
       // this.$Message.success("工程师正在努力开发中...");
     }
   }
