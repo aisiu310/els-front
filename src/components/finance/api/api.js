@@ -1,7 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
 import { url } from './url'
-import { checkServerIdentity } from 'tls';
 
 const api = {
     // get bank data
@@ -111,6 +110,25 @@ const api = {
             return res.data.data;
         } catch (error) {
             alert("服务器出错！");
+            console.log(error);
+        }
+    },
+    // get city list
+    async getCityList(URL) {
+        try {
+            let res = await axios.get(URL);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // get org by city
+    async getOrgByCity(URL, city) {
+        try {
+            let res = await axios.get(URL + city);
+            console.log(res.data)
+            return res.data.data;
+        } catch (error) {
             console.log(error);
         }
     }

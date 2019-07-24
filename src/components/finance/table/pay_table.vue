@@ -40,13 +40,13 @@
         </Modal>
 
         <Button type="primary" shape="circle" @click="modal = true">新建付款单</Button>
-        <!-- add payee modal -->
+        <!-- add pay modal -->
         <Modal title="新建付款单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
           <Form :model="formItem" :label-width="80">
             <FormItem label="付款日期">
               <Row>
                 <Col span="11">
-                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.payDate"></DatePicker>
+                  <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
                 </Col>
               </Row>
             </FormItem>

@@ -126,8 +126,7 @@ export default {
     };
   },
   mounted: function() {
-    // this.username = this.$route.params.user;
-    this.username = "sender";
+    this.username = sessionStorage.getItem("account");
   },
   methods: {
     // return to login.vue

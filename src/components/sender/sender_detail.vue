@@ -101,7 +101,7 @@
           <label>快递方式：</label>
           <RadioGroup v-model="courie">
             <Radio label="经济快递"></Radio>
-            <Radio label="普通快递"></Radio>
+            <Radio label="标准快递"></Radio>
             <Radio label="次晨特快"></Radio>
           </RadioGroup>
           <br />
@@ -141,12 +141,11 @@ import { url } from "./api/url";
 export default {
   data() {
     return {
-      cost: "",
+      cost: 0,
       package: "",
-      courie: "",
-      // freight fee
-      courieFee: 0,
       packingFee: 0,
+      courie: "",
+      courieFee: 0,
       weight: 0,
       cityList: [
         { value: "上海", label: "上海" },
@@ -274,8 +273,21 @@ export default {
     turnReceipt(data, index) {
       this.receipt = data;
     },
-    // get total fee by select express type
-    getTotalFee() {},
+    // get total fee by select express type and weight
+    getCourierFee(cityA, cityB, economy_type, weight) {
+      api
+        .calculateTotalFreight(
+          url.calculateURL,
+          cityA,
+          cityB,
+          economy_type,
+          weight
+        )
+        .then(res => {
+          this.courieFee = res;
+          this.cost = res;
+        });
+    },
     // get address by userId
     getAddressList() {},
     packageFee(val) {
@@ -298,8 +310,13 @@ export default {
       }
     },
     courie: function() {
-      alert(this.weight);
-      this.cost = 150;
+      let self = this;
+      this.getCourierFee(
+        self.send.city,
+        self.receipt.city,
+        self.courie,
+        self.weight
+      );
     }
   }
 };
