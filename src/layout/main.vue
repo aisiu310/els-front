@@ -25,8 +25,8 @@
   margin-right: 0px;
 }
 .layout-info {
-  /* border: 1px solid rebeccapurple; */
-}
+  border: 1px solid rebeccapurple; 
+} 
 .layout-footer-center {
   text-align: center;
 }
