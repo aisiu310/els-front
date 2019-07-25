@@ -52,7 +52,7 @@
           </template>
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button :v-bind="formItem" @click="handleSave(index)">save</Button>
+              <Button :v-bind="editItem" @click="handleSave(editItem)">save</Button>
               <Button @click="editIndex = -1">cancel</Button>
             </div>
             <div v-else>
@@ -88,7 +88,7 @@
             v-model="modal"
             title="添加"
             v-bind="formItem"
-            @on-ok="submitform('formItem')"
+            @on-ok="submitform(formItem)"
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
@@ -98,7 +98,7 @@
                     <DatePicker
                       type="date"
                       placeholder="Select date"
-                      :options="option"
+                      :options="options"
                       v-model="formItem.date"
                     ></DatePicker>
                   </Col>
@@ -160,8 +160,8 @@
 </template>
 <script>
 import qs from "qs";
-import { linkSync, link, constants } from "fs";
-import { error } from "util";
+import { api } from "./api";
+import { linkSync, link } from "fs";
 export default {
   data() {
     const transportationIdRule = (rule, value, callback) => {
@@ -174,7 +174,7 @@ export default {
     return {
       currentPage: 1,
       pageSize: 10,
-      option: {
+      options: {
         shortcuts: [
           {
             text: "Today",
@@ -222,7 +222,7 @@ export default {
         code: [
           {
             required: true,
-            message: "营业厅编号不能为空",
+            message: "中转中心编号不能为空",
             trigger: "blur",
             type: "string"
           }
@@ -280,7 +280,8 @@ export default {
         },
         {
           title: "中转中心编号",
-          slot: "code"
+          slot: "code",
+          sortable: true
         },
         {
           title: "运输单号",
@@ -324,25 +325,18 @@ export default {
   },
   mounted() {
     sessionStorage.setItem("accountId", "025000");
-    // this.getLoadCarList(this.currentPage, this.pageSize);
+    this.getLoadCarList(this.currentPage, this.pageSize);
   },
   methods: {
     getLoadCarList(currentPage, pageSize) {
       const self = this;
-      // this.$axios
-      //   .get(" http://192.168.2.229/loadcar/getLoadingList", {
-      //     params: {
-      //       code: "025000",
-      //       currentPage: currentPage,
-      //       pageCount: pageSize
-      //     }
-      //   })
       api
         .getLoadCarList(currentPage, pageSize)
         .then(response => {
+          // console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data[0];
-            self.sum = response.data.data[1];
+            self.data = response.data.data.list;
+            self.sum = response.data.data.total;
           }
         })
         .catch(error => {
@@ -351,20 +345,16 @@ export default {
     },
     select(selection, row) {
       this.sel = selection;
+      // console.log(this.sel);
     },
     remove(sel) {
       const self = this;
-      var list = [];
       if (sel.length > 0) {
         this.modal_loading = true;
-        sel.forEach(element => {
-          list.push(element.id);
-        });
-        this.$axios
-          .delete("http://192.168.2.229/loadcar/removeLoadingFake", {
-            data: list
-          })
+        api
+          .loadCarListRemove(sel)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
               this.modal_loading = false;
               this.modaldelet = false;
@@ -403,34 +393,35 @@ export default {
       this.editItem.status = row.status;
       this.editIndex = index;
     },
-    handleSave(index) {
+    handleSave(editItem) {
       const self = this;
-      this.$axios
-        .put("http://192.168.2.229/loadcar/modifyLoadingById", self.editItem)
+      api
+        .loadcarListSave(editItem)
         .then(response => {
           // console.log(response);
           if (response.data.status === 200) {
-            this.getLoadCarList(this.currentPage, this.pageSize);
+            this.getLoadCarList();
             this.$Message.success("修改成功");
           } else {
             this.$Message.error("没有获取到数据");
           }
         })
-        .catch(error => {
+        .catch(function(error) {
           self.$Message.error("请求超时,请检查连接信息");
         });
       this.editIndex = -1;
     },
     submitform(formItem) {
       const self = this;
-      self.$refs[formItem].validate(valid => {
+      self.$refs["formItem"].validate(valid => {
         if (valid) {
           api
-            .submitform(formItem)
+            .loadCarListSubmitForm(formItem)
             .then(response => {
-              if (response.data.status) {
+              console.log(response);
+              if (response.data.status === 200) {
                 self.$Message.success("添加成功");
-                self.getLoadCarList();
+                self.getLoadCarList(this.currentPage, this.pageSize);
               } else {
                 self.$Message.warning(response.data.msg);
               }
@@ -449,18 +440,12 @@ export default {
     },
     submitforcheck(sel) {
       const self = this;
-      var list = [];
       if (sel.length > 0) {
-        sel.forEach(element => {
-          if (element.state === 0) {
-            list.push(element.id);
-          }
-        });
-        this.$axios
-          .put("http://192.168.2.229/loadcar/modifyStateList?state=1", list)
+        api
+          .loadCarListSubmitForCheck(sel)
           .then(response => {
             if (response.data.status === 200) {
-              this.getLoadCarList(this.currentPage, this.pageSize);
+              this.getLoadCarList();
               this.$Message.success("提交成功");
             } else {
               this.$Message.error("提交失败");
@@ -474,8 +459,6 @@ export default {
       }
     },
     changePage(page) {
-      console.log(page);
-      // this.currentPage = val;
       this.getLoadCarList(page, this.pageSize);
     },
     changePageSize(pageSize) {

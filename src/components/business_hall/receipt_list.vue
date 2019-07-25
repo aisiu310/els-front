@@ -4,7 +4,6 @@
     <div style="margin:10px;float:left;">
       <Button type="success" v-bind="sel" @click="receiptListSubmitForCheck(sel)">提交审核</Button>
     </div>
-
     <div style="margin:10px;float:right;">
       <Page
         :total="sum"

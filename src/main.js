@@ -28,7 +28,8 @@ import axios from 'axios'
 Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
 Vue.prototype.$store = store
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; // 配置请求头（推荐）
+// axios.defaults.headers.post['Content-Type'] = 'text/plain'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded' // 配置请求头（推荐）
 
 Vue.use(iView)
 Vue.use(vueResource)
@@ -44,32 +45,33 @@ new Vue({
   },
   template: '<App/>'
 })
-//request攔截器
-axios.interceptors.request.use(config => {
-  if (store.state.login.token) {
-    alert('token存在')
-    config.headers.common['post-Token'] = store.state.token
-  }
-  return config;
-})
+// request攔截器
+// axios.interceptors.request.use(config => {
+//   if (store.state.login.token) {
+//     // alert('token存在')
+//     config.headers['Content-Type'] = 'text/plain' // 关键所在
+//     // config.headers.common['post-Token'] = store.state.token
+//   }
+//   return config;
+// })
 //respone拦截器
-axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => { //默认除了2XX之外都为错误
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          this.$store.commit('delToken');
-          router.replace({ //跳转到登录页面
-            path: '/login',
-            query: {
-              redirect: router.currentRoute.fullPath
-            } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-          });
-      }
-    }
-    return Promise.reject(error.response);
-  }
-)
+// axios.interceptors.response.use(
+//   response => {
+//     return response;
+//   },
+//   error => { //默认除了2XX之外都为错误
+//     if (error.response) {
+//       switch (error.response.status) {
+//         case 401:
+//           this.$store.commit('delToken');
+//           router.replace({ //跳转到登录页面
+//             path: '/login',
+//             query: {
+//               redirect: router.currentRoute.fullPath
+//             } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+//           });
+//       }
+//     }
+//     return Promise.reject(error.response);
+//   }
+// )

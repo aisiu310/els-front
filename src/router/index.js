@@ -67,14 +67,16 @@ export const fixedRouter = [{
     component: login
   }
 ]
-export const asynRouter = [{
+export const asynRouter = [
+  //transit
+  {
     path: '/transit',
     redirect: '/transit/arriveList',
     component: main,
     meta: {
       title: "中转中心",
       icon: "el-icon-success",
-      roles: ['transister'],
+      roles: ['transit'],
       requireAuth: true
     },
     children: [{
@@ -169,17 +171,6 @@ export const asynRouter = [{
         component: business_driver_info,
         meta: {
           title: "司机信息",
-          icon: "ios-analytics",
-          roles: ['businessHall'],
-          requireAuth: true
-        },
-      },
-      {
-        path: 'businessReceiptList',
-        name: '收款管理',
-        component: business_receipt_list,
-        meta: {
-          title: "收款单",
           icon: "ios-analytics",
           roles: ['businessHall'],
           requireAuth: true

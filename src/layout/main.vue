@@ -18,12 +18,14 @@
   left: 20px;
 }
 .layout-nav {
-  border: 10px solid rebeccapurple;
+  border: 1px solid rebeccapurple;
   width: 820px;
   margin: 0 auto;
   margin-right: 0px;
 }
 .layout-info {
+  /* margin: 0px; */
+  float: right;
   border: 1px solid rebeccapurple;
 }
 .layout-footer-center {
@@ -50,7 +52,11 @@
               {{item.meta.title}}
             </MenuItem>
           </div>
-          <div class="layout-info"></div>
+          <div class="layout-info">
+            <Poptip trigger="hover" title="Title" content="content">
+              <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />
+            </Poptip>
+          </div>
         </Menu>
       </Header>
       <Content :style="{padding: '0 50px'}">

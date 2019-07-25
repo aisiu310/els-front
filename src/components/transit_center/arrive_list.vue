@@ -6,25 +6,17 @@
           <template slot-scope="{row,index}" hidden slot="date">
             <span>{{row.id}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
+          <template slot-scope="{row,index}" slot="transferCode">
+            <input type="text" v-model="editItem.transferCode" v-if="editIndex === index" />
+            <span v-else>{{row.transferCode}}</span>
           </template>
           <template slot-scope="{row,index}" slot="arriveDate">
             <input type="text" v-model="editItem.arriveDate" v-if="editIndex === index" />
             <span v-else>{{row.arriveDate}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="transferId">
-            <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
-            <span v-else>{{row.transferId}}</span>
-          </template>
           <template slot-scope="{row,index}" slot="placeOfDeparture">
             <input type="text" v-model="editItem.placeOfDeparture" v-if="editIndex === index" />
             <span v-else>{{row.placeOfDeparture}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="goodsState">
-            <input type="text" v-model="editItem.goodsState" v-if="editIndex === index" />
-            <span v-else>{{row.goodsState}}</span>
           </template>
           <template slot-scope="{row,index}" slot="state">
             <span>{{row.state}}</span>
@@ -74,8 +66,8 @@
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="营业厅编号" prop="code">
-                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
+              <FormItem label="中转中心编号" prop="transferCode">
+                <Input v-model="formItem.transferCode" placeholder="Enter something..."></Input>
               </FormItem>
               <FormItem label="到达日期" prop="arriveDate">
                 <Row>
@@ -89,14 +81,11 @@
                   </Col>
                 </Row>
               </FormItem>
-              <FormItem label="中转单编号" prop="transferId">
-                <Input v-model="formItem.transferId" placeholder="Enter something..."></Input>
-              </FormItem>
               <FormItem label="出发地" prop="placeOfDeparture">
                 <Input v-model="formItem.placeOfDeparture" placeholder="Enter something..."></Input>
               </FormItem>
-              <FormItem label="货物状态" prop="goodsState">
-                <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
+              <FormItem label="货物状态" prop="state">
+                <Input v-model="formItem.state" placeholder="Enter something..."></Input>
               </FormItem>
             </Form>
           </Modal>
@@ -161,11 +150,10 @@ export default {
         ]
       },
       formItem: {
-        code: "025000",
+        transferCode: "025000",
         arriveDate: "2019-7-16",
-        transferId: "111",
         placeOfDeparture: "拉文克劳",
-        goodsState: "破损"
+        state: "破损"
       },
       ruleValidate: {
         arriveDate: [
@@ -185,11 +173,10 @@ export default {
       editIndex: -1, // 当前聚焦的输入框的行数
       editItem: {
         id: "",
-        code: "",
+        transferCode: "",
         arriveDate: "",
-        transferId: "",
         placeOfDeparture: "",
-        goodsState: ""
+        state: ""
       },
       sum: 0,
       columns: [
@@ -204,8 +191,8 @@ export default {
           align: "center"
         },
         {
-          title: "营业厅编号",
-          slot: "code"
+          title: "中转中心编号",
+          slot: "transferCode"
         },
         {
           title: "到达日期",
@@ -213,19 +200,11 @@ export default {
           sortable: true
         },
         {
-          title: "中转单编号",
-          slot: "transferId"
-        },
-        {
           title: "出发地",
           slot: "placeOfDeparture"
         },
         {
           title: "货物状态（损坏、完整、丢失）",
-          slot: "goodsState"
-        },
-        {
-          title: "审核状态",
           slot: "state"
         },
         {
@@ -236,7 +215,7 @@ export default {
     };
   },
   mounted() {
-    // this.getArriveList(this.currentPage, this.pageSize);
+    this.getArriveList(this.currentPage, this.pageSize);
   },
   methods: {
     getArriveList(currentPage, pageSize) {
@@ -266,9 +245,6 @@ export default {
     handleSave(index, editItem) {
       const self = this;
       console.log(editItem);
-      // this.$axios
-      //   .put(
-      //     "http://192.168.2.229:9001/yuantu/logistics/arrive/modifyArriveById",editItem)
       api
         .arriveListSave(editItem)
         .then(response => {
@@ -290,18 +266,8 @@ export default {
     },
     remove(sel) {
       let self = this;
-      // var list = [];
-      // console.log(self.sel);
       if (sel.length > 0) {
         self.modal_loading = true;
-        //   sel.forEach(element => {
-        //     list.push(element.id);
-        //   });
-        //   console.log(list);
-        //   this.$axios
-        //     .delete("http://192.168.2.229/arrive/removeArriveFake", {
-        //       data: list
-        //     })
         api
           .arriveListRemove(sel)
           .then(response => {
@@ -333,8 +299,6 @@ export default {
       const self = this;
       self.$refs[formItem].validate(valid => {
         if (valid) {
-          // self.$axios
-          //   .post("http://192.168.2.229/arrive/addArrive", self.formItem)
           api
             .arriveListSubmitForm(self.formItem)
             .then(response => {
@@ -366,8 +330,6 @@ export default {
             list.push(element.id);
           }
         });
-        // this.$axios
-        //   .put("http://192.168.2.229/loadcar/modifyStateList?state=1", list)
         api
           .arriveListSubmitForCheck(list)
           .then(response => {
@@ -388,7 +350,6 @@ export default {
       }
     },
     changePage(page) {
-      console.log(page);
       // this.currentPage = val;
       this.getArriveList(page, this.pageSize);
     },

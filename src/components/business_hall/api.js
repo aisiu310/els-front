@@ -1,5 +1,7 @@
 import axios from 'axios'
-import qs from 'qs'
+const ip = '192.168.2.229:'
+const port = '9001'
+const path = 'yuantu/logistics/car'
 
 const getLoadCarListUrl = 'http://192.168.2.229:9001/yuantu/logistics/loadcar/getLoadingList'
 const loadcarListSaveUrl = 'http://192.168.2.229/yuantu/logistics/loadcar/modifyLoadingById'
@@ -17,10 +19,10 @@ const getdeliverlistUrl = "http://192.168.2.229:9001/yuantu/logistics/distribute
 const deliverListSave = "http://192.168.2.229:9001/yuantu/logistics/distribute/modifyDistributeById"
 const deliverListSubmitForCheckUrl = "http://192.168.2.229:9001/yuantu/logistics/distribute/modifyStateList?state=1"
 
-const getCarListUrl = ""
-const removeCarListUrl = ''
-const carListSubmitFormUrl = ''
-const carListSaveUrl = ''
+const getCarListUrl = "http://localhost:9001/" + path + "/getCarList"
+const removeCarListUrl = "http://localhost:9001/" + path + "/removeCarList"
+const carListSubmitFormUrl = "http://localhost:9001/" + path + "/addCar"
+const carListSaveUrl = "http://localhost:9001/" + path + "/modifyCarById"
 
 
 const getDriverListUrl = "http://192.168.2.231:8088/driver/queryAllDriver"
@@ -126,25 +128,27 @@ const api = {
     let response = await axios.put(deliverListSubmitForCheckUrl, list);
     return response
   },
-  async getCarList(currentPage, pageSize) {
-    let response = await axios.post(getCarListUrl, {
-      code: "025000",
-      currentPage: currentPage,
-      pageCount: pageSize
+  async getCarList() {
+    let response = await axios.get(getCarListUrl, {
+      params: {
+        code: "025000",
+      }
     });
     return response
   },
   async removeCarList(sel) {
-    var list = [];
+    var idList = [];
     sel.forEach(element => {
-      list.push(element.id);
+      idList.push(element.id);
     });
+    // console.log(idList)
     let response = axios.delete(removeCarListUrl, {
-      data: list
+      data: idList
     });
     return response
   },
   async carListSubmitForm(formItem) {
+    console.log(formItem)
     let response = await axios.post(carListSubmitFormUrl, formItem)
     return response
   },
