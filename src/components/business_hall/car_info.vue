@@ -64,10 +64,10 @@
             v-model="modal"
             title="添加"
             v-bind="formItem"
-            @on-ok="submitform('formItem')"
+            @on-ok="submitform(formItem)"
             @on-cancle="cancle"
           >
-            <Form :model="formItem" :label-width="80">
+            <Form ref="formItem" :rules="ruleValidate" :model="formItem" :label-width="80">
               <FormItem label="number">
                 <Input v-model="formItem.number" placeholder="Enter something..."></Input>
               </FormItem>
@@ -127,21 +127,21 @@ export default {
         endDate: ""
       },
       formItem: {
-        number: "",
-        code: "",
-        licensePlate: "",
-        startDate: "",
-        endDate: ""
+        number: "苏K1211",
+        code: "025000",
+        licensePlate: "325325243",
+        startDate: "2019-2-21",
+        endDate: "2029-2-21"
       },
       ruleValidate: {
-        startDate: [
-          {
-            required: true,
-            message: "日期不能为空",
-            trigger: "change",
-            type: "date"
-          }
-        ]
+        // startDate: [
+        //   {
+        //     required: true,
+        //     message: "日期不能为空",
+        //     trigger: "change",
+        //     type: "date"
+        //   }
+        // ]
       },
       columns: [
         {
@@ -187,12 +187,17 @@ export default {
     this.getCarList(this.currentPage, this.pageSize);
   },
   methods: {
-    getCarList() {
+    getCarList(currentPage, pageSize) {
       api
-        .getCarList()
+        .getCarList(currentPage, pageSize)
         .then(response => {
-          this.data = response.data.data[0];
-          this.sum = response.data.data[1];
+          console.log(response);
+          if (response.data.status === 200) {
+            this.data = response.data.data;
+            this.sum = response.data.code;
+          } else {
+            console.log(response.data.msg);
+          }
         })
         .catch(function(error) {
           alert("请求超时,加载本地数据");
@@ -208,11 +213,16 @@ export default {
       this.editIndex = index;
     },
     handleSave(editItem) {
+      let self = this;
       api
         .carListSave(editItem)
         .then(response => {
-          if (response.data) {
-            this.getdeliverlist();
+          console.log(response);
+          if (response.data.status === 200) {
+            self.$Message.success("修改成功");
+            self.getCarList(this.currentPage, this.pageSize);
+          } else {
+            self.$Message.error(response.data.msg);
           }
         })
         .catch(function(error) {
@@ -225,27 +235,28 @@ export default {
       this.sel = selection;
     },
     remove(sel) {
-      if (sel.length) {
-        this.modal_loading = true;
-        sel.forEach(element => {
-          api
-            .removeCarList(sel)
-            .then(response => {
-              if (response.data) {
-                this.modal_loading = false;
-                this.modaldelet = false;
-                this.$Message.success("Successfully delete");
-                this.getCarList();
-              } else {
-                this.$Message.error("没有获取到数据");
-              }
-            })
-            .catch(function(error) {
-              alert("请求超时,请检查连接信息");
-              this.modal_loading = false;
-              this.modaldelet = false;
-            });
-        });
+      let self = this;
+
+      if (sel.length > 0) {
+        self.modal_loading = true;
+        api
+          .removeCarList(sel)
+          .then(response => {
+            console.log(response);
+            if (response.data.status === 200) {
+              self.modal_loading = false;
+              self.modaldelet = false;
+              self.$Message.success("刪除成功");
+              self.getCarList(self.currentPage, self.pageSize);
+            } else {
+              self.$Message.error(response.data.msg);
+            }
+          })
+          .catch(function(error) {
+            alert("请求超时,请检查连接信息");
+            self.modal_loading = false;
+            self.modaldelet = false;
+          });
       } else {
         this.$Message.error("你还没有选择");
         setTimeout(() => {
@@ -255,24 +266,26 @@ export default {
       }
     },
     submitform(formItem) {
-      this.$refs[formItem].validate(valid => {
-        if (valid) {
-          api
-            .carListSubmitForm(formItem)
-            .then(response => {
-              if (response.data) {
-                this.$Message.success("添加成功");
-                this.getCarList();
-              }
-            })
-            .catch(function(error) {
-              this.$Message.error("请求超时,请检查连接信息");
-            });
-        } else {
-          this.modal = "true";
-          this.$Message.error("操作失败");
-        }
-      });
+      // this.$refs["formItem"].validate(valid => {
+      //   if (valid) {
+      console.log(formItem);
+      api
+        .carListSubmitForm(formItem)
+        .then(response => {
+          console.log(response);
+          if (response.data) {
+            this.$Message.success("添加成功");
+            this.getCarList();
+          }
+        })
+        .catch(function(error) {
+          this.$Message.error("请求超时,请检查连接信息");
+        });
+      //   } else {
+      //     this.modal = "true";
+      //     this.$Message.error("操作失败");
+      //   }
+      // });
     },
     cancle() {
       this.$Message.info("取消操作");

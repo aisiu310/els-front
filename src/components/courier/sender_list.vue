@@ -1,7 +1,7 @@
 <template>
   <div>
     <Tabs>
-      <TabPane label="装车单" icon="ios-paper-plane">
+      <TabPane label="派件单" icon="ios-paper-plane">
         <Table stripe border :columns="columns" :data="data"></Table>
 
         <div id="arrive_list_add">
@@ -38,6 +38,7 @@ import { api } from "./api";
 export default {
   data() {
     return {
+      modal: false,
       currentPage: 1,
       pageSize: 10,
       formItem: {

@@ -73,10 +73,126 @@ export const fixedRouter = [{
         component: login
     }
 ]
+<<<<<<< HEAD
+export const asynRouter = [
+  //transit
+  {
+    path: '/transit',
+    redirect: '/transit/arriveList',
+    component: main,
+    meta: {
+      title: "中转中心",
+      icon: "el-icon-success",
+      roles: ['transit'],
+      requireAuth: true
+    },
+    children: [{
+      path: 'arriveList',
+      component: transit_arrive_list,
+      name: '接收管理',
+      meta: {
+        title: "接收单",
+        icon: "ios-navigate",
+        roles: ['transit'],
+        requireAuth: true
+      },
+    }, {
+      path: 'transferList',
+      component: transit_transfer_list,
+      name: '中转管理',
+      meta: {
+        title: "中转单",
+        icon: "ios-keypad",
+        roles: ['transit'],
+        requireAuth: true
+      },
+    }, {
+      path: 'loadCarList',
+      component: transit_loadcar_list,
+      name: '装车管理',
+      meta: {
+        title: "装车单",
+        icon: "ios-analytics",
+        roles: ['transit'],
+        requireAuth: true
+      },
+    }]
+  },
+  {
+    path: '/businessHall',
+    redirect: '/businessHall/businessLoadcarList',
+    component: main,
+    meta: {
+      title: "营业厅",
+      icon: "el-icon-success",
+      roles: ['businessHall'],
+      requireAuth: true
+    },
+    children: [{
+        path: 'businessLoadcarList',
+        name: '装车管理',
+        component: business_loadcar_list,
+        meta: {
+          title: "装车单",
+          icon: "ios-analytics",
+          roles: ['businessHall'],
+          requireAuth: true
+        },
+      },
+      {
+        path: 'businessArriveList',
+        name: '接收管理',
+        component: business_arrive_list,
+        meta: {
+          title: "到达单",
+          icon: "ios-analytics",
+          roles: ['businessHall'],
+          requireAuth: true
+        },
+      },
+      {
+        path: 'business_deliver_list',
+        name: '派件管理',
+        component: business_deliver_list,
+        meta: {
+          title: "派件单",
+          icon: "ios-analytics",
+          roles: ['businessHall'],
+          requireAuth: true
+        },
+      },
+      {
+        path: 'businessCarInfo',
+        name: '车辆管理',
+        component: business_car_info,
+        meta: {
+          title: "车辆信息",
+          icon: "ios-analytics",
+          roles: ['businessHall'],
+          requireAuth: true
+        },
+      },
+      {
+        path: 'businessDriverInfo',
+        name: '司机管理',
+        component: business_driver_info,
+        meta: {
+          title: "司机信息",
+          icon: "ios-analytics",
+          roles: ['businessHall'],
+          requireAuth: true
+        },
+      },
+      {
+        path: 'businessReceiptRecord',
+        name: '收款记录',
+        component: business_receipt_record,
+=======
 export const asynRouter = [{
         path: '/transit',
         redirect: '/transit/arriveList',
         component: main,
+>>>>>>> d2f5edb943c19321d62ad95377f6e8d8643ae67b
         meta: {
             title: "中转中心",
             icon: "el-icon-success",

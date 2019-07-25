@@ -51,7 +51,11 @@
               {{item.meta.title}}
             </MenuItem>
           </div>
-          <div class="layout-info"></div>
+          <div class="layout-info">
+            <Poptip trigger="hover" title="Title" content="content">
+              <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />
+            </Poptip>
+          </div>
         </Menu>
       </Header>
       <Content :style="{padding: '0 50px'}">

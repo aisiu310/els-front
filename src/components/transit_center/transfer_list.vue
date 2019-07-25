@@ -6,9 +6,9 @@
           <template slot-scope="{row,index}" slot="id">
             <span>{{row.id}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
+          <template slot-scope="{row,index}" slot="transferId">
+            <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
+            <span v-else>{{row.transferId}}</span>
           </template>
           <template slot-scope="{row,index}" slot="date">
             <input type="text" v-model="editItem.date" v-if="editIndex === index" />
@@ -51,7 +51,7 @@
           </template>
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button @click="handleSave(index)">save</Button>
+              <Button v-bind="editItem" @click="handleSave(editItem)">保存信息</Button>
               <Button @click="editIndex = -1">cancel</Button>
             </div>
             <div v-else>
@@ -94,22 +94,17 @@
             v-model="modal"
             title="添加"
             v-bind="formItem"
-            @on-ok="submitform('formItem')"
+            @on-ok="submitform(formItem)"
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="中转中心编号" prop="code">
-                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
+              <FormItem label="中转中心编号" prop="transferId">
+                <Input v-model="formItem.transferId" placeholder="Enter something..."></Input>
               </FormItem>
               <FormItem label="装车日期" prop="date">
                 <Row>
                   <Col span="11">
-                    <DatePicker
-                      type="date"
-                      placeholder="请选择日期"
-                      :options="option"
-                      v-model="formItem.date"
-                    ></DatePicker>
+                    <DatePicker type="date" placeholder="请选择日期" v-model="formItem.date"></DatePicker>
                   </Col>
                 </Row>
               </FormItem>
@@ -165,6 +160,7 @@
   </div>
 </template>
 <script>
+import { api } from "./api";
 export default {
   data() {
     return {
@@ -172,15 +168,15 @@ export default {
       pageSize: 10,
       data: [],
       formItem: {
-        code: "",
-        date: "",
-        transportationId: "",
-        placeOfDeparture: "",
-        placeOfArrival: "",
-        container: "",
-        monitor: "",
-        freight: "",
-        orderList: ""
+        transferId: "025000",
+        date: "2019-12-07",
+        transportationId: "121",
+        placeOfDeparture: "南京",
+        placeOfArrival: "北京",
+        container: "1",
+        monitor: "1",
+        freight: "1",
+        orderList: "1121212121"
       },
       ruleValidate: {},
       modaldelet: false,
@@ -192,7 +188,7 @@ export default {
       editIndex: -1, // 当前聚焦的输入框的行数
       editItem: {
         id: "",
-        code: "",
+        transferId: "",
         date: "",
         transportationId: "",
         placeOfDeparture: "",
@@ -215,7 +211,7 @@ export default {
         },
         {
           title: "中转中心编号",
-          slot: "code",
+          slot: "transferId",
           sortable: true
         },
         {
@@ -263,7 +259,7 @@ export default {
     };
   },
   mounted() {
-    this.getTransferList(this.currentPage, this.pageSize);
+    // this.getTransferList(this.currentPage, this.pageSize);
   },
   methods: {
     getTransferList(currentPage, pageSize) {
@@ -283,7 +279,7 @@ export default {
     },
     handleEdit(row, index) {
       this.editItem.id = row.id;
-      this.editItem.code = row.code;
+      this.editItem.transferId = row.transferId;
       this.editItem.date = row.data;
       this.editItem.transportationId = row.transportationId;
       this.editItem.placeOfDeparture = row.placeOfDeparture;
@@ -349,15 +345,14 @@ export default {
     },
     submitform(formItem) {
       const self = this;
-      self.$refs[formItem].validate(valid => {
+      self.$refs["formItem"].validate(valid => {
         if (valid) {
-          // self.$axios
-          //   .post("http://192.168.2.229/arrive/addArrive", self.formItem)
           api
             .transferListSubmitForm(self.formItem)
             .then(response => {
-              if (response.data.status) {
-                self.getTransferList(this.currentPage, this.pageSize);
+              console.log(response);
+              if (response.data.status === 200) {
+                // self.getTransferList(this.currentPage, this.pageSize);
                 self.$Message.success("添加成功");
               } else {
                 self.$Message.warning(response.data.msg);
@@ -404,7 +399,6 @@ export default {
       }
     },
     changePage(page) {
-      console.log(page);
       this.getTransferList(page, this.pageSize);
     },
     changePageSize(pageSize) {

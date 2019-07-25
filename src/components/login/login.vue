@@ -146,6 +146,7 @@ export default {
           //     console.log(response.data);
           //     if (response.data.status === 200) {
           //       self.$Message.success("登陆成功");
+          //       sessionStorage.setItem("phone", self.formInline.user);
           //       self.$store.commit("setToken", response.data.data.code);
           //       self.$store.commit("setRole", response.data.data.identity);
           //       self.$store.commit("setUserName", response.data.data.name);
@@ -159,6 +160,9 @@ export default {
           //   .catch(error => {
           //     self.$Message.error("服務器異常、檢查連接信息");
           //   });
+          // self.$store.commit("setToken", 123456);
+          self.$Message.success("登陆成功");
+          self.$store.commit("setRole", "businessHall");
           self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
           self.$store.commit("setRole", "manager");
