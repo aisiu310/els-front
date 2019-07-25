@@ -31,10 +31,10 @@
 export default {
   methods: {
     addEmployee() {
-      this.$Message.info("开发人员正在努力扩展~");
+      this.$router.push({ path: "/admin/add" });
     },
     employeeList() {
-      this.$Message.info("开发人员正在努力扩展~");
+      this.$router.push({ path: "/admin/show_admin" });
     },
     allocate() {
       this.$Message.info("开发人员正在努力扩展~");

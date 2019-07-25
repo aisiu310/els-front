@@ -17,7 +17,7 @@
           </Select>
         </FormItem>
         <FormItem label="部门" prop="department">
-          <Select v-model="employee.department" placeholder="请选择部门" filterable>
+          <Select v-model="employee.department" placeholder="请选择部门" filterable >
             <Option
               v-for="item in departmentList"
               :value="item.value"
@@ -53,7 +53,14 @@ export default {
     return {
       cityList: [],
       departmentList: [],
-      jobList: [],
+      jobList: [
+        { value: "快递员", label: "快递员" },
+        { value: "营业厅业务员", label: "营业厅业务员" },
+        { value: "中转中心业务员", label: "中转中心业务员" },
+        { value: "中转中心管理员", label: "中转中心管理人员" },
+        { value: "财务", label: "财务" },
+        { value: "总经理", label: "总经理" }
+      ],
       city: "",
       employee: {
         code: "",
@@ -64,9 +71,6 @@ export default {
       },
       Validate: {
         code: [{ required: true, message: "工号不能为空！", trigger: "blur" }],
-        department: [
-          { required: true, message: "部门不能为空！", trigger: "blur" }
-        ],
         job: [{ required: true, message: "职位不能为空！", trigger: "blur" }],
         name: [{ required: true, message: "姓名不能为空！", trigger: "blur" }],
         password: [
@@ -87,7 +91,7 @@ export default {
     };
   },
   mounted() {
-    this.exit();
+    this.getCiytList();
   },
   watch: {
     city: function(val) {
@@ -132,10 +136,11 @@ export default {
     getJobList() {},
     // add employee
     addEmployee() {
+      console.log(this.employee.department);
       api
         .addData(url.employee_addURL, this.employee)
         .then(res => {
-          if (res != null) {
+          if (res == 1) {
             this.$Message.success("新增成功！");
             // turn to the employee list router
             this.exit();

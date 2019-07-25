@@ -28,6 +28,24 @@ const api = {
         } catch (error) {
             console.log(error);
         }
+    },
+    // get employee by like
+    async getEmployee(URL, parameter) {
+        try {
+            let res = await axios.post(URL, parameter);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // reset and del through id
+    async updateEmployee(URL, id) {
+        try {
+            let res = await axios.put(URL + id);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 export { api }

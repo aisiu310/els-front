@@ -65,7 +65,7 @@ export default {
           key: "totalFee"
         },
         {
-          title: "Action",
+          title: "",
           slot: "action",
           width: 150,
           align: "center"

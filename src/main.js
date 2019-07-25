@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App1'
+import App from './App'
 import iView from 'iview'
 import store from './store/index'
 import vueResource from 'vue-resource'
@@ -12,7 +12,7 @@ Vue.use(BaiduMap, {
     ak: "GBMI8DT2X6mXqHi7fDXc1f1pGABmeg2M"
 })
 
-import router from './router/admin'
+import router from './router/index'
 import '@/permission.js'
 
 import qs from 'qs'
@@ -47,7 +47,7 @@ new Vue({
     //request攔截器
 axios.interceptors.request.use(config => {
         if (store.state.login.token) {
-            alert('token存在')
+            // alert('token存在')
             config.headers.common['post-Token'] = store.state.token
         }
         return config;
