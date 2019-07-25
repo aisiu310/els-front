@@ -7,7 +7,7 @@
         </p>
         <Form ref="formValidate" :model="salaryStragety" :label-width="80">
           <FormItem label="职位" prop="job">
-            <Input v-model="salaryStragety.job"></Input>
+            <Input v-model="salaryStragety.job" disabled></Input>
           </FormItem>
           <FormItem label="底薪" prop="salary">
             <Input prefix="logo-usd" v-model="salaryStragety.salary"></Input>
