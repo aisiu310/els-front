@@ -46,10 +46,6 @@ export default {
           align: "center"
         },
         {
-          title: "id",
-          key: "id"
-        },
-        {
           title: "货物数量",
           key: "goodsCount",
           sortable: true
@@ -60,13 +56,8 @@ export default {
           sortable: true
         },
         {
-          title: "货物体积",
-          key: "goodsVolume",
-          sortable: true
-        },
-        {
           title: "收件日期",
-          key: "receiptDate",
+          key: "receiptTime",
           sortable: true
         },
         {
@@ -82,7 +73,6 @@ export default {
           title: "收件人手机号",
           key: "addresseePhone"
         },
-
         {
           title: "收件人详细住址",
           key: "addresseeDetailAddress"
@@ -90,10 +80,6 @@ export default {
         {
           title: "实际收件人姓名",
           key: "trueAddresseeName"
-        },
-        {
-          title: "寄件人编号",
-          key: "senderId"
         }
       ]
     };
