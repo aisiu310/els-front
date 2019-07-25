@@ -7,6 +7,21 @@
       <a href="#" slot="extra" @click.prevent="exit">
         <Icon type="ios-loop-strong"></Icon>退出
       </a>
+      <div class="middle">
+        <div class="search">
+          <Input v-model="searchValue" @on-enter="getDataBySearch()">
+            <Select v-model="select" slot="prepend" style="width: 80px">
+              <Option value="code">工号</Option>
+              <Option value="job">职位</Option>
+              <Option value="name">姓名</Option>
+            </Select>
+            <Button slot="append" icon="ios-search"></Button>
+          </Input>
+        </div>
+        <div class="refresh" @click="refresh()">
+          <Icon type="md-refresh" size="32" />
+        </div>
+      </div>
       <Table stripe :columns="columns" :data="employee">
         <template slot-scope="{ row, index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 5px" @click="reset(index)">重置密码</Button>
@@ -39,6 +54,8 @@ export default {
       totalSize: 0,
       currentPage: 1,
       pageSize: 10,
+      searchValue: "",
+      select: "",
       columns: [
         {
           type: "index",
@@ -84,6 +101,11 @@ export default {
   },
   mounted() {
     this.initData(this.currentPage, this.pageSize);
+  },
+  searchValue: function(val) {
+    if (val == null) {
+      this.initData(this.currentPage, this.pageSize);
+    }
   },
   methods: {
     // go back
@@ -144,6 +166,43 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    // search
+    getDataBySearch() {
+      if (this.select == "code") {
+        var para = {
+          code: this.searchValue,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
+        };
+      } else if (this.select == "job") {
+        var para = {
+          job: this.searchValue,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
+        };
+      } else if (this.select == "name") {
+        var para = {
+          name: this.searchValue,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
+        };
+      }
+      api
+        .getEmployee(url.employee_getURL, para)
+        .then(res => {
+          if (res != null) {
+            this.employee = res.list;
+            this.totalSize = res.total;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // refresh data
+    refresh() {
+      this.initData(this.currentPage, this.pageSize);
     }
   }
 };
@@ -155,5 +214,21 @@ export default {
   height: auto;
   margin-top: 1%;
   text-align: right;
+}
+
+.search {
+  width: 30%;
+  height: auto;
+  padding-bottom: 10px;
+}
+
+.middle {
+  width: 100%;
+  height: auto;
+  display: flex;
+}
+
+.refresh {
+  padding-left: 10px;
 }
 </style>
