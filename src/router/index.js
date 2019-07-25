@@ -64,7 +64,6 @@ import add from "@/components/admin/func/add"
 import show_admin from "@/components/admin/func/show"
 
 Vue.use(router)
-<<<<<<< HEAD
 export const fixedRouter = [{
     path: '/',
     redirect: '/login'
@@ -204,22 +203,11 @@ export const asynRouter = [
           icon: "ios-analytics",
           roles: ['businessHall'],
           requireAuth: true
-=======
-export const fixedRouter = [ //transit
-    {
-        path: '/transit',
-        redirect: '/transit/arriveList',
-        component: main,
-        meta: {
-            title: "中转中心",
-            icon: "el-icon-success",
-            roles: ['transit'],
-            requireAuth: true
->>>>>>> 72be799987fafac02bcde411524b3b90dd1b0382
         },
       },
     ]
   },
+
   //manager
   {
     path: '/manager',
@@ -232,124 +220,27 @@ export const fixedRouter = [ //transit
       roles: ['manager'],
       requireAuth: true
     },
-<<<<<<< HEAD
     children: [{
         path: 'checkList',
         name: '单据审批',
         component: manager_check_list,
-=======
-    //businessHall
-    {
-        path: '/businessHall',
-        redirect: '/businessHall/businessLoadcarList',
-        component: main,
->>>>>>> 72be799987fafac02bcde411524b3b90dd1b0382
         meta: {
           title: "单据审批",
           icon: "ios-analytics",
           roles: ['manager'],
           requireAuth: true
         },
-<<<<<<< HEAD
       },
       {
         path: 'adjustPeople',
         name: '人员调整',
         component: manager_adjust_people,
-=======
-        children: [{
-                path: 'businessLoadcarList',
-                name: '装车管理',
-                component: business_loadcar_list,
-                meta: {
-                    title: "装车单",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'businessArriveList',
-                name: '接收管理',
-                component: business_arrive_list,
-                meta: {
-                    title: "到达单",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'business_deliver_list',
-                name: '派件管理',
-                component: business_deliver_list,
-                meta: {
-                    title: "派件单",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'businessCarInfo',
-                name: '车辆管理',
-                component: business_car_info,
-                meta: {
-                    title: "车辆信息",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'businessDriverInfo',
-                name: '司机管理',
-                component: business_driver_info,
-                meta: {
-                    title: "司机信息",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'businessReceiptList',
-                name: '收款管理',
-                component: business_receipt_list,
-                meta: {
-                    title: "收款单",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'businessReceiptRecord',
-                name: '收款记录',
-                component: business_receipt_record,
-                meta: {
-                    title: "收款记录",
-                    icon: "ios-analytics",
-                    roles: ['businessHall'],
-                    requireAuth: true
-                },
-            },
-        ]
-    },
-    //manager
-    {
-        path: '/manager',
-        name: '总经理',
-        redirect: '/manager/checkList',
-        component: main,
->>>>>>> 72be799987fafac02bcde411524b3b90dd1b0382
         meta: {
           title: "人员调整",
           icon: "ios-analytics",
           roles: ['manager'],
           requireAuth: true
         },
-<<<<<<< HEAD
       },
       {
         path: 'adjustOrgan',
@@ -366,71 +257,6 @@ export const fixedRouter = [ //transit
         path: 'adjustSalary',
         name: '薪水调整',
         component: manager_adjust_salary,
-=======
-        children: [{
-                path: 'checkList',
-                name: '单据审批',
-                component: manager_check_list,
-                meta: {
-                    title: "单据审批",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'adjustOrgan',
-                name: '机构调整',
-                component: manager_adjust_organ,
-                meta: {
-                    title: "机构调整",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'adjustSalary',
-                name: '薪水调整',
-                component: manager_adjust_salary,
-                meta: {
-                    title: "薪水调整",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'adjustCharge',
-                name: '收费策略',
-                component: manager_adjust_charge,
-                meta: {
-                    title: "收费策略",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
-            {
-                path: 'examineLog',
-                name: '检查日志',
-                component: manager_examine_log,
-                meta: {
-                    title: "检查日志",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
-        ]
-    },
-    //courier
-    {
-        path: '/courier',
-        name: '快递员',
-        redirect: '/courier/senderList',
-        component: main,
->>>>>>> 72be799987fafac02bcde411524b3b90dd1b0382
         meta: {
           title: "薪水调整",
           icon: "ios-analytics",
@@ -547,7 +373,6 @@ export const fixedRouter = [ //transit
             roles: ['sender']
           }
         ]
-<<<<<<< HEAD
       }
     ]
   },
@@ -682,22 +507,6 @@ export const fixedRouter = [ //transit
 ]
 
 
-=======
-    },
-    // 当页面地址和上面任一地址不匹配，则跳转到404
-    {
-        path: '*',
-        redirect: '/404',
-        component: error,
-        meta: {
-            title: "统一错误返回页面",
-            icon: "el-icon-success",
-            roles: ['admin', 'manager', 'transist', 'businessHall'],
-            requireAuth: false
-        },
-    }
-]
->>>>>>> 72be799987fafac02bcde411524b3b90dd1b0382
 export default new router({
   routes: fixedRouter
 })

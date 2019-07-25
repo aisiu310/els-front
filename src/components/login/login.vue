@@ -160,19 +160,9 @@ export default {
           //   .catch(error => {
           //     self.$Message.error("服務器異常、檢查連接信息");
           //   });
-<<<<<<< HEAD
-
           // self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
           self.$store.commit("setRole", "courier");
-=======
-          // self.$store.commit("setToken", 123456);
-          self.$Message.success("登陆成功");
-          self.$store.commit("setRole", "businessHall");
-          self.$store.commit("setToken", 123456);
-          self.$Message.success("登陆成功");
-          self.$store.commit("setRole", "manager");
->>>>>>> 72be799987fafac02bcde411524b3b90dd1b0382
           this.$router.push({
             path: self.$store.state.login.role
           });
