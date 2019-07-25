@@ -60,7 +60,7 @@
           <BreadcrumbItem>{{breadCrumb}}</BreadcrumbItem>
         </Breadcrumb>
         <Card>
-          <div style="min-height: 700px;">
+          <div style="min-height: auto;">
             <router-view></router-view>
           </div>
         </Card>

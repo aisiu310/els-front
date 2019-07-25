@@ -18,7 +18,7 @@ import business_receipt_list from '@/components/business_hall/receipt_list'
 import business_receipt_record from '@/components/business_hall/receipt_record'
 //manager
 import manager_check_list from '@/components/manager/check_list'
-import manager_adjust_people from '@/components/manager/adjust_people'
+// import manager_adjust_people from '@/components/manager/adjust_people'
 import manager_adjust_organ from '@/components/manager/adjust_organ'
 import manager_adjust_salary from '@/components/manager/adjust_salary'
 import manager_adjust_charge from '@/components/manager/adjust_charge'
@@ -226,17 +226,17 @@ export const asynRouter = [{
                     requireAuth: true
                 },
             },
-            {
-                path: 'adjustPeople',
-                name: '人员调整',
-                component: manager_adjust_people,
-                meta: {
-                    title: "人员调整",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
+            // {
+            //     path: 'adjustPeople',
+            //     name: '人员调整',
+            //     component: manager_adjust_people,
+            //     meta: {
+            //         title: "人员调整",
+            //         icon: "ios-analytics",
+            //         roles: ['manager'],
+            //         requireAuth: true
+            //     },
+            // },
             {
                 path: 'adjustOrgan',
                 name: '机构调整',
