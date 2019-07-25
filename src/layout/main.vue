@@ -10,24 +10,23 @@
   width: 400px;
   height: 30px;
   text-align: center;
-  font-size: 3em;
+  font-size: 30px;
+  font-family: "隶书";
   color: white;
   border-radius: 3px;
   float: left;
   position: relative;
-  left: 20px;
+  /* left: 10px; */
 }
 .layout-nav {
-  border: 1px solid rebeccapurple;
+  /* border: 10px solid rebeccapurple; */
   width: 820px;
   margin: 0 auto;
   margin-right: 0px;
 }
 .layout-info {
-  /* margin: 0px; */
-  float: right;
-  border: 1px solid rebeccapurple;
-}
+  border: 1px solid rebeccapurple; 
+} 
 .layout-footer-center {
   text-align: center;
 }
@@ -66,7 +65,7 @@
           <BreadcrumbItem>{{breadCrumb}}</BreadcrumbItem>
         </Breadcrumb>
         <Card>
-          <div style="min-height: 700px;">
+          <div style="min-height: auto;">
             <router-view></router-view>
           </div>
         </Card>
@@ -80,7 +79,7 @@ import store from "../store/index";
 export default {
   data() {
     return {
-      footerTime: "2011-2019",
+      footerTime: "2019/06-2019/07",
       menuItem: "",
       breadCrumb: ""
     };
