@@ -231,17 +231,6 @@ export const asynRouter = [
                 },
             },
             {
-                path: 'adjustPeople',
-                name: '人员调整',
-                component: manager_adjust_people,
-                meta: {
-                    title: "人员调整",
-                    icon: "ios-analytics",
-                    roles: ['manager'],
-                    requireAuth: true
-                },
-            },
-            {
                 path: 'adjustOrgan',
                 name: '机构调整',
                 component: manager_adjust_organ,
@@ -504,8 +493,6 @@ export const asynRouter = [
         },
     }
 ]
-
-
 export default new router({
     routes: fixedRouter
 })
