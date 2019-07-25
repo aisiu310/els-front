@@ -1,0 +1,36 @@
+.menu_body {
+    width: 100%;
+    height: auto;
+    display: flex;
+    padding: 100px;
+    background-color: #eee;
+    border-radius: 10px;
+    margin-top: 1%;
+}
+
+.menu_content {
+    width: 20%;
+    height: 200px;
+    text-align: center;
+    border-radius: 30px;
+    margin-left: 4%;
+    background-color: white
+}
+
+.menu_content div {
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 20%;
+    text-align: center;
+}
+
+.menu_content:hover {
+    background-color: darkgrey;
+}
+
+.add_body {
+    width: 60%;
+    height: auto;
+    margin-left: 20%;
+    margin-top: 1%;
+}

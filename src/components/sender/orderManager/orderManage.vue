@@ -7,9 +7,8 @@
             <Icon type="ios-briefcase" />订单管理
           </template>
           <MenuItem name="1-1" to="/sender/orderManage/order_table">全部订单</MenuItem>
-          <MenuItem name="1-2" to="/sender/orderManage/order_table">待取件</MenuItem>
-          <MenuItem name="1-3" to="/sender/orderManage/order_table">派送中</MenuItem>
-          <MenuItem name="1-4" to="/sender/orderManage/order_table">已签收</MenuItem>
+          <MenuItem name="1-2" to="/sender/orderManage/order_table">派送中</MenuItem>
+          <MenuItem name="1-3" to="/sender/orderManage/order_table">已签收</MenuItem>
         </Submenu>
       </Menu>
     </div>

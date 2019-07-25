@@ -9,10 +9,10 @@ import '../my-theme/dist/iview.css';
 import BaiduMap from 'vue-baidu-map'
 // import baidu map aky
 Vue.use(BaiduMap, {
-  ak: "GBMI8DT2X6mXqHi7fDXc1f1pGABmeg2M"
+    ak: "GBMI8DT2X6mXqHi7fDXc1f1pGABmeg2M"
 })
 
-import router from './router'
+import router from './router/index'
 import '@/permission.js'
 
 import qs from 'qs'
@@ -28,8 +28,12 @@ import axios from 'axios'
 Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
 Vue.prototype.$store = store
+<<<<<<< HEAD
 // axios.defaults.headers.post['Content-Type'] = 'text/plain'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded' // 配置请求头（推荐）
+=======
+    // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; // 配置请求头（推荐）
+>>>>>>> d2f5edb943c19321d62ad95377f6e8d8643ae67b
 
 Vue.use(iView)
 Vue.use(vueResource)
@@ -37,6 +41,7 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+<<<<<<< HEAD
   el: '#app',
   router,
   store,
@@ -75,3 +80,42 @@ new Vue({
 //     return Promise.reject(error.response);
 //   }
 // )
+=======
+        el: '#app',
+        router,
+        store,
+        components: {
+            App
+        },
+        template: '<App/>'
+    })
+    //request攔截器
+axios.interceptors.request.use(config => {
+        if (store.state.login.token) {
+            // alert('token存在')
+            config.headers.common['post-Token'] = store.state.token
+        }
+        return config;
+    })
+    //respone拦截器
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => { //默认除了2XX之外都为错误
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    this.$store.commit('delToken');
+                    router.replace({ //跳转到登录页面
+                        path: '/login',
+                        query: {
+                            redirect: router.currentRoute.fullPath
+                        } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                    });
+            }
+        }
+        return Promise.reject(error.response);
+    }
+)
+>>>>>>> d2f5edb943c19321d62ad95377f6e8d8643ae67b

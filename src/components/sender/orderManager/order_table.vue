@@ -12,7 +12,7 @@
       </Table>
     </div>
     <div class="page">
-      <Page :total="dataTotal" show-elevator @on-change="change" :page-size="pageSize" />
+      <Page :total="dataTotal" :current="currentPage" show-elevator @on-change="change" :page-size="pageSize" />
     </div>
   </div>
 </template>
@@ -20,11 +20,15 @@
 
 <script>
 import bus from "../../reuse/bus";
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       dataTotal: 0,
+      currentPage: 1,
       pageSize: 5,
+      url: "",
       columns: [
         {
           type: "index",
@@ -61,7 +65,7 @@ export default {
           key: "totalFee"
         },
         {
-          title: "Action",
+          title: "",
           slot: "action",
           width: 150,
           align: "center"
@@ -97,7 +101,7 @@ export default {
           receiptDate: ""
         },
         {
-           id: "1231231231",
+          id: "1231231231",
           code: "1231231231",
           courierId: "123",
           courierName: "小明",
@@ -124,7 +128,7 @@ export default {
           receiptDate: ""
         },
         {
-           id: "1231231231",
+          id: "1231231231",
           code: "1231231231",
           courierId: "123",
           courierName: "小明",
@@ -151,7 +155,7 @@ export default {
           receiptDate: ""
         },
         {
-           id: "1231231231",
+          id: "1231231231",
           code: "1231231231",
           courierId: "123",
           courierName: "小明",
@@ -178,7 +182,7 @@ export default {
           receiptDate: ""
         },
         {
-           id: "1231231231",
+          id: "1231231231",
           code: "1231231231",
           courierId: "123",
           courierName: "小明",
@@ -205,7 +209,7 @@ export default {
           receiptDate: ""
         },
         {
-           id: "1231231231",
+          id: "1231231231",
           code: "1231231231",
           courierId: "123",
           courierName: "小明",
@@ -232,7 +236,7 @@ export default {
           receiptDate: ""
         },
         {
-           id: "1231231231",
+          id: "1231231231",
           code: "1231231231",
           courierId: "123",
           courierName: "小明",
@@ -290,17 +294,15 @@ export default {
   },
   mounted() {
     // api 获取 data数据
-    this.dataTotal = this.data.length;
-    this.showData = this.data.slice(0, 5);
     bus.$on("sendChoice", res => {
       switch (res) {
         case "1-1":
+          this.url = url.order_getURL;
+          this.initData(this.url, sessionStorage.getItem("phone"), this.currentPage, this.pageSize);
           break;
         case "1-2":
           break;
         case "1-3":
-          break;
-        case "1-4":
           break;
         default:
           break;
@@ -342,6 +344,15 @@ export default {
     },
     change(val) {
       this.showData = this.data.slice((val - 1) * 5, val * 5);
+    },
+    // get All order
+    initData(url, phone, currentPage, pageSize) {
+      api.initData(url, phone, currentPage, pageSize).then(res => {
+        if(res != null){
+          this.showData = res[0];
+          this.dataTotal = res[1];
+        }
+      })
     }
   }
 };

@@ -146,7 +146,10 @@ export default {
           //     console.log(response.data);
           //     if (response.data.status === 200) {
           //       self.$Message.success("登陆成功");
+<<<<<<< HEAD
           //       sessionStorage.setItem("phone", self.formInline.user);
+=======
+>>>>>>> d2f5edb943c19321d62ad95377f6e8d8643ae67b
           //       self.$store.commit("setToken", response.data.data.code);
           //       self.$store.commit("setRole", response.data.data.identity);
           //       self.$store.commit("setUserName", response.data.data.name);
@@ -160,10 +163,16 @@ export default {
           //   .catch(error => {
           //     self.$Message.error("服務器異常、檢查連接信息");
           //   });
+<<<<<<< HEAD
 
           // self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
           self.$store.commit("setRole", "businessHall");
+=======
+          self.$store.commit("setToken", 123456);
+          self.$Message.success("登陆成功");
+          self.$store.commit("setRole", "courier");
+>>>>>>> d2f5edb943c19321d62ad95377f6e8d8643ae67b
           this.$router.push({
             path: self.$store.state.login.role
           });

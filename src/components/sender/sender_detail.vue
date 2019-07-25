@@ -29,10 +29,11 @@
             </FormItem>
             <FormItem label="城市" prop="city">
               <Select v-model="send.city" placeholder="请选择发送城市">
-                <Option value="北京">北京</Option>
-                <Option value="上海">上海</Option>
-                <Option value="深圳">深圳</Option>
-                <Option value="南京">南京</Option>
+                <Option
+                  v-for="item in cityList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
               </Select>
             </FormItem>
             <FormItem label="地址" prop="address">
@@ -68,10 +69,11 @@
             </FormItem>
             <FormItem label="城市" prop="city">
               <Select v-model="receipt.city" placeholder="请选择到达城市">
-                <Option value="北京">北京</Option>
-                <Option value="上海">上海</Option>
-                <Option value="深圳">深圳</Option>
-                <Option value="南京">南京</Option>
+                <Option
+                  v-for="item in cityList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
               </Select>
             </FormItem>
             <FormItem label="地址" prop="address">
@@ -88,11 +90,19 @@
           <Icon type="ios-send" size="48" />其他服务
         </div>
         <div class="expand">
+          <label>&nbsp;&nbsp;&nbsp;总质量：</label>
+          <Select v-model="weight" style="width:200px">
+            <Option value="2">0-3kg</Option>
+            <Option value="5">3-6kg</Option>
+            <Option value="8.5">6-10kg</Option>
+          </Select>
+          <br />
+          <br />
           <label>快递方式：</label>
           <RadioGroup v-model="courie">
             <Radio label="经济快递"></Radio>
-            <Radio label="普通快递"></Radio>
-            <Radio label="特快"></Radio>
+            <Radio label="标准快递"></Radio>
+            <Radio label="次晨特快"></Radio>
           </RadioGroup>
           <br />
           <br />
@@ -101,7 +111,6 @@
             <Radio label="纸箱"></Radio>
             <Radio label="木箱"></Radio>
             <Radio label="快递袋"></Radio>
-            <Radio label="其他"></Radio>
           </RadioGroup>
         </div>
       </div>
@@ -127,12 +136,23 @@
 </template>
 
 <script>
+import { api } from "./api/api";
+import { url } from "./api/url";
 export default {
   data() {
     return {
-      cost: "",
+      cost: 0,
       package: "",
+      packingFee: 0,
       courie: "",
+      courieFee: 0,
+      weight: 0,
+      cityList: [
+        { value: "上海", label: "上海" },
+        { value: "南京", label: "南京" },
+        { value: "北京", label: "北京" },
+        { value: "广州", label: "广州" }
+      ],
       send: {
         name: "",
         phone: "",
@@ -224,7 +244,27 @@ export default {
   methods: {
     // pay
     pay() {
-      this.$Message.success("下单成功");
+      let newData = {
+        code: this.createRandomId(),
+        senderName: this.send.name,
+        senderRegion: this.send.city,
+        senderDetailAddress: this.send.address,
+        senderPhone: this.send.phone,
+        addresseeName: this.receipt.name,
+        addresseeRegion: this.receipt.city,
+        addresseeDetailAddress: this.receipt.address,
+        addresseePhone: this.receipt.phone,
+        packingFee: this.packingFee,
+        freight: this.courieFee,
+        totalFee: this.cost,
+        orderTime: new Date(),
+        paymentTime: new Date()
+      };
+      api.addOrder(url.order_addURL, newData).then(res => {
+        if (res == 1) {
+          alert("下单成功，付款界面尚未开发，尽情谅解！");
+        }
+      });
     },
     // access address in order to fill in information quickly
     turnSender(data, index) {
@@ -233,16 +273,50 @@ export default {
     turnReceipt(data, index) {
       this.receipt = data;
     },
-    // get total fee by select express type
-    getTotalFee() {}
+    // get total fee by select express type and weight
+    getCourierFee(cityA, cityB, economy_type, weight) {
+      api
+        .calculateTotalFreight(
+          url.calculateURL,
+          cityA,
+          cityB,
+          economy_type,
+          weight
+        )
+        .then(res => {
+          this.courieFee = res;
+          this.cost = res;
+        });
+    },
+    // get address by userId
+    getAddressList() {},
+    packageFee(val) {
+      alert(val);
+    },
+    // Randomly generate ten order Numbers
+    createRandomId() {
+      return (Math.random() * 10000000000).toString().substr(0, 10);
+    }
   },
   // wait for calculate
   watch: {
     package: function() {
-      this.cost = "123";
+      if (this.package == "快递袋") {
+        this.cost = this.courieFee + 1;
+      } else if (this.package == "纸箱") {
+        this.cost = this.courieFee + 8;
+      } else {
+        this.cost = this.courieFee + 18;
+      }
     },
-    courie: function(val) {
-      this.cost = "150";
+    courie: function() {
+      let self = this;
+      this.getCourierFee(
+        self.send.city,
+        self.receipt.city,
+        self.courie,
+        self.weight
+      );
     }
   }
 };
