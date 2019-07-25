@@ -207,7 +207,6 @@ export const asynRouter = [
       },
     ]
   },
-
   //manager
   {
     path: '/manager',
@@ -226,17 +225,6 @@ export const asynRouter = [
         component: manager_check_list,
         meta: {
           title: "单据审批",
-          icon: "ios-analytics",
-          roles: ['manager'],
-          requireAuth: true
-        },
-      },
-      {
-        path: 'adjustPeople',
-        name: '人员调整',
-        component: manager_adjust_people,
-        meta: {
-          title: "人员调整",
           icon: "ios-analytics",
           roles: ['manager'],
           requireAuth: true
@@ -505,7 +493,6 @@ export const asynRouter = [
     },
   }
 ]
-
 
 export default new router({
   routes: fixedRouter
