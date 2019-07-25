@@ -6,7 +6,7 @@
     background-color: #eee;
 }
 
-.men_content {
+.menu_content {
     width: 20%;
     height: 200px;
     text-align: center;
@@ -16,9 +16,20 @@
     background-color: white
 }
 
-.men_content div {
+.menu_content div {
     width: 50%;
     margin-left: 25%;
     margin-top: 20%;
     text-align: center;
+}
+
+.menu_content:hover {
+    background-color: darkgrey;
+}
+
+.add_body {
+    width: 60%;
+    height: auto;
+    margin-left: 20%;
+    margin-top: 1%;
 }

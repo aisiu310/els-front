@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import admin_index from "@/components/admin/admin_index"
 import menu from "@/components/admin/func/menu"
+import add from "@/components/admin/func/add"
+import show from "@/components/admin/func/show"
 
 Vue.use(Router)
 
@@ -13,9 +15,18 @@ export default new Router({
         redirect: "/admin_index/menu",
         component: admin_index,
         children: [{
-            path: 'menu',
-            name: 'menu',
-            component: menu
-        }]
+                path: 'menu',
+                name: 'menu',
+                component: menu
+            },
+            {
+                path: 'add',
+                component: add
+            },
+            {
+                path: 'show',
+                component: show
+            }
+        ]
     }]
 })
