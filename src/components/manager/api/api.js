@@ -14,11 +14,21 @@ const api = {
     // update
     async updateData(URL, obj) {
         try {
-            let res = await axios.put(URL, obj);
+            let res = await axios.post(URL, obj);
             return res.data.data;
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+    // delete
+    async delData(URL, para) {
+        try {
+            let res = await axios.delete(URL + para);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
 }
 export { api }

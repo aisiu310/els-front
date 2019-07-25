@@ -56,12 +56,12 @@ export default {
   data() {
     return {
       salaryStragety: {
-        id: '',
+        id: "",
         job: "",
-        salary: '',
-        royalty: '',
-        freight: '',
-        singleFreight: ''
+        salary: "",
+        royalty: "",
+        freight: "",
+        singleFreight: ""
       },
       columns: [
         {
@@ -130,7 +130,7 @@ export default {
           }
         }
       ],
-      data: [],
+      data: []
     };
   },
   mounted() {
@@ -139,7 +139,7 @@ export default {
   methods: {
     update(name) {
       api
-        .updateData(url.salary_updateURL, this.freight)
+        .updateData(url.salary_updateURL, this.salaryStragety)
         .then(res => {
           if (res == 1) {
             this.$Message.success("更新成功！");
@@ -151,13 +151,23 @@ export default {
     },
     insert() {},
     add() {
-      this.buttonSwitch = "insert";
+      this.$Message.info("请等待开发人员开发~");
     },
     show(index) {
       this.salaryStragety = this.data[index];
     },
     remove(index) {
-      this.data.splice(index, 1);
+      api
+        .delData(url.salary_delURL, this.data[index].id)
+        .then(res => {
+          if (res == 1) {
+            this.$Message.success("删除成功！");
+            this.data.splice(index, 1);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     // get data
     initData() {

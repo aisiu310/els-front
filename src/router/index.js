@@ -264,7 +264,7 @@ export const asynRouter = [{
                 name: '收费策略',
                 component: manager_adjust_charge,
                 meta: {
-                    title: "收费策略",
+                    title: "运费策略",
                     icon: "ios-analytics",
                     roles: ['manager'],
                     requireAuth: true
