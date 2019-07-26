@@ -29,6 +29,14 @@ const api = {
             console.log(error);
         }
     },
+    async addData(URL, newData) {
+        try {
+            let res = await axios.post(URL, newData);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
     // get city list
     async getCityList(URL) {
         try {
@@ -83,5 +91,33 @@ const api = {
             console.log(error);
         }
     },
+    // add data by get
+    async addCityByGet(URL, para) {
+        try {
+            let res = await axios.get(URL + para);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // add distance by get
+    async addDistanceByGet(URL, name1, name2, distance) {
+        try {
+            let parameter = qs.stringify({ cityA: name1, cityB: name2, distance: distance });
+            let res = await axios.get(URL + parameter);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // update postage by put
+    async updatePostage(URL, obj) {
+        try {
+            let res = await axios.put(URL, obj);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 export { api }

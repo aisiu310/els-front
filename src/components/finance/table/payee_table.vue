@@ -52,7 +52,7 @@
             <FormItem label="收款日期">
               <Row>
                 <Col span="11">
-                  <DatePicker type="date" placeholder="选择收款日期" v-model="formItem.date"></DatePicker>
+                  <DatePicker type="datetime" placeholder="选择收款日期" v-model="formItem.time"></DatePicker>
                 </Col>
               </Row>
             </FormItem>
@@ -63,6 +63,9 @@
                 placeholder="请输入收款总金额"
                 prefix="logo-usd"
               ></Input>
+            </FormItem>
+            <FormItem label="快递员编号">
+              <Input v-model="formItem.courierId" placeholder="请输入收款快递员编号"></Input>
             </FormItem>
             <FormItem label="收款快递员">
               <Input v-model="formItem.courierName" placeholder="请输入收款快递员姓名"></Input>
@@ -76,7 +79,7 @@
               ></Input>
             </FormItem>
             <FormItem>
-              <Button type="primary" @click>新建</Button>
+              <Button type="primary" @click="addPayee()">新建</Button>
               <Button style="margin-left: 8px" @click="payee = false">取消</Button>
             </FormItem>
           </Form>
@@ -88,10 +91,6 @@
     <hr class="common" />
     <div>
       <Table
-        :border="showBorder"
-        :stripe="showStripe"
-        :show-header="showHeader"
-        :size="tableSize"
         :data="payeeData"
         :columns="tableColumns"
         @on-select="batchSelect"
@@ -133,8 +132,9 @@ export default {
       // add payee data
       formItem: {
         code: "",
-        date: new Date(),
+        time: new Date(),
         moeny: "",
+        courierId: "",
         courierName: "",
         orderList: ""
       },
@@ -142,11 +142,7 @@ export default {
       payeeData: [],
       dataLength: 0,
       currentPage: 1,
-      showBorder: true,
-      showStripe: true,
-      showHeader: true,
       showCheckbox: true,
-      tableSize: "default",
       // batch delete
       delSeletion: []
     };
@@ -280,7 +276,20 @@ export default {
     }
   },
   methods: {
-    addPayee() {},
+    addPayee() {
+      api
+        .addData(url.receipt_addURL, this.formItem)
+        .then(res => {
+          if (res == 1) {
+            this.$Message.success("创建成功！");
+            this.initData(this.currentPage);
+            this.payee = false;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     check(index) {
       let self = this;
       if (self.payeeData[index].state == "未提交审核") {
@@ -295,19 +304,34 @@ export default {
       }
     },
     batchSelect(selection, row) {
-      this.delSeletion = selection;
+      let flag = 0;
+      for (let i = 0; i < selection.length; i++) {
+        if (selection[i].state == "待审核") {
+          flag++;
+          break;
+        }
+      }
+      if (flag == 0) {
+        this.deleteArr = selection;
+      } else {
+        this.$Message.error("存在待审核单子，无法删除！");
+      }
     },
     batchDelete() {
-      let id = [];
-      for (let i = 0; i < this.delSeletion.length; i++) {
-        id[i] = this.delSeletion[i].id;
-      }
-      api.batchDelete(url.receipt_delURL, id).then(res => {
-        if (res != null) {
-          this.initData(this.currentPage);
-          this.$Message.info("删除成功！");
+      if (this.deleteArr.length == 0) {
+        this.$Message.error("存在待审核单子，无法删除！");
+      } else {
+        let id = [];
+        for (let i = 0; i < this.delSeletion.length; i++) {
+          id[i] = this.delSeletion[i].id;
         }
-      });
+        api.batchDelete(url.receipt_delURL, id).then(res => {
+          if (res != null) {
+            this.initData(this.currentPage);
+            this.$Message.info("删除成功！");
+          }
+        });
+      }
     },
     // page
     changePage(val) {
@@ -347,8 +371,8 @@ export default {
           this.calculate.money = res;
         });
     },
-    saveSum(){
-      this.$Message.info("该模块暂未开发！")
+    saveSum() {
+      this.$Message.info("该模块暂未开发！");
     }
   }
 };

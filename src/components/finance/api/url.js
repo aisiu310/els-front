@@ -14,6 +14,7 @@ const url = {
     receipt_checkURL: api + "/receipt/update",
     receipt_sumURL: api + "/receipt/sum",
     receipt_calculateURL: api + "/receipt/calculate",
+    receipt_addURL: api + "/receipt/addReceipt",
     // pay
     pay_calculateURL: api + "/pay/calculate",
     pay_getURL: api + "/pay/getAllPay?skip=",

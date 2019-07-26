@@ -46,12 +46,17 @@
             <FormItem label="付款日期">
               <Row>
                 <Col span="11">
-                  <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
+                  <DatePicker type="datetime" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
                 </Col>
               </Row>
             </FormItem>
             <FormItem label="付款金额">
-              <Input v-model="formItem.payMoney" type="number" placeholder="请输入付款金额" prefix="logo-usd"></Input>
+              <Input
+                v-model="formItem.payMoney"
+                type="number"
+                placeholder="请输入付款金额"
+                prefix="logo-usd"
+              ></Input>
             </FormItem>
             <FormItem label="付款人">
               <Input v-model="formItem.payName" placeholder="请输入付款人姓名"></Input>
@@ -82,10 +87,6 @@
     </div>
     <hr class="common" />
     <Table
-      :border="showBorder"
-      :stripe="showStripe"
-      :show-header="showHeader"
-      :size="tableSize"
       :data="payData"
       :columns="tableColumns"
       @on-select="deleteSeclection"
@@ -116,17 +117,13 @@ export default {
       payData: [],
       dataLength: 0,
       currentPage: 1,
-      showBorder: true,
-      showStripe: true,
-      showHeader: true,
       showCheckbox: true,
-      tableSize: "default",
       modal: false,
       calculate: false,
       deleteArr: [],
       selectTime: [],
       formItem: {
-        payDate: "",
+        payDate: new Date(),
         payMoney: "",
         payName: "",
         payAccount: "",
@@ -182,18 +179,33 @@ export default {
     },
     // get ths list of id to delete
     deleteSeclection(selection, row) {
-      this.deleteArr = selection;
+      let flag = 0;
+      for (let i = 0; i < selection.length; i++) {
+        if (selection[i].state == "待审核") {
+          flag++;
+          break;
+        }
+      }
+      if (flag == 0) {
+        this.deleteArr = selection;
+      } else {
+        this.$Message.error("存在待审核单子，无法删除！");
+      }
     },
     // del payee and get the data which is from back-end
     batchDel() {
-      let id = [];
-      for (let i = 0; i < this.deleteArr.length; i++) {
-        id[i] = this.deleteArr[i].id;
+      if (this.deleteArr.length == 0) {
+        this.$Message.error("存在待审核单子，无法删除！");
+      } else {
+        let id = [];
+        for (let i = 0; i < this.deleteArr.length; i++) {
+          id[i] = this.deleteArr[i].id;
+        }
+        api.batchDelete(url.pay_delURL, id).then(res => {
+          this.initPayData(this.currentPage);
+          this.$Message.success("删除成功！");
+        });
       }
-      api.batchDelete(url.pay_delURL, id).then(res => {
-        this.initPayData(this.currentPage);
-        this.$Message.success("删除成功！");
-      });
     },
     // check
     check(index) {
@@ -230,7 +242,9 @@ export default {
       });
     },
     // calculate the payee
-    calculate_pay() {},
+    calculate_pay() {
+      this.$Message.info("等待开发人员开发！");
+    },
     // 搜索一段时间内的付款单
     searchByTime(val) {
       this.selectTime = val;

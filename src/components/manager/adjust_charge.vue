@@ -55,7 +55,7 @@ import city from "./table/city";
 import cityDistance from "./table/city_distance";
 import cityForm from "./form/add_city";
 import cityDistanceForm from "./form/add_city_distance";
-import postage from "./form/postage"
+import postage from "./form/postage";
 export default {
   components: {
     city,

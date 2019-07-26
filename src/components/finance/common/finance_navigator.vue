@@ -37,16 +37,6 @@
         </Menu> -->
       </div>
       <div class="divide"></div>
-      <div class="employee_message">
-        <div>
-          <img src="../../../assets/employee.png" />
-        </div>
-        <p>{{user.employee_id}}</p>
-        <p>{{user.employee_name}}</p>
-        <p>{{user.employee_job}}</p>
-        <p>{{user.employee_dept}}</p>
-      </div>
-      <div class="divide"></div>
     </div>
 
     <div class="content">
@@ -62,13 +52,7 @@ export default {
     return {
       theme: "light",
       width: "100%",
-      menuItem: "",
-      user: {
-        employee_id: "1001",
-        employee_name: "benny",
-        employee_job: "CEO",
-        employee_dept: "company"
-      }
+      menuItem: ""
     };
   },
   created() {

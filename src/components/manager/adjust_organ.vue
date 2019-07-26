@@ -1,13 +1,13 @@
 <template>
-  <Tabs type="card">
-    <TabPane icon="ios-add-circle" label="新增机构">
+  <Tabs type="card" value="1">
+    <TabPane icon="ios-add-circle" label="新增机构" name="0">
       <div style="background:#eee;padding: 20px; width: auto;">
         <Card :bordered="true">
           <addOrg></addOrg>
         </Card>
       </div>
     </TabPane>
-    <TabPane icon="ios-list-box" label="机构列表"><orgTable></orgTable></TabPane>
+    <TabPane icon="ios-list-box" label="机构列表" name="1"><orgTable></orgTable></TabPane>
   </Tabs>
 </template>
 
