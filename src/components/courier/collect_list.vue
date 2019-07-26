@@ -2,145 +2,103 @@
   <div>
     <Tabs>
       <TabPane label="揽件单" icon="ios-paper-plane">
-        <Table stripe border :columns="columns" :data="data" @on-selection-change="select"></Table>
-
-        <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="submitCollectList(sel)">揽件</Button>
-        </div>
-
-        <div style="margin: 10px;overflow: hidden">
-          <div style="float: right;">
-            <Page
-              :total="sum"
-              @on-change="changePage"
-              @on-page-size-change="changePageSize"
-              show-sizer
-              :courent="currentPage"
-              :page-size="pageSize"
-              show-elevator
-              show-total
-            ></Page>
+        <Transfer
+          :data="date"
+          :target-keys="targetdata"
+          :list-style="listStyle"
+          :render-format="render"
+          :titles="['待派送','已揽件']"
+          :operations="['一键退回','一键揽件']"
+          filterable
+          not-found-text
+          @on-change="handleChange"
+          @on-selected-change="selectKeys"
+        >
+          <div :style="{float: 'right', margin: '5px'}">
+            <Button type="primary" size="small" v-bind="targetdata" @click="submit(targetdata)">派件确认</Button>
           </div>
-        </div>
+        </Transfer>
+      </TabPane>
+      <TabPane label="历史记录" icon="ios-clock-outline">
+        <p>等待程序员小哥开发</p>
       </TabPane>
     </Tabs>
   </div>
 </template>
 <script>
 import { api } from "./api";
-import qs from "qs";
-import { linkSync, link } from "fs";
-import { error } from "util";
 export default {
   data() {
     return {
+      sourceSelectedKeys: "",
+      targetSelectedKeys: "",
+      targetKey: "",
       currentPage: 1,
       pageSize: 10,
-      sel: [],
-      data: [],
-      sum: 0,
-      columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
-          title: "货物数量",
-          key: "goodsCount",
-          sortable: true
-        },
-        {
-          title: "货物总重量",
-          key: "goodsWeight",
-          sortable: true
-        },
-        {
-          title: "收件日期",
-          key: "receiptTime",
-          sortable: true
-        },
-        {
-          title: "收件人所属区域",
-          key: "addresseeRegion",
-          sortable: true
-        },
-        {
-          title: "收件人姓名",
-          key: "addresseeName"
-        },
-        {
-          title: "收件人手机号",
-          key: "addresseePhone"
-        },
-        {
-          title: "收件人详细住址",
-          key: "addresseeDetailAddress"
-        },
-        {
-          title: "实际收件人姓名",
-          key: "trueAddresseeName"
-        }
-      ]
+      date: "",
+      targetdata: this.getTargetKeys(),
+      listStyle: {
+        width: "650px",
+        height: "600px"
+      }
     };
   },
-  mounted() {
-    this.getCollectList(this.currentPage, this.pageSize);
-  },
   methods: {
-    getCollectList(currentPage, pageSize) {
+    getOrderlist() {
       const self = this;
       api
-        .getCollectList(currentPage, pageSize)
+        .getCollectList()
         .then(response => {
+          console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data[0];
-            self.sum = response.data.data[1];
+            self.date = response.data.data.list;
           }
         })
         .catch(error => {
           self.$Message.error("请求超时");
         });
     },
-    select(selection, row) {
-      this.sel = selection;
+    selectKeys(sourceSelectedKeys, targetSelectedKeys) {
+      this.sourceSelectedKeys = sourceSelectedKeys;
+      this.targetSelectedKeys = targetSelectedKeys;
     },
-    submitCollectList(sel) {
+    getTargetKeys() {
+      return this.targetSelectedKeys;
+    },
+    handleChange(newTargetKeys) {
+      this.targetKey = newTargetKeys;
+    },
+    render(item) {
+      return item;
+    },
+    submit(sel) {
       const self = this;
+      var list = [];
       if (sel.length > 0) {
+        sel.forEach(element => {
+          if (element.state === 0) {
+            list.push(element.id);
+          }
+        });
         api
-          .submitCollectList(sel)
+          .receiptListSubmitForCheck(list)
           .then(response => {
             if (response.data.status === 200) {
-              this.getCollectList(this.currentPage, this.pageSize);
-              this.$Message.success("提交成功");
+              self.getReceiptList(self.currentPage, self.pageSize);
+              self.$Message.success("提交成功");
             } else {
-              this.$Message.error("提交失败");
+              self.$Message.error("提交失败");
             }
           })
-          .catch(error => {
+          .catch(function(error) {
             self.$Message.error("请求超时,请检查连接信息");
           });
       } else {
-        this.$Message.error("你还没有选择");
+        self.$Message.error("你还没有选择");
       }
-    },
-    changePage(page) {
-      // this.currentPage = val;
-      this.getCollectList(page, this.pageSize);
-    },
-    changePageSize(pageSize) {
-      // console.log(pageSize);
-      this.getCollectList(this.currentPage, pageSize);
     }
   }
 };
 </script>
 <style>
-#submit_for_check {
-  margin: 10px;
-  width: auto;
-  height: auto;
-  float: left;
-}
 </style>

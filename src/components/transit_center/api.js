@@ -21,19 +21,20 @@ const loadCarListSubmitFormUrl = 'http://192.168.2.229:9001/yuantu/logistics/loa
 const loadCarListRemoveUrl = 'http://192.168.2.229/yuantu/logistics/loadcar/removeLoadingFake'
 const loadCarListSubmitForCheckmUrl = 'http://192.168.2.229/loadcar/modifyStateList?state=1'
 
-const getTransferListUrl = "http://localhost:9001/" + transferPath + "/getTransferList"
-const transferListSaveUrl = ""
+const getTransferListUrl = "http://" + ip + ":" + port + "/" + transferPath + "/getTransferList"
+const transferListSaveUrl = "http://localhost:9001/" + transferPath + "/modifyDistributeById"
 const transferListSubmitFormUrl = "http://localhost:9001/" + transferPath + "/addTransfer"
-const transferListRemoveUrl = ''
-const transferListSubmitForCheckUrl = ''
+const transferListRemoveUrl = "http://localhost:9001/" + transferPath + "/removeDistributeFake"
+const transferListSubmitForCheckUrl = "http://localhost:9001/" + transferPath + "/modifyStateList"
 
 const api = {
   async getTransferList(currentPage, pageSize) {
     let response = await axios.post(
       getTransferListUrl, {
-        code: "025000",
-        currentPage: currentPage,
-        pageSize: pageSize
+        code: "18003",
+        currentPage: 1,
+        pageSize: 10
+
       }
     );
     return response
