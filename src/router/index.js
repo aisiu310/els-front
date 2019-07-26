@@ -184,17 +184,6 @@ export const asynRouter = [
         },
       },
       {
-        path: 'businessReceiptList',
-        name: '收款管理',
-        component: business_receipt_list,
-        meta: {
-          title: "收款单",
-          icon: "ios-analytics",
-          roles: ['businessHall'],
-          requireAuth: true
-        },
-      },
-      {
         path: 'businessReceiptRecord',
         name: '收款记录',
         component: business_receipt_record,

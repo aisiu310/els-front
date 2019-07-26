@@ -11,8 +11,7 @@
             <span v-else>{{row.number}}</span>
           </template>
           <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
+            <span v-model="editItem.code">{{row.code}}</span>
           </template>
           <template slot-scope="{row,index}" slot="licensePlate">
             <input type="text" v-model="editItem.licensePlate" v-if="editIndex === index" />
@@ -187,6 +186,7 @@ export default {
     this.getCarList(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询车辆单~自测成功
     getCarList(currentPage, pageSize) {
       api
         .getCarList(currentPage, pageSize)
@@ -212,6 +212,7 @@ export default {
       this.editItem.endDate = row.endDate;
       this.editIndex = index;
     },
+    //修改车辆单~自测成功
     handleSave(editItem) {
       let self = this;
       api
@@ -234,6 +235,7 @@ export default {
       // console.log(selection);
       this.sel = selection;
     },
+    //删除车辆单~自测成功
     remove(sel) {
       let self = this;
 
@@ -265,6 +267,7 @@ export default {
         }, 100);
       }
     },
+    //添加车辆单~自测成功
     submitform(formItem) {
       // this.$refs["formItem"].validate(valid => {
       //   if (valid) {

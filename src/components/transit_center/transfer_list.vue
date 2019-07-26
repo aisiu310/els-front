@@ -3,20 +3,18 @@
     <Tabs>
       <TabPane label="接收管理" icon="md-clipboard">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
-          <template slot-scope="{row,index}" slot="id">
-            <span>{{row.id}}</span>
+          <template slot-scope="{row,index}" hidden slot="id">
+            <span v-model="editItem.id">{{row.id}}</span>
           </template>
           <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
+            <span v-model="editItem.code">{{row.code}}</span>
           </template>
           <template slot-scope="{row,index}" slot="transferId">
             <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
             <span v-else>{{row.transferId}}</span>
           </template>
           <template slot-scope="{row,index}" slot="date">
-            <input type="text" v-model="editItem.date" v-if="editIndex === index" />
-            <span v-else>{{row.date}}</span>
+            <span v-model="editItem.transferId">{{row.date}}</span>
           </template>
           <template slot-scope="{row,index}" slot="transportationId">
             <input type="text" v-model="editItem.transportationId" v-if="editIndex === index" />
@@ -26,9 +24,9 @@
             <input type="text" v-model="editItem.placeOfDeparture" v-if="editIndex === index" />
             <span v-else>{{row.placeOfDeparture}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="placOfArrival">
-            <input type="text" v-model="editItem.placOfArrival" v-if="editIndex === index" />
-            <span v-else>{{row.placOfArrival}}</span>
+          <template slot-scope="{row,index}" slot="placeOfArrival">
+            <input type="text" v-model="editItem.placeOfArrival" v-if="editIndex === index" />
+            <span v-else>{{row.placeOfArrival}}</span>
           </template>
           <template slot-scope="{row,index}" slot="container">
             <input type="text" v-model="editItem.container" v-if="editIndex === index" />
@@ -47,8 +45,7 @@
             <span v-else>{{row.orderList}}</span>
           </template>
           <template slot-scope="{row,index}" slot="state">
-            <input type="text" v-model="state" v-if="editIndex === index" />
-            <span v-else>{{row.state}}</span>
+            <span>{{row.state}}</span>
           </template>
           <template slot-scope="{ row }" slot="id">
             <strong>{{ row.id }}</strong>
@@ -56,10 +53,10 @@
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
               <Button v-bind="editItem" @click="handleSave(editItem)">保存信息</Button>
-              <Button @click="editIndex = -1">cancel</Button>
+              <Button @click="editIndex = -1">取消</Button>
             </div>
             <div v-else>
-              <Button @click="handleEdit(row,index)">操作</Button>
+              <Button @click="handleEdit(row,index)">修改</Button>
             </div>
           </template>
         </Table>
@@ -95,7 +92,10 @@
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="中转中心编号" prop="transferId">
+              <FormItem label="中转中心编号" prop="code">
+                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
+              </FormItem>
+              <FormItem label="中转单编号" prop="transferId">
                 <Input v-model="formItem.transferId" placeholder="Enter something..."></Input>
               </FormItem>
               <FormItem label="装车日期" prop="date">
@@ -165,7 +165,9 @@ export default {
       pageSize: 10,
       data: [],
       formItem: {
-        transferId: "025000",
+        id: "",
+        code: "025000",
+        transferId: "111",
         date: "2019-12-07",
         transportationId: "121",
         placeOfDeparture: "南京",
@@ -265,6 +267,7 @@ export default {
     this.getTransferList(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询中转单~自测成功
     getTransferList(currentPage, pageSize) {
       const self = this;
       api
@@ -272,6 +275,7 @@ export default {
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
+            console.log(response.data.data.list);
             self.data = response.data.data.list;
             self.sum = response.data.data.total;
           }
@@ -284,7 +288,7 @@ export default {
       this.editItem.id = row.id;
       this.editItem.code = row.code;
       this.editItem.transferId = row.transferId;
-      this.editItem.date = row.data;
+      this.editItem.date = row.date;
       this.editItem.transportationId = row.transportationId;
       this.editItem.placeOfDeparture = row.placeOfDeparture;
       this.editItem.placeOfArrival = row.placeOfArrival;
@@ -294,7 +298,8 @@ export default {
       this.editItem.orderList = row.orderList;
       this.editIndex = index;
     },
-    handleSave(index, editItem) {
+    //修改中转单~自测成功
+    handleSave(editItem) {
       const self = this;
       console.log(editItem);
       api
@@ -302,20 +307,22 @@ export default {
         .then(response => {
           console.log(response);
           if (response.data) {
-            this.getTransferList(this.currentPage, this.pageSize);
-            this.$Message.success("修改成功");
+            self.getTransferList(this.currentPage, this.pageSize);
+            self.$Message.success("修改成功");
           } else {
-            this.$Message.error("没有获取到数据");
+            self.$Message.error(response.date.msg);
           }
         })
         .catch(error => {
-          self.$Message.error(response.date.msg);
+          self.$Message.error("连接超时、请检查连接信息");
         });
-      this.editIndex = -1;
+      self.editIndex = -1;
     },
     select(selection, row) {
+      console.log(selection);
       this.sel = selection;
     },
+    //删除中转单~自测成功
     remove(sel) {
       let self = this;
       if (sel.length > 0) {
@@ -323,6 +330,7 @@ export default {
         api
           .transferListRemove(sel)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
               self.modal_loading = false;
               self.modaldelet = false;
@@ -347,6 +355,7 @@ export default {
         }, 100);
       }
     },
+    //添加中转单~自测成功
     submitform(formItem) {
       const self = this;
       self.$refs["formItem"].validate(valid => {
@@ -356,7 +365,7 @@ export default {
             .then(response => {
               console.log(response);
               if (response.data.status === 200) {
-                // self.getTransferList(this.currentPage, this.pageSize);
+                self.getTransferList(self.currentPage, self.pageSize);
                 self.$Message.success("添加成功");
               } else {
                 self.$Message.warning(response.data.msg);
@@ -374,17 +383,12 @@ export default {
     cancle() {
       this.$Message.info("取消操作");
     },
+    //中转单提交审核~自测成功
     submitforcheck(sel) {
       const self = this;
-      var list = [];
       if (sel.length > 0) {
-        sel.forEach(element => {
-          if (element.state === 0) {
-            list.push(element.id);
-          }
-        });
         api
-          .transferListSubmitForCheck(list)
+          .transferListSubmitForCheck(sel)
           .then(response => {
             console.log(response);
             if (response.data.status === 200) {

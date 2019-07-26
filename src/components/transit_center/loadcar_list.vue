@@ -8,12 +8,11 @@
             <span v-else>{{row.id}}</span>
           </template>
           <template slot-scope="{row,index}" slot="date">
-            <input type="text" v-model="editItem.data" v-if="editIndex === index" />
+            <input type="text" v-model="editItem.date" v-if="editIndex === index" />
             <span v-else>{{row.date}}</span>
           </template>
           <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
+            <span v-model="editItem.code">{{row.code}}</span>
           </template>
           <template slot-scope="{row,index}" slot="transportationId">
             <input type="text" v-model="editItem.transportationId" v-if="editIndex === index" />
@@ -24,7 +23,7 @@
             <span v-else>{{row.placeOfArrival}}</span>
           </template>
           <template slot-scope="{row,index}" slot="carCode">
-            <input type="text" v-model="editItem.carCode" v-if="editItem.editIndex === index" />
+            <input type="text" v-model="editItem.carCode" v-if="editIndex === index" />
             <span v-else>{{row.carCode}}</span>
           </template>
           <template slot-scope="{row,index}" slot="supervisor">
@@ -44,8 +43,7 @@
             <span v-else>{{row.orderList}}</span>
           </template>
           <template slot-scope="{row,index}" slot="state">
-            <input type="text" v-model="editItem.state" v-if="editIndex === index" />
-            <span v-else>{{row.state}}</span>
+            <span v-model="editItem.state">{{row.state}}</span>
           </template>
           <template slot-scope="{ row }" slot="id">
             <strong>{{ row.date }}</strong>
@@ -328,6 +326,7 @@ export default {
     this.getLoadCarList(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询装车单~自测成功
     getLoadCarList(currentPage, pageSize) {
       const self = this;
       api
@@ -347,6 +346,7 @@ export default {
       this.sel = selection;
       // console.log(this.sel);
     },
+    //删除装车单~自测成功
     remove(sel) {
       const self = this;
       if (sel.length > 0) {
@@ -358,7 +358,7 @@ export default {
             if (response.data.status === 200) {
               this.modal_loading = false;
               this.modaldelet = false;
-              this.getLoadCarList();
+              this.getLoadCarList(this.currentPage, this.pageSize);
               this.$Message.success("删除成功");
             } else {
               this.$Message.error("没有获取到数据");
@@ -393,6 +393,7 @@ export default {
       this.editItem.status = row.status;
       this.editIndex = index;
     },
+    //修改装车单~自测成功
     handleSave(editItem) {
       const self = this;
       api
@@ -400,7 +401,7 @@ export default {
         .then(response => {
           // console.log(response);
           if (response.data.status === 200) {
-            this.getLoadCarList();
+            this.getLoadCarList(this.currentPage, this.pageSize);
             this.$Message.success("修改成功");
           } else {
             this.$Message.error("没有获取到数据");
@@ -411,6 +412,7 @@ export default {
         });
       this.editIndex = -1;
     },
+    //添加装车单~自测成功
     submitform(formItem) {
       const self = this;
       self.$refs["formItem"].validate(valid => {
@@ -438,6 +440,7 @@ export default {
     cancle() {
       this.$Message.info("取消操作");
     },
+    //装车单提交审核~自测成功
     submitforcheck(sel) {
       const self = this;
       if (sel.length > 0) {
@@ -445,7 +448,7 @@ export default {
           .loadCarListSubmitForCheck(sel)
           .then(response => {
             if (response.data.status === 200) {
-              this.getLoadCarList();
+              this.getLoadCarList(this.currentPage, this.pageSize);
               this.$Message.success("提交成功");
             } else {
               this.$Message.error("提交失败");

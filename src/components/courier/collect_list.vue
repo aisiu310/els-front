@@ -30,11 +30,11 @@ import { api } from "./api";
 export default {
   data() {
     return {
+      currentPage: 1,
+      pageSize: 10,
       sourceSelectedKeys: "",
       targetSelectedKeys: "",
       targetKey: "",
-      currentPage: 1,
-      pageSize: 10,
       date: "",
       targetdata: this.getTargetKeys(),
       listStyle: {
@@ -43,15 +43,20 @@ export default {
       }
     };
   },
+  mounted() {
+    this.getOrderlist(this.currentPage, this.pageSize);
+  },
   methods: {
-    getOrderlist() {
+    getOrderlist(currentPage, pageSize) {
       const self = this;
       api
-        .getCollectList()
+        .getCollectList(currentPage, pageSize)
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
             self.date = response.data.data.list;
+          } else {
+            self.$Message.error(response.data.msg);
           }
         })
         .catch(error => {
