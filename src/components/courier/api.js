@@ -6,7 +6,20 @@ const submitCollectListUrl = ''
 
 const getSenderListUrl = "http://localhost:9001/" + distributePath + "/getDistributeList"
 const submitSenderListUrl = "http://localhost:9001/" + distributePath + "/addDistribute"
+
+const retreatListUrl = ""
+
+
 const api = {
+  async retreatList(currentPage, pageSize) {
+    let response = await axios.post(retreatListUrl, {
+      code: '025000',
+      currentPage: currentPage,
+      pageSize: pageSize
+    });
+    return response
+  },
+
   async getCollectList(currentPage, pageSize) {
     let response = await axios.post(getCollectListUrl, {
       code: '025000',

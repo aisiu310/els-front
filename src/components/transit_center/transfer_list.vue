@@ -6,6 +6,10 @@
           <template slot-scope="{row,index}" slot="id">
             <span>{{row.id}}</span>
           </template>
+          <template slot-scope="{row,index}" slot="code">
+            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
+            <span v-else>{{row.code}}</span>
+          </template>
           <template slot-scope="{row,index}" slot="transferId">
             <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
             <span v-else>{{row.transferId}}</span>
@@ -56,13 +60,6 @@
             </div>
             <div v-else>
               <Button @click="handleEdit(row,index)">操作</Button>
-              <Button
-                type="primary"
-                size="small"
-                style="margin-right: 5px"
-                @click="show(index)"
-              >View</Button>
-              <Button type="error" size="small" @click="remove(index)">Delete</Button>
             </div>
           </template>
         </Table>
@@ -188,6 +185,7 @@ export default {
       editIndex: -1, // 当前聚焦的输入框的行数
       editItem: {
         id: "",
+        code: "",
         transferId: "",
         date: "",
         transportationId: "",
@@ -211,6 +209,11 @@ export default {
         },
         {
           title: "中转中心编号",
+          slot: "code",
+          sortable: true
+        },
+        {
+          title: "中转单编号",
           slot: "transferId",
           sortable: true
         },
@@ -259,7 +262,7 @@ export default {
     };
   },
   mounted() {
-    // this.getTransferList(this.currentPage, this.pageSize);
+    this.getTransferList(this.currentPage, this.pageSize);
   },
   methods: {
     getTransferList(currentPage, pageSize) {
@@ -279,6 +282,7 @@ export default {
     },
     handleEdit(row, index) {
       this.editItem.id = row.id;
+      this.editItem.code = row.code;
       this.editItem.transferId = row.transferId;
       this.editItem.date = row.data;
       this.editItem.transportationId = row.transportationId;
@@ -407,3 +411,22 @@ export default {
   }
 };
 </script>
+<style>
+#delete_button {
+  margin: 10px;
+  float: left;
+}
+#arrive_list_add {
+  border: 0px solid rebeccapurple;
+  margin: 10px;
+  width: auto;
+  height: auto;
+  float: left;
+}
+#submit_for_check {
+  margin: 10px;
+  width: auto;
+  height: auto;
+  float: left;
+}
+</style>

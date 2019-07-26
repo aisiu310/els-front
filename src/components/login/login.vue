@@ -162,7 +162,7 @@ export default {
           //   });
           // self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
-          self.$store.commit("setRole", "courier");
+          self.$store.commit("setRole", "transit");
           this.$router.push({
             path: self.$store.state.login.role
           });
