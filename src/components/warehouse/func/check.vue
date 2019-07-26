@@ -15,7 +15,13 @@
     </div>
     <hr />
     <div>
-      <Table :columns="columns" :data="checkData" :stripe="true" ref="table"></Table>
+      <Table
+        :columns="columns"
+        :data="checkData"
+        :stripe="true"
+        ref="table"
+        no-data-text="仓库更新时间在截止时间之后，无数据"
+      ></Table>
       <div class="bottom">
         <div class="print">
           <Button type="primary" size="large" @click="exportData()">
@@ -117,7 +123,12 @@ export default {
       });
     },
     getDate(val) {
-      // alert(this.limitTime);
+      let self = this;
+      api.getAllInventory("南京中转中心仓库", val).then(res => {
+        self.data = res;
+        self.checkData = self.data.slice(0, 10);
+        self.dataLength = self.data.length;
+      });
     },
     // divide page
     changePage(val) {

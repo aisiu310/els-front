@@ -2,7 +2,7 @@
   <div class="addOrg">
     <Form ref="organization" :model="organization" :rules="organizationRule" :label-width="80">
       <FormItem label="机构编号" prop="id">
-        <Input v-model="organization.id" placeholder="请输入机构编号" @on-blur="validId"></Input>
+        <Input v-model="organization.id" placeholder="请输入机构编号" @on-blur="validId()"></Input>
       </FormItem>
       <FormItem label="机构名称" prop="name">
         <Input v-model="organization.name" placeholder="请输入机构名称"></Input>
@@ -92,11 +92,11 @@ export default {
         });
     },
     // valid id 
-    validId(val){
-      api.validId(url.rent_validId, val).then(res => {
+    validId(){
+      api.validId(url.rent_validId, this.organization.id).then(res => {
         if(res.length != 0){
           this.$Message.error("该机构编号已存在");
-          this.organization.id = "";
+          this.organization.id = null;
         }
       })
     }

@@ -49,31 +49,6 @@ export default {
           title: "操作时间",
           key: "log_time",
           sortable: true
-        },
-        {
-          title: "Action",
-          key: "action",
-          width: 100,
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.show(params.index);
-                    }
-                  }
-                },
-                "View"
-              )
-            ]);
-          }
         }
       ],
       log: [
@@ -111,12 +86,6 @@ export default {
   methods: {
     search(val) {
       alert("waiting the result");
-    },
-    show(index) {
-      this.$Modal.info({
-        title: "操作日志",
-        content: `工号：${this.log[index].job_number}<br>姓名：${this.log[index].name}<br>操作行为：${this.log[index].action}<br>操作时间：${this.log[index].log_time}`
-      });
     }
   }
 };
