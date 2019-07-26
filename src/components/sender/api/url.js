@@ -5,7 +5,13 @@ const url = {
     order_addURL: api + "order/addSenderOrder",
     order_getURL: api + "order/getSenderOrderList",
     // calculate
-    calculateURL: total + "cityDistance/queryFeeByName?"
+    calculateURL: total + "cityDistance/queryFeeByName?",
+    // city
+    city_getURL: total + "city/queryAllCity",
+    // address
+    address_getURL: total + "myaddress/queryMyaddressByAccount?account=",
+    aadress_delURL: total + "myaddress/removeMyaddress?id=",
+    address_addURL: total + "myaddress/addMyaddress"
 
 }
 export { url }

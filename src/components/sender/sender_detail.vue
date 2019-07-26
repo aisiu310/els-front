@@ -147,12 +147,7 @@ export default {
       courie: "",
       courieFee: 0,
       weight: 0,
-      cityList: [
-        { value: "上海", label: "上海" },
-        { value: "南京", label: "南京" },
-        { value: "北京", label: "北京" },
-        { value: "广州", label: "广州" }
-      ],
+      cityList: [],
       send: {
         name: "",
         phone: "",
@@ -213,33 +208,12 @@ export default {
           tooltip: true
         }
       ],
-      address: [
-        {
-          name: "John Brown",
-          phone: 18396016699,
-          city: "南京",
-          address: "鼓楼区广州路188号苏宁大厦"
-        },
-        {
-          name: "benny",
-          phone: 12345679812,
-          city: "南京",
-          address: "雨花台区京妆商务五号楼"
-        },
-        {
-          name: "Jordan",
-          phone: 18396016699,
-          city: "厦门",
-          address: "软件园二期"
-        },
-        {
-          name: "herry",
-          phone: 18396016699,
-          city: "上海",
-          address: "静安区静安寺"
-        }
-      ]
+      address: []
     };
+  },
+  mounted() {
+    this.getCityList();
+    this.getAddressList();
   },
   methods: {
     // pay
@@ -273,6 +247,34 @@ export default {
     turnReceipt(data, index) {
       this.receipt = data;
     },
+    // get city List
+    getCityList() {
+      api
+        .initData(url.city_getURL)
+        .then(res => {
+          let city = [];
+          for (var i = 0; i < res.length; i++) {
+            city[i] = { value: res[i].cityName, label: res[i].cityName };
+          }
+          this.cityList = city;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // get address by userId
+    getAddressList() {
+      api
+        .initAddress(url.address_getURL, "18396016699")
+        .then(res => {
+          if (res != null) {
+            this.address = res;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     // get total fee by select express type and weight
     getCourierFee(cityA, cityB, economy_type, weight) {
       api
@@ -288,8 +290,6 @@ export default {
           this.cost = res;
         });
     },
-    // get address by userId
-    getAddressList() {},
     packageFee(val) {
       alert(val);
     },

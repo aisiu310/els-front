@@ -2,8 +2,6 @@ import axios from "axios"
 import qs from "qs"
 
 const api = {
-    //get pakingFee
-    //get freight
     // get all order
     async initData(URL, phone, skip, pageSize) {
         try {
@@ -31,6 +29,42 @@ const api = {
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+    // init data by get and no parameter
+    async initData(URL) {
+        try {
+            let res = await axios.get(URL);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // delete data by id
+    async delData(URL, id) {
+        try {
+            let res = await axios.delete(URL + id);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // add data by post
+    async addData(URL, obj) {
+        try {
+            let res = await axios.post(URL, obj);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // init data with account
+    async initAddress(URL, account) {
+        try {
+            let res = await axios.get(URL + account);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
 }
 export { api }
