@@ -1,56 +1,5 @@
 <template>
-  <div class="body">
-    <div class="header">
-      <div class="word">租金</div>
-      <div class="search"></div>
-      <div class="button">
-        <Button type="primary" @click="calculate()">
-          <Icon type="ios-calculator" size="16" />租金结算
-        </Button>
-        <!-- calculate rent modal -->
-        <Modal title="租金结算" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
-          <Form :model="formItem" :label-width="80">
-            <FormItem label="付款日期">
-              <Row>
-                <Col span="11">
-                  <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
-                </Col>
-              </Row>
-            </FormItem>
-            <FormItem label="付款金额">
-              <Input
-                v-model="formItem.payMoney"
-                type="number"
-                placeholder="请输入付款金额"
-                prefix="logo-usd"
-              ></Input>
-            </FormItem>
-            <FormItem label="付款人">
-              <Input v-model="formItem.payName" placeholder="请输入付款人姓名"></Input>
-            </FormItem>
-            <FormItem label="付款账户">
-              <Input v-model="formItem.payAccount" placeholder="请输入付款账户"></Input>
-            </FormItem>
-            <FormItem label="付款条目">
-              <Input
-                v-model="formItem.payList"
-                type="textarea"
-                :autosize="{minRows: 2,maxRows: 5}"
-                placeholder="请输入付款条目"
-              ></Input>
-            </FormItem>
-            <FormItem label="备注">
-              <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
-            </FormItem>
-            <FormItem>
-              <Button type="primary" @click="addpay()">新建</Button>
-              <Button style="margin-left: 8px" @click="modal = false">取消</Button>
-            </FormItem>
-          </Form>
-        </Modal>
-      </div>
-    </div>
-    <hr class="common" />
+  <div>
     <div class="select">
       <Select v-model="selectCity" prefix="ios-home" style="width:150px" @on-change="organization">
         <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -58,7 +7,7 @@
     </div>
     <Table border :columns="columns" :data="rent"></Table>
     <div class="alonePage">
-      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
+      <Page :total="dataTotal" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
     <!-- update rent -->
     <Modal v-model="rentModal" :styles="{top: '20px'}" @on-ok="updateRent()">
@@ -70,23 +19,22 @@
           <Input v-model="udpateRentData.lease"></Input>
         </FormItem>
         <FormItem label="到期时间">
-          <Input v-model="udpateRentData.due"></Input>
+           <DatePicker type="date" v-model="udpateRentData.due"></DatePicker>
         </FormItem>
       </Form>
     </Modal>
   </div>
 </template>
-
 <script>
 import { api } from "../api/api";
 import { url } from "../api/url";
 export default {
   data() {
     return {
-      modal: false,
-      rentModal: false,
-      dataLength: 0,
+      dataTotal: 0,
       currentPage: 1,
+      selectCity: "",
+      rentModal: false,
       columns: [
         {
           type: "selection",
@@ -129,7 +77,7 @@ export default {
         {
           title: "操作",
           key: "action",
-          width: 100,
+          width: 150,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -149,7 +97,25 @@ export default {
                     }
                   }
                 },
-                "修改"
+                "更新"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.remove(params.index);
+                    }
+                  }
+                },
+                "删除"
               )
             ]);
           }
@@ -158,15 +124,6 @@ export default {
       rent: [],
       totalRent: [],
       cityList: [],
-      selectCity: "",
-      formItem: {
-        payDate: new Date(),
-        payMoney: "",
-        payName: "",
-        payAccount: "",
-        payList: "",
-        payRemarks: ""
-      },
       udpateRentData: {
         id: "",
         rent: "",
@@ -216,6 +173,20 @@ export default {
         }
       });
     },
+    // del org
+    remove(index) {
+      api
+        .delData(url.rent_delOrgURL, this.rent[index].id)
+        .then(res => {
+          if (res == 1) {
+            this.$Message.success("删除成功！");
+            this.rent.splice(index, 1);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     // update rent
     updateRent() {
       api.updateRent(url.rent_updateRentURL, this.udpateRentData).then(res => {
@@ -227,24 +198,22 @@ export default {
           this.rentModal = false;
         }
       });
-    },
-    // get total rent
-    getTotalRent(city){
-      api.getTotalRent(url.rent_totalRentURL, city).then(res => {
-        if(res != null){
-          this.formItem.payMoney = res;
-        }
-      })
-    },
-    // calculate rent
-    calculate(){
-      this.modal = true;
-      this.getTotalRent(this.selectCity);
     }
   }
 };
 </script>
-
 <style scoped>
-@import url("../css/finance.css");
+.select {
+  width: 15%;
+  margin-bottom: 0.3%;
+}
+
+.alonePage {
+  width: 99%;
+  height: auto;
+  text-align: right;
+  margin-top: 0.5%;
+  margin-right: 0.5%;
+  margin-bottom: 0.5%;
+}
 </style>
