@@ -9,7 +9,7 @@ const api = {
             let res = await axios.post(url.bank_getURL, { skipCount: skipCount });
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
+            console.log(error);
         }
     },
     // search Bank Data
@@ -18,7 +18,6 @@ const api = {
             let res = await axios.post(url.bank_getURL, { name: name, skipCount: skipCount });
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！")
             console.log(error);
         }
     },
@@ -28,7 +27,7 @@ const api = {
             let res = await axios.get(URL + skipCount);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
+            console.log(error);
         }
     },
     // add new Data
@@ -37,7 +36,6 @@ const api = {
             let res = await axios.post(URL, newData);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -47,7 +45,6 @@ const api = {
             let res = await axios.delete(URL + id);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -57,7 +54,6 @@ const api = {
             let res = await axios.delete(URL, { data: id });
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -67,7 +63,6 @@ const api = {
             let res = await axios.post(URL, { state: '待审核', id: id });
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -77,7 +72,6 @@ const api = {
             let res = await axios.post(URL, { time: time, code: code });
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -87,7 +81,6 @@ const api = {
             let res = await axios.post(URL, { begin: begin, end: end });
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -98,7 +91,6 @@ const api = {
             let res = await axios.get(URL + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
@@ -109,7 +101,6 @@ const api = {
             let res = await axios.get(URL + parameter);
             return res.data.data;
         } catch (error) {
-            alert("服务器出错！");
             console.log(error);
         }
     },
