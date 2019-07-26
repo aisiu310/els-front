@@ -3,7 +3,6 @@
     <Tabs>
       <TabPane label="派件单" icon="ios-paper-plane">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select"></Table>
-
         <div id="submit_for_check">
           <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
         </div>
@@ -29,6 +28,7 @@ export default {
       ruleValidate: {},
       sel: [],
       data: [],
+
       sum: 0,
       columns: [
         {

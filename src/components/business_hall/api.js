@@ -13,6 +13,7 @@ const loadCarPath = '/yuantu/logistics/loadcar'
 const arrivePath = '/yuantu/logistics/arrive'
 const deliverPath = '/yuantu/logistics/distribute'
 const driverPath = '/driver'
+const orderPath = '/yuantu/business/order'
 //装车管理url
 const getLoadCarListUrl = "http://" + testIp + testPort + loadCarPath + "/getLoadingList"
 const loadcarListSaveUrl = "http://" + testIp + testPort + loadCarPath + "/modifyLoadingById"
@@ -42,8 +43,8 @@ const driverListSubmitFormUrl = "http://" + driverIp + driverPort + driverPath +
 const driverListSaveUrl = "http://" + driverIp + driverPort + driverPath + "/modifyDriver"
 const searchDriverUrl = "http://" + driverIp + driverPort + driverPath + "/queryDriverByNum"
 //营收管理-收款记录url
-const getCourierListUrl = ''
-const getReceiptRecordUrl = ''
+const getCourierListUrl = "http://" + ip + port + orderPath + "/getReceiptInfo"
+const getReceiptRecordUrl = "http://" + ip + port + orderPath + "/getReceiptInfo"
 const receiptRecordSubmitFormUrl = ''
 //营收灌流-收款单url
 const getReceiptListUrl = ''
@@ -241,7 +242,8 @@ const api = {
   //营收管理-收款记录
   async getCourierList() {
     let response = await axios.post(getCourierListUrl, {
-      code: "025000",
+      code: sessionStorage.getItem("code"),
+      date: new Date()
     });
     return response
   },

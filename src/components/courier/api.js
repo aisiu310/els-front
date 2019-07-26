@@ -44,6 +44,7 @@ const api = {
     let response = await axios.post(submitCollectListUrl, list)
     return response
   },
+  //查询派件单~自测成功
   async getSenderList(currentPage, pageSize) {
     let response = await axios.post(getSenderListUrl, {
       code: '025000',
