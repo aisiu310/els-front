@@ -4,7 +4,7 @@ const state = {
   userImage: '',
   role: '',
   menu: '',
-  breadCrumb: ''
+  breadCrumb: '',
 }
 
 const mutations = {
@@ -16,7 +16,7 @@ const mutations = {
   },
   setToken(state, value) { //添加token
     state.token = value;
-    sessionStorage.setItem('token', state.token);
+    sessionStorage.setItem("token", state.token);
     // console.log(value)
   },
   delToken(state) {

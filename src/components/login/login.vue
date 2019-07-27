@@ -78,7 +78,7 @@ export default {
       checkCode: "",
       logisticId: "",
       formInline: {
-        user: "els025000001",
+        user: "els25001mgr001",
         password: "123456",
         authcode: ""
       },
@@ -142,26 +142,44 @@ export default {
           //     password: self.formInline.password
           //   })
           //   .then(response => {
-          //     console.log(response.data);
+          //     console.log(response);
           //     if (response.data.status === 200) {
           //       self.$Message.success("登陆成功");
-          //       sessionStorage.setItem("phone", self.formInline.user);
-          //       self.$store.commit("setToken", response.data.data.code);
+          //       self.$store.commit("setToken", response.data.data.userCode);
+          //       console.log(1);
           //       self.$store.commit("setRole", response.data.data.identity);
-          //       self.$store.commit("setUserName", response.data.data.name);
+          //       console.log(2);
+          //       // self.$store.commit(
+          //       //   "setBusinessHallCode",
+          //       //   response.data.data.organizationCode
+          //       // );
+          //       sessionStorage.setItem(
+          //         "businessHallCode",
+          //         response.data.data.organizationCode
+          //       );
+          //       // self.$store.commit("setUserName", response.data.data.userName);
+          //       console.log(1, self.$store.state.login.role);
           //       self.$router.push({
           //         path: self.$store.state.login.role
           //       });
+          //       if (response.data.data.identity === "businessHall") {
+          //         self.$store.commit(
+          //           "setBusinessHallCode",
+          //           response.data.data.identity
+          //         );
+          //       }
           //     } else {
           //       self.$Message.error(response.data.msg);
           //     }
           //   })
           //   .catch(error => {
-          //     self.$Message.error("服務器異常、檢查連接信息");
+          //     console.log(error);
+          //     self.$Message.error("服务器异常、检查连接信息");
           //   });
-          // self.$store.commit("setToken", 123456);
+          self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
-          self.$store.commit("setRole", "manager");
+          sessionStorage.setItem("code", 18001);
+          self.$store.commit("setRole", "businessHall");
           this.$router.push({
             path: self.$store.state.login.role
           });

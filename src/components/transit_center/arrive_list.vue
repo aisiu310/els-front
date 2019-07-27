@@ -6,9 +6,8 @@
           <template slot-scope="{row,index}" hidden slot="date">
             <span>{{row.id}}</span>
           </template>
-          <template slot-scope="{row,index}" slot="transferCode">
-            <input type="text" v-model="editItem.transferCode" v-if="editIndex === index" />
-            <span v-else>{{row.transferCode}}</span>
+          <template slot-scope="{row,index}" slot="code">
+            <span v-model="editItem.code">{{row.code}}</span>
           </template>
           <template slot-scope="{row,index}" slot="arriveDate">
             <input type="text" v-model="editItem.arriveDate" v-if="editIndex === index" />
@@ -17,6 +16,14 @@
           <template slot-scope="{row,index}" slot="placeOfDeparture">
             <input type="text" v-model="editItem.placeOfDeparture" v-if="editIndex === index" />
             <span v-else>{{row.placeOfDeparture}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="transferId">
+            <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
+            <span v-else>{{row.transferId}}</span>
+          </template>
+          <template slot-scope="{row,index}" slot="goodsState">
+            <input type="text" v-model="editItem.goodsState" v-if="editIndex === index" />
+            <span v-else>{{row.goodsState}}</span>
           </template>
           <template slot-scope="{row,index}" slot="state">
             <span>{{row.state}}</span>
@@ -66,8 +73,8 @@
             @on-cancle="cancle"
           >
             <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="中转中心编号" prop="transferCode">
-                <Input v-model="formItem.transferCode" placeholder="Enter something..."></Input>
+              <FormItem label="中转中心编号" prop="code">
+                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
               </FormItem>
               <FormItem label="到达日期" prop="arriveDate">
                 <Row>
@@ -81,11 +88,17 @@
                   </Col>
                 </Row>
               </FormItem>
+              <FormItem label="货物状态" prop="goodsState">
+                <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
+              </FormItem>
+              <FormItem label="中转单编号" prop="transferId">
+                <Input v-model="formItem.transferId" placeholder="Enter something..."></Input>
+              </FormItem>
               <FormItem label="出发地" prop="placeOfDeparture">
                 <Input v-model="formItem.placeOfDeparture" placeholder="Enter something..."></Input>
               </FormItem>
-              <FormItem label="货物状态" prop="state">
-                <Input v-model="formItem.state" placeholder="Enter something..."></Input>
+              <FormItem label="货物状态" prop="goodsState">
+                <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
               </FormItem>
             </Form>
           </Modal>
@@ -150,10 +163,10 @@ export default {
         ]
       },
       formItem: {
-        transferCode: "025000",
+        code: sessionStorage.getItem("code"),
         arriveDate: "2019-7-16",
         placeOfDeparture: "拉文克劳",
-        state: "破损"
+        goodsState: "破损"
       },
       ruleValidate: {
         arriveDate: [
@@ -173,10 +186,10 @@ export default {
       editIndex: -1, // 当前聚焦的输入框的行数
       editItem: {
         id: "",
-        transferCode: "",
+        code: "",
         arriveDate: "",
         placeOfDeparture: "",
-        state: ""
+        goodsState: ""
       },
       sum: 0,
       columns: [
@@ -192,7 +205,11 @@ export default {
         },
         {
           title: "中转中心编号",
-          slot: "transferCode"
+          slot: "code"
+        },
+        {
+          title: "中转单编号",
+          slot: "transferId"
         },
         {
           title: "到达日期",
@@ -205,6 +222,10 @@ export default {
         },
         {
           title: "货物状态（损坏、完整、丢失）",
+          slot: "goodsState"
+        },
+        {
+          title: "审核状态",
           slot: "state"
         },
         {
@@ -218,6 +239,7 @@ export default {
     this.getArriveList(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询到达单~自测成功
     getArriveList(currentPage, pageSize) {
       const self = this;
       api
@@ -242,6 +264,7 @@ export default {
       this.editItem.goodsState = row.goodsState;
       this.editIndex = index;
     },
+    //修改到达单~自测成功
     handleSave(index, editItem) {
       const self = this;
       console.log(editItem);
@@ -295,6 +318,7 @@ export default {
         }, 100);
       }
     },
+    //添加到达单~自测成功
     submitform(formItem) {
       const self = this;
       self.$refs[formItem].validate(valid => {
@@ -302,6 +326,7 @@ export default {
           api
             .arriveListSubmitForm(self.formItem)
             .then(response => {
+              console.log(response);
               if (response.data.status) {
                 self.getArriveList(this.currentPage, this.pageSize);
                 self.$Message.success("添加成功");
@@ -321,6 +346,7 @@ export default {
     cancle() {
       this.$Message.info("取消操作");
     },
+
     submitforcheck(sel) {
       const self = this;
       var list = [];
@@ -350,11 +376,9 @@ export default {
       }
     },
     changePage(page) {
-      // this.currentPage = val;
       this.getArriveList(page, this.pageSize);
     },
     changePageSize(pageSize) {
-      // console.log(pageSize);
       this.getArriveList(this.currentPage, pageSize);
     }
   }

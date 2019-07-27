@@ -2,25 +2,10 @@
   <div>
     <Tabs>
       <TabPane label="揽件单" icon="ios-paper-plane">
-        <Transfer
-          :data="date"
-          :target-keys="targetdata"
-          :list-style="listStyle"
-          :render-format="render"
-          :titles="['待派送','已揽件']"
-          :operations="['一键退回','一键揽件']"
-          filterable
-          not-found-text
-          @on-change="handleChange"
-          @on-selected-change="selectKeys"
-        >
-          <div :style="{float: 'right', margin: '5px'}">
-            <Button type="primary" size="small" v-bind="targetdata" @click="submit(targetdata)">派件确认</Button>
-          </div>
-        </Transfer>
-      </TabPane>
-      <TabPane label="历史记录" icon="ios-clock-outline">
-        <p>等待程序员小哥开发</p>
+        <Table stripe border :columns="columns" :data="data" @on-selection-change="select"></Table>
+        <div id="submit_for_check">
+          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+        </div>
       </TabPane>
     </Tabs>
   </div>
@@ -30,75 +15,133 @@ import { api } from "./api";
 export default {
   data() {
     return {
-      sourceSelectedKeys: "",
-      targetSelectedKeys: "",
-      targetKey: "",
+      modal: false,
       currentPage: 1,
       pageSize: 10,
-      date: "",
-      targetdata: this.getTargetKeys(),
-      listStyle: {
-        width: "650px",
-        height: "600px"
-      }
+      formItem: {
+        code: "025000",
+        deliverDate: "2019-07-20",
+        allOrderCode: "15476125",
+        courierId: "12123",
+        courier: "褚岩"
+      },
+      ruleValidate: {},
+      sel: [],
+      data: [],
+
+      sum: 0,
+      columns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "营业厅编号",
+          key: "code"
+        },
+        {
+          title: "派送日期",
+          key: "deliverDate"
+        },
+        {
+          title: "订单条形码号",
+          key: "allOrderCode"
+        },
+        {
+          title: "快递员编号",
+          key: "courierId"
+        },
+        {
+          title: "快递员",
+          key: "courier"
+        },
+        {
+          title: "派件状态",
+          key: "state"
+        }
+      ]
     };
   },
+  mounted() {
+    this.getSenderList(this.currentPage, this.pageSize);
+  },
   methods: {
-    getOrderlist() {
+    getSenderList(currentPage, pageSize) {
       const self = this;
       api
-        .getCollectList()
+        .getSenderList(currentPage, pageSize)
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
-            self.date = response.data.data.list;
+            self.data = response.data.data.list;
+            self.sum = response.data.data.total;
+          } else {
+            self.$Message.error(response.data.msg);
           }
         })
         .catch(error => {
           self.$Message.error("请求超时");
         });
     },
-    selectKeys(sourceSelectedKeys, targetSelectedKeys) {
-      this.sourceSelectedKeys = sourceSelectedKeys;
-      this.targetSelectedKeys = targetSelectedKeys;
+    select(selection, row) {
+      this.sel = selection;
     },
-    getTargetKeys() {
-      return this.targetSelectedKeys;
-    },
-    handleChange(newTargetKeys) {
-      this.targetKey = newTargetKeys;
-    },
-    render(item) {
-      return item;
-    },
-    submit(sel) {
+    submitforcheck(sel) {
       const self = this;
-      var list = [];
       if (sel.length > 0) {
-        sel.forEach(element => {
-          if (element.state === 0) {
-            list.push(element.id);
-          }
-        });
         api
-          .receiptListSubmitForCheck(list)
+          .submitSenderListForCheck(sel)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
-              self.getReceiptList(self.currentPage, self.pageSize);
-              self.$Message.success("提交成功");
+              self.getSenderList(this.currentPage, this.pageSize);
+              self.$Message.success("审核成功");
             } else {
-              self.$Message.error("提交失败");
+              self.$Message.error(response.data.msg);
             }
           })
-          .catch(function(error) {
+          .catch(error => {
+            console.log(error);
             self.$Message.error("请求超时,请检查连接信息");
           });
       } else {
         self.$Message.error("你还没有选择");
       }
+    },
+    cancle() {
+      this.$Message.info("取消操作");
+    },
+    changePage(page) {
+      this.getSenderList(page, this.pageSize);
+    },
+    changePageSize(pageSize) {
+      this.getSenderList(this.currentPage, pageSize);
     }
   }
 };
 </script>
 <style>
+#delete_button {
+  margin: 10px;
+  float: left;
+}
+#arrive_list_add {
+  border: 0px solid rebeccapurple;
+  margin: 10px;
+  width: auto;
+  height: auto;
+  float: left;
+}
+#submit_for_check {
+  margin: 10px;
+  width: auto;
+  height: auto;
+  float: left;
+}
 </style>

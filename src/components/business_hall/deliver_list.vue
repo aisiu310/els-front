@@ -34,11 +34,11 @@
           </template>
           <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
-              <Button v-bind="editItem" @click="handleSave(editItem)">save</Button>
-              <Button @click="editIndex = -1">cancel</Button>
+              <Button v-bind="editItem" @click="handleSave(editItem)">保存</Button>
+              <Button @click="editIndex = -1">取消</Button>
             </div>
             <div v-else>
-              <Button @click="handleEdit(row,index)">操作</Button>
+              <Button @click="handleEdit(row,index)">修改</Button>
             </div>
           </template>
         </Table>
@@ -133,15 +133,18 @@ export default {
     this.getdeliverlist(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询派件单~自测成功
     getdeliverlist(currentPage, pageSize) {
       let self = this;
       api
         .getdeliverlist(currentPage, pageSize)
         .then(response => {
+          console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data[0];
+            self.data = response.data.data.list;
             self.sum = response.data.data[1];
-            self.$Message.success("加载成功");
+          } else {
+            self.$Message.error(response.data.data.msg);
           }
         })
         .catch(error => {
@@ -157,11 +160,13 @@ export default {
       this.editItem.courier = row.courier;
       this.editIndex = index;
     },
+    //修改派件单~自测成功
     handleSave(editItem) {
       let self = this;
       api
         .deliverListSave(editItem)
         .then(response => {
+          console.log(response);
           if (response.data.status === 200) {
             self.getdeliverlist(self.currentPage, self.pageSize);
             self.$Message.success("修改成功");
@@ -177,6 +182,7 @@ export default {
     select(selection, row) {
       this.sel = selection;
     },
+    //派件单提交审核
     deliverListSubmitForCheck(sel) {
       const self = this;
       var list = [];
@@ -189,6 +195,7 @@ export default {
         api
           .deliverListSubmitForCheck(list)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
               self.getdeliverlist(self.currentPage, self.pageSize);
               self.$Message.success("提交成功");
@@ -207,23 +214,16 @@ export default {
       this.$Message.info("取消操作");
     },
     changePage(page) {
-      console.log(page);
-      // this.currentPage = val;
       this.getdeliverlist(page, this.pageSize);
     },
     changePageSize(pageSize) {
-      // console.log(pageSize);
       this.getdeliverlist(this.currentPage, pageSize);
     }
   }
 };
 </script>
 <style>
-#delete_button {
-  margin: 10px;
-  float: left;
-}
-#arrive_list_add {
+#submit_for_check {
   border: 0px solid rebeccapurple;
   margin: 10px;
   width: auto;

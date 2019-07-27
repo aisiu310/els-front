@@ -2,35 +2,9 @@
   <div>
     <Tabs>
       <TabPane label="派件单" icon="ios-paper-plane">
-        <Table stripe border :columns="columns" :data="data"></Table>
-
-        <div id="arrive_list_add">
-          <Button type="primary" @click="modal = true">添加</Button>
-          <Modal
-            v-model="modal"
-            title="添加"
-            v-bind="formItem"
-            @on-ok="submitform(formItem)"
-            @on-cancle="cancle"
-          >
-            <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="营业厅编号" prop="code">
-                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="派送日期" prop="deliverDate">
-                <Input v-model="formItem.deliverDate" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="订单条形码编号" prop="allOrderCode">
-                <Input v-model="formItem.allOrderCode" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="快递员编号" prop="courierId">
-                <Input v-model="formItem.courierId" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="快递员" prop="courier">
-                <Input v-model="formItem.courier" placeholder="Enter something..."></Input>
-              </FormItem>
-            </Form>
-          </Modal>
+        <Table stripe border :columns="columns" :data="data" @on-selection-change="select"></Table>
+        <div id="submit_for_check">
+          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
         </div>
       </TabPane>
     </Tabs>
@@ -54,6 +28,7 @@ export default {
       ruleValidate: {},
       sel: [],
       data: [],
+
       sum: 0,
       columns: [
         {
@@ -87,7 +62,7 @@ export default {
           key: "courier"
         },
         {
-          title: "状态",
+          title: "派件状态",
           key: "state"
         }
       ]
@@ -106,6 +81,8 @@ export default {
           if (response.data.status === 200) {
             self.data = response.data.data.list;
             self.sum = response.data.data.total;
+          } else {
+            self.$Message.error(response.data.msg);
           }
         })
         .catch(error => {
@@ -115,40 +92,36 @@ export default {
     select(selection, row) {
       this.sel = selection;
     },
-    submitform(formItem) {
+    submitforcheck(sel) {
       const self = this;
-      // self.$refs["formItem"].validate(valid => {
-      //   if (valid) {
-      api
-        .submitSenderList(formItem)
-        .then(response => {
-          console.log(response);
-          if (response.data.status === 200) {
-            self.$Message.success("添加成功");
-            self.getSenderList(this.currentPage, this.pageSize);
-          } else {
-            self.$Message.warning(response.data.msg);
-          }
-        })
-        .catch(error => {
-          self.$Message.error("请求超时,请检查连接信息");
-        });
-      // } else {
-      //   self.modal = "true";
-      //   self.$Message.error("操作失败");
-      //   }
-      // });
+      if (sel.length > 0) {
+        api
+          .submitSenderListForCheck(sel)
+          .then(response => {
+            console.log(response);
+            if (response.data.status === 200) {
+              self.getSenderList(this.currentPage, this.pageSize);
+              self.$Message.success("审核成功");
+            } else {
+              self.$Message.error(response.data.msg);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            self.$Message.error("请求超时,请检查连接信息");
+          });
+      } else {
+        self.$Message.error("你还没有选择");
+      }
     },
     cancle() {
       this.$Message.info("取消操作");
     },
     changePage(page) {
-      // this.currentPage = val;
-      this.getLoadCarList(page, this.pageSize);
+      this.getSenderList(page, this.pageSize);
     },
     changePageSize(pageSize) {
-      // console.log(pageSize);
-      this.getLoadCarList(this.currentPage, pageSize);
+      this.getSenderList(this.currentPage, pageSize);
     }
   }
 };

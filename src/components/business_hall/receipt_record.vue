@@ -127,69 +127,59 @@ export default {
     };
   },
   mounted() {
-    // this.getReceiptRecord();
-    // this.getCourierList();
-    this.courier = [
-      {
-        courierName: "褚岩",
-        courierId: "087960",
-        count: 3
-      },
-      {
-        courierName: "程心",
-        courierId: "087960",
-        count: 1
-      }
-    ];
-    this.receiptRecord = [
-      {
-        paymentTime: "2016-10-02",
-        money: 25,
-        courierName: "褚岩",
-        code: "23452634365453"
-      },
-      {
-        paymentTime: "2016-10-02",
-        money: 20,
-        courierName: "褚岩",
-        code: "23452634365453"
-      },
-      {
-        paymentTime: "2016-10-02",
-        money: 188,
-        courierName: "褚岩",
-        code: "23452634365453"
-      },
-      {
-        paymentTime: "2016-10-02",
-        money: 20,
-        courierName: "程心",
-        code: "23452634365453"
-      }
-    ];
+    // this.courier = [
+    //   {
+    //     courierName: "褚岩",
+    //     courierId: "087960",
+    //     count: 3
+    //   },
+    //   {
+    //     courierName: "程心",
+    //     courierId: "087960",
+    //     count: 1
+    //   }
+    // ];
+    // this.receiptRecord = [
+    //   {
+    //     paymentTime: "2016-10-02",
+    //     money: 25,
+    //     courierName: "褚岩",
+    //     code: "23452634365453"
+    //   },
+    //   {
+    //     paymentTime: "2016-10-02",
+    //     money: 20,
+    //     courierName: "褚岩",
+    //     code: "23452634365453"
+    //   },
+    //   {
+    //     paymentTime: "2016-10-02",
+    //     money: 188,
+    //     courierName: "褚岩",
+    //     code: "23452634365453"
+    //   },
+    //   {
+    //     paymentTime: "2016-10-02",
+    //     money: 20,
+    //     courierName: "程心",
+    //     code: "23452634365453"
+    //   }
+    // ];
+    this.getCourierList();
   },
   methods: {
     getCourierList() {
       let self = this;
+
       api
         .getCourierList()
         .then(response => {
+          console.log(response);
           if (response.data.status === 200) {
-            self.courier = response.data.data[0];
-          }
-        })
-        .catch(function(error) {
-          self.$Message.error("请求超时");
-        });
-    },
-    getReceiptRecord() {
-      let self = this;
-      api
-        .getReceiptRecord()
-        .then(response => {
-          if (response.data.status === 200) {
+            console.log(response.data.data[0]);
+            console.log(response.data.date[1]);
             self.receiptRecord = response.data.data[0];
-            self.receiptRecordTemp = response.data.date[0];
+            self.courier = response.data.date[1];
           }
         })
         .catch(function(error) {

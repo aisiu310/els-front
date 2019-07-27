@@ -2,6 +2,15 @@
   <div>
     <Tabs>
       <TabPane label="司机信息" icon="ios-car">
+        <!-- <div id="search">
+          <Input
+            v-model="inputData"
+            :on-click="search(inputData)"
+            search
+            enter-button
+            placeholder="请输入司机编号"
+          />
+        </div>-->
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
           <template slot-scope="{row,index}" hidden slot="id">
             <span>{{row.id}}</span>
@@ -141,6 +150,7 @@ import { appendFile } from "fs";
 export default {
   data() {
     return {
+      inputData: "",
       options: {
         shortcuts: [
           {
@@ -276,19 +286,30 @@ export default {
     this.getDriverList(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询司机信息~与余雷测试成功
     getDriverList(currentPage, pageSize) {
       let self = this;
       api
         .getDriverList(currentPage, pageSize)
         .then(response => {
-          self.data = response;
-          // self.sum = response[1];
-          self.$Message.success("加载成功");
+          self.data = response.list;
         })
         .catch(function(error) {
           alert("请求超时,请检查链接信息");
         });
     },
+    // queryDriverList(inputData) {
+    //   let self = this;
+    //   api
+    //     .search(inputData)
+    //     .then(response => {
+    //       console.log(response);
+    //       self.data = response.list;
+    //     })
+    //     .catch(error => {
+    //       alert("请求超时,请检查链接信息");
+    //     });
+    // },
     handleEdit(row, index) {
       this.formItem.id = row.id;
       this.formItem.number = row.number;
@@ -362,7 +383,7 @@ export default {
             console.log(response);
             if (response.data) {
               this.$Message.success("添加成功");
-              this.getDriverList();
+              this.getDriverList(this.currentPage, this.pageSize);
             }
           })
           .catch(function(error) {
