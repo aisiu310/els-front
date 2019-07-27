@@ -8,20 +8,11 @@
         </Select>
       </div>
       <div class="button">
-        <Button type="primary" shape="circle" @click="check()">批量审批</Button>
+        <!-- <Button type="primary" shape="circle" @click="check()">批量审批</Button> -->
       </div>
     </div>
 
-    <Table
-      :size="tableSize"
-      :data="payeeData"
-      :columns="tableColumns"
-      @on-select="batchSelect"
-      @on-select-cancel="batchSelect"
-      @on-select-all-cancel="batchSelect"
-      @on-select-all="batchSelect"
-      ref="payeeTable"
-    ></Table>
+    <Table :size="tableSize" :data="payeeData" :columns="tableColumns" ref="payeeTable"></Table>
     <div class="page">
       <Page
         :total="total"
@@ -48,7 +39,7 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 10,
-      showCheckbox: true,
+      showIndex: true,
       tableSize: "default",
       // batch delete
       seletion: [],
@@ -59,16 +50,68 @@ export default {
   mounted() {
     this.initPayData(this.selectState, this.currentPage, this.pageSize);
   },
+  methods: {
+    // init Data
+    initPayData(selectState, currentPage, pageSize) {
+      let statePO = {
+        state: selectState,
+        currentPage: currentPage,
+        pageSize: pageSize
+      };
+      api.getDataToManager(url.finance_payee_getURL, statePO).then(res => {
+        if (res != null) {
+          this.payeeData = res[0];
+          this.total = res[1];
+        }
+      });
+    },
+    // page
+    changePage(val) {
+      this.initPayData(this.selectState, val, this.pageSize);
+    },
+    // pageSize
+    changePageSize(val) {
+      this.initPayData(this.selectState, this.currentPage, val);
+    },
+    showDataByState(val) {
+      this.initPayData(val, this.currentPage, this.pageSize);
+    },
+    // pass
+    pass(index) {
+      if (this.payeeData[index].state == "待审核") {
+        var checkPO = {
+          id: this.payeeData[index].id,
+          state: "审核通过"
+        };
+        api.updateDataToManager(url.finance_payee_checkURL, checkPO).then(res => {
+          if (res == 1) {
+            this.initPayData(this.selectState, this.currentPage, this.pageSize);
+          }
+        });
+      } else {
+        this.$Message.error("已审核！");
+      }
+    },
+    // lose
+    lose(index) {
+      if (this.payeeData[index].state == "待审核") {
+        var checkPO = {
+          id: this.payeeData[index].id,
+          state: "审核不通过"
+        };
+        api.updateDataToManager(url.finance_payee_checkURL, checkPO).then(res => {
+          if (res == 1) {
+            this.initPayData(this.selectState, this.currentPage, this.pageSize);
+          }
+        });
+      } else {
+        this.$Message.error("已审核！");
+      }
+    }
+  },
   computed: {
     tableColumns() {
       let columns = [];
-      if (this.showCheckbox) {
-        columns.push({
-          type: "selection",
-          width: 60,
-          align: "center"
-        });
-      }
       if (this.showIndex) {
         columns.push({
           type: "index",
@@ -85,18 +128,19 @@ export default {
       columns.push({
         title: "收款日期",
         key: "time",
+        width: 160,
         sortable: true
       });
       columns.push({
         title: "收款金额",
-        width: 100,
-        key: "money"
+        width: 120,
+        key: "money",
+        sortable: true
       });
       columns.push({
         title: "收款快递员 ",
         key: "courierName",
-        width: 120,
-        sortable: true
+        width: 120
       });
       columns.push({
         title: "所有收款订单号",
@@ -107,33 +151,7 @@ export default {
         title: "审核状态",
         key: "state",
         width: 120,
-        sortable: true,
-        filters: [
-          {
-            label: "未提交审核",
-            value: "未提交审核"
-          },
-          {
-            label: "待审核",
-            value: "待审核"
-          },
-          {
-            label: "审核通过",
-            value: "审核通过"
-          },
-          {
-            label: "审核不通过",
-            value: "审核不通过"
-          },
-          {
-            label: "已结算",
-            value: "已结算"
-          }
-        ],
-        filterMethod(value, row) {
-          console.log(row);
-          return row.is_pass.indexOf(value) > -1;
-        }
+        sortable: true
       });
       columns.push({
         title: "操作",
@@ -182,43 +200,6 @@ export default {
         }
       });
       return columns;
-    }
-  },
-  methods: {
-     // init Data
-    initPayData(selectState, currentPage, pageSize) {
-      let statePO = {
-        state: selectState,
-        currentPage: currentPage,
-        pageSize: pageSize
-      };
-      api.getDataToManager(url.finance_payee_getURL, statePO).then(res => {
-        if (res != null) {
-          this.payeeData = res[0];
-          this.total = res[1];
-        }
-      });
-    },
-    // page
-    changePage(val) {
-      this.initPayData(this.selectState, val, this.pageSize);
-    },
-    // pageSize
-    changePageSize(val) {
-      this.initPayData(this.selectState, this.currentPage, val);
-    },
-    check(index) {},
-    batchSelect(selection, row) {
-      this.seletion = selection;
-    },
-    show(index) {
-      this.$Modal.info({
-        title: "付款单信息",
-        content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].time}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courierName}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].state}`
-      });
-    },
-    showDataByState(val){
-       this.initPayData(val, this.currentPage, this.pageSize);
     }
   }
 };

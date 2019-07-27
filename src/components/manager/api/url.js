@@ -28,9 +28,9 @@ const url = {
     postage_updateURL: api + "postageStrategy/modifyPostageStrategy",
     // finance
     finance_payee_getURL: finance + "receipt/getPayeeToManager",
-    finance_payee_checkURL: finance + "",
+    finance_payee_checkURL: finance + "receipt/update",
     finance_pay_getURL: finance + "pay/getPayToManager",
-    finance_pay_checkURL: finance + "",
+    finance_pay_checkURL: finance + "pay/update",
     // warehouse
     warehouse_in_getURL: warehouse + "",
     warehouse_in_checkURL: warehouse + "",

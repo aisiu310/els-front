@@ -80,19 +80,42 @@ export default {
     showDataByState(val) {
       this.initPayData(val, this.currentPage, this.pageSize);
     },
-    // show detail pay data
-    show(index) {
-      this.$Modal.info({
-        title: "收款单信息",
-        content: `编号:${this.payData[index].id}<br>付款日期：${this.payData[index].payDate}<br>付款金额：${this.payData[index].payMoney}<br>付款人：${this.payData[index].payName}<br>付款账户：${this.payData[index].payAccount}<br>付款条目：${this.payData[index].payList}<br>备注：${this.payData[index].payRemarks}<br>状态：${this.payData[index].state}`
-      });
-    },
     // get ths list of id to check
     seclection(selection, row) {
       this.deleteArr = selection;
     },
-    // check
-    check(index) {}
+    // pass
+    pass(index) {
+      if (this.payData[index].state == "待审核") {
+        let checkPO = {
+          id: this.payData[index].id,
+          state: "审核通过"
+        };
+        api.updateDataToManager(url.finance_pay_checkURL, checkPO).then(res => {
+          if (res == 1) {
+            this.initPayData(this.selectState, this.currentPage, this.pageSize);
+          }
+        });
+      } else {
+        this.$Message.error("已审核！");
+      }
+    },
+    // lose
+    lose(index) {
+      if (this.payData[index].state == "待审核") {
+        let checkPO = {
+          id: this.payData[index].id,
+          state: "审核不通过"
+        };
+        api.updateDataToManager(url.finance_pay_checkURL, checkPO).then(res => {
+          if (res == 1) {
+            this.initPayData(this.selectState, this.currentPage, this.pageSize);
+          }
+        });
+      } else {
+        this.$Message.error("已审核！");
+      }
+    }
   },
   computed: {
     tableColumns() {
@@ -132,42 +155,16 @@ export default {
       columns.push({
         title: "付款人",
         key: "payName",
-        sortable: true
+        width: 100
       });
       columns.push({
         title: "付款账户",
-        key: "payAccount",
-        sortable: true
+        key: "payAccount"
       });
       columns.push({
         title: "审核状态",
         key: "state",
-        sortable: true,
-        filters: [
-          {
-            label: "未提交审核",
-            value: "未提交审核"
-          },
-          {
-            label: "待审核",
-            value: "待审核"
-          },
-          {
-            label: "审核通过",
-            value: "审核通过"
-          },
-          {
-            label: "审核不通过",
-            value: "审核不通过"
-          },
-          {
-            label: "已结算",
-            value: "已结算"
-          }
-        ],
-        filterMethod(value, row) {
-          return row.state.indexOf(value) > -1;
-        }
+        sortable: true
       });
       columns.push({
         title: "操作",

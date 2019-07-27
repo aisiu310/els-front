@@ -128,5 +128,14 @@ const api = {
             console.log(error);
         }
     },
+    // update finance state by post
+    async updateDataToManager(URL, obj) {
+        try {
+            let res = await axios.post(URL, obj);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 export { api }

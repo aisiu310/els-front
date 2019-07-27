@@ -179,10 +179,10 @@ export default {
           self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
           sessionStorage.setItem("code", 18001);
-          self.$store.commit("setRole", "businessHall");
+          self.$store.commit("setRole", "manager");
           this.$router.push({
             path: self.$store.state.login.role
-          });
+          }); 
         } else {
           this.$Message.error("验证码错误！");
         }
