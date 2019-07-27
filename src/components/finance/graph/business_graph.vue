@@ -27,7 +27,7 @@ export default {
       begin: "",
       end: new Date(),
       payeeData: [],
-      calculateDate: [],
+      calculateData: [],
       payData: []
     };
   },
@@ -150,7 +150,7 @@ export default {
       api.calculate(url.receipt_calculateURL, begin, end).then(res => {
         this.payee(res[0], res[1]);
         this.payeeData = res[1];
-        this.calculateDate = res[0];
+        this.calculateData = res[0];
       });
     },
     getPayData(begin, end) {
@@ -165,7 +165,7 @@ export default {
       } else {
         this.getPayeeData(this.begin, this.end);
         this.getPayData(this.begin, this.end);
-        this.myChart(this.calculateDate, this.payeeData, this.payData);
+        this.myChart(this.calculateData, this.payeeData, this.payData);
       }
     }
   }

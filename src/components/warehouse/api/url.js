@@ -1,4 +1,5 @@
 const api = "http://localhost:8031"
+    // http://localhost:9001/yuantu/stock
 const url = {
     // outInventory url
     out_addURL: api + "/outInventory/addOutInventory",

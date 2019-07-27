@@ -1,42 +1,63 @@
 <template>
-  <div class="body">
+  <div class="check_body">
     <div class="header">
-      <Button type="primary" shape="circle" @click="check()">批量审批</Button>
+      <div class="select">
+        <Select v-model="selectState" style="width:150px" @on-change="showDataByState">
+          <Option value="待审核">待审核</Option>
+          <Option value="已审核">已审核</Option>
+        </Select>
+      </div>
+      <div class="button">
+        <Button type="primary" shape="circle" @click="check()">批量审批</Button>
+      </div>
     </div>
-    <div>
-      <Table
-        :size="tableSize"
-        :data="payeeData"
-        :columns="tableColumns"
-        @on-select="batchSelect"
-        @on-select-cancel="batchSelect"
-        @on-select-all-cancel="batchSelect"
-        @on-select-all="batchSelect"
-        ref="payeeTable"
-      ></Table>
-    </div>
+
+    <Table
+      :size="tableSize"
+      :data="payeeData"
+      :columns="tableColumns"
+      @on-select="batchSelect"
+      @on-select-cancel="batchSelect"
+      @on-select-all-cancel="batchSelect"
+      @on-select-all="batchSelect"
+      ref="payeeTable"
+    ></Table>
     <div class="page">
-      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
+      <Page
+        :total="total"
+        :current="currentPage"
+        show-elevator
+        show-total
+        show-sizer
+        :page-size="pageSize"
+        @on-change="changePage"
+        @on-page-size-change="changePageSize"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       // table data
       payeeData: [],
-      dataLength: 0,
+      total: 0,
       currentPage: 1,
+      pageSize: 10,
       showCheckbox: true,
       tableSize: "default",
       // batch delete
-      seletion: []
+      seletion: [],
+      // state
+      selectState: "待审核"
     };
   },
   mounted() {
-    this.initData(this.currentPage);
+    this.initPayData(this.selectState, this.currentPage, this.pageSize);
   },
   computed: {
     tableColumns() {
@@ -125,7 +146,7 @@ export default {
               "Button",
               {
                 props: {
-                  type: "primary",
+                  type: "success",
                   size: "small"
                 },
                 style: {
@@ -133,17 +154,17 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index);
+                    this.pass(params.index);
                   }
                 }
               },
-              "查看"
+              "通过"
             ),
             h(
               "Button",
               {
                 props: {
-                  type: "primary",
+                  type: "error",
                   size: "small"
                 },
                 style: {
@@ -151,11 +172,11 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.check(params.index);
+                    this.lose(params.index);
                   }
                 }
               },
-              "审核"
+              "不通过"
             )
           ]);
         }
@@ -164,45 +185,45 @@ export default {
     }
   },
   methods: {
-    check(index) {
-    },
-    batchSelect(selection, row) {
-      this.seletion = selection;
+     // init Data
+    initPayData(selectState, currentPage, pageSize) {
+      let statePO = {
+        state: selectState,
+        currentPage: currentPage,
+        pageSize: pageSize
+      };
+      api.getDataToManager(url.finance_payee_getURL, statePO).then(res => {
+        if (res != null) {
+          this.payeeData = res[0];
+          this.total = res[1];
+        }
+      });
     },
     // page
     changePage(val) {
-      this.initData(val);
+      this.initPayData(this.selectState, val, this.pageSize);
     },
-    // get init data
-    initData(skip) {
-        
+    // pageSize
+    changePageSize(val) {
+      this.initPayData(this.selectState, this.currentPage, val);
+    },
+    check(index) {},
+    batchSelect(selection, row) {
+      this.seletion = selection;
     },
     show(index) {
       this.$Modal.info({
         title: "付款单信息",
         content: `编号:${this.payeeData[index].id}<br>所属营业厅：${this.payeeData[index].code}<br>收款日期：${this.payeeData[index].time}<br>收款金额：${this.payeeData[index].money}<br>收款快递员：${this.payeeData[index].courierName}<br>所有收款订单号：${this.payeeData[index].orderList}<br>状态：${this.payeeData[index].state}`
       });
+    },
+    showDataByState(val){
+       this.initPayData(val, this.currentPage, this.pageSize);
     }
   }
 };
 </script>
 
 <style scoped>
-.body {
-  width: 100%;
-  height: auto;
-}
-
-.header {
-  width: 100%;
-  height: auto;
-  text-align: right;
-  padding-bottom: 5px;
-}
-.page {
-  width: 100%;
-  height: auto;
-  text-align: right;
-  padding: 10px;
-}
+@import url("../css/manager.css");
 </style>
