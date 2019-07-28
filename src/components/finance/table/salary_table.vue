@@ -305,7 +305,6 @@ export default {
     addPay() {
       api.addData(url.pay_addURL, this.formItem).then(res => {
         if (res != null) {
-          this.initPayData(this.currentPage);
           this.modal = false;
           this.$Message.success("创建成功！");
         }
