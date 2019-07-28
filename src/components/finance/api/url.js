@@ -1,5 +1,5 @@
 const api = "http://localhost:9001/yuantu/finance";
-const rent = "http://192.168.2.231:8088"
+const yulei = "http://192.168.2.231:8088"
 const url = {
     // bank url
     bank_addURL: api + "/bank/addBankAccount",
@@ -23,9 +23,14 @@ const url = {
     pay_getDataForTimeURL: api + "/pay/getReceiptBetweenTime?",
     pay_addURL: api + "/pay/addPay",
     // rent
-    rent_getCityURL: rent + "/employeeSalary/queryAllDepartment",
-    rent_getOrganizationURL: rent + "/organization/queryOrganizationByBelong?belong=",
-    rent_updateRentURL: rent + "/organization/modifyOrganizationByFinance",
-    rent_totalRentURL: rent + "/organization/queryRentByBelong?belong=",
+    rent_getCityURL: yulei + "/employeeSalary/queryAllDepartment",
+    rent_getOrganizationURL: yulei + "/organization/queryOrganizationByBelong?belong=",
+    rent_updateRentURL: yulei + "/organization/modifyOrganizationByFinance",
+    rent_totalRentURL: yulei + "/organization/queryRentByBelong?belong=",
+    // salary
+    salary_getAllURL: yulei + "/employeeSalary/queryEmployeeSalaryByOrg?",
+    salary_delURL: yulei + "/employeeSalary/removeEmployeeSalary",
+    salary_totalURL: yulei + "/employeeSalary/queryTotalByOrg?name=",
+    salary_updateURL: yulei + "/employeeSalary/modifyEmployeeSalary"
 }
 export { url }

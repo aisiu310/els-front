@@ -178,13 +178,18 @@ export default {
           //   });
           self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
+<<<<<<< HEAD
           sessionStorage.setItem("hallCode", 18001);
           sessionStorage.setItem("courierId", 18001123);
           sessionStorage.setItem("courierName", "courier");
           self.$store.commit("setRole", "courier");
+=======
+          sessionStorage.setItem("code", 18001);
+          self.$store.commit("setRole", "manager");
+>>>>>>> f9f3ad481888d2bf3a2c9f6899d0cec7a589aad3
           this.$router.push({
             path: self.$store.state.login.role
-          });
+          }); 
         } else {
           this.$Message.error("验证码错误！");
         }

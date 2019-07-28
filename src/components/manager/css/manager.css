@@ -1,0 +1,29 @@
+.check_body {
+    width: 100%;
+    height: auto;
+}
+
+.header {
+    width: 100%;
+    height: auto;
+    padding-bottom: 5px;
+    display: flex;
+}
+
+.select {
+    width: 50%;
+    height: auto;
+}
+
+.button {
+    width: 50%;
+    height: auto;
+    text-align: right;
+}
+
+.page {
+    width: 100%;
+    height: auto;
+    text-align: right;
+    padding: 10px;
+}

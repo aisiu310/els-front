@@ -95,17 +95,6 @@
       <router-view></router-view>
     </div>
 
-    <div v-if="show" class="position">
-      <baidu-map
-        class="bm-view"
-        :center="position"
-        :zoom="15"
-        :scroll-wheel-zoom="true"
-        @click="comfirm()"
-      >
-        <bm-marker :position="position" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
-        <!-- <bm-panorama></bm-panorama> -->
-      </baidu-map>
     </div>
   </div>
 </template>

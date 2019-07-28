@@ -164,7 +164,7 @@ export default {
         payMoney: "",
         payName: "",
         payAccount: "",
-        payList: "",
+        payList: "城市所有机构租金总和",
         payRemarks: ""
       },
       udpateRentData: {

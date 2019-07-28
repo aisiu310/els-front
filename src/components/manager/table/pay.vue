@@ -1,7 +1,15 @@
 <template>
-  <div class="body">
+  <div class="check_body">
     <div class="header">
-      <Button type="primary" shape="circle" @click="batchDel()">批量审批</Button>
+      <div class="select">
+        <Select v-model="selectState" style="width:150px" @on-change="showDataByState">
+          <Option value="待审核">待审核</Option>
+          <Option value="已审核">已审核</Option>
+        </Select>
+      </div>
+      <div class="button">
+        <!-- <Button type="primary" shape="circle" @click="check()">批量审批</Button> -->
+      </div>
     </div>
     <Table
       :data="payData"
@@ -14,44 +22,100 @@
     ></Table>
     <!-- page -->
     <div class="page">
-      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
+      <Page
+        :total="total"
+        :current="currentPage"
+        show-elevator
+        show-total
+        show-sizer
+        :page-size="pageSize"
+        @on-change="changePage"
+        @on-page-size-change="changePageSize"
+      />
     </div>
   </div>
 </template>
 <script>
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
       payData: [],
-      dataLength: 0,
+      total: 0,
       currentPage: 1,
+      pageSize: 10,
       showCheckbox: true,
-      selectArr: []
+      selectArr: [],
+      selectState: "待审核"
     };
   },
   mounted() {
-    this.initPayData(this.currentPage);
+    this.initPayData(this.selectState, this.currentPage, this.pageSize);
   },
   methods: {
     // init Data
-    initPayData(page) {},
+    initPayData(selectState, currentPage, pageSize) {
+      let statePO = {
+        state: selectState,
+        currentPage: currentPage,
+        pageSize: pageSize
+      };
+      api.getDataToManager(url.finance_pay_getURL, statePO).then(res => {
+        if (res != null) {
+          this.payData = res[0];
+          this.total = res[1];
+        }
+      });
+    },
     // page
     changePage(val) {
-      this.initPayData(val);
+      this.initPayData(this.selectState, val, this.pageSize);
     },
-    // show detail pay data
-    show(index) {
-      this.$Modal.info({
-        title: "收款单信息",
-        content: `编号:${this.payData[index].id}<br>付款日期：${this.payData[index].payDate}<br>付款金额：${this.payData[index].payMoney}<br>付款人：${this.payData[index].payName}<br>付款账户：${this.payData[index].payAccount}<br>付款条目：${this.payData[index].payList}<br>备注：${this.payData[index].payRemarks}<br>状态：${this.payData[index].state}`
-      });
+    // pageSize
+    changePageSize(val) {
+      this.initPayData(this.selectState, this.currentPage, val);
+    },
+    // as func
+    showDataByState(val) {
+      this.initPayData(val, this.currentPage, this.pageSize);
     },
     // get ths list of id to check
     seclection(selection, row) {
       this.deleteArr = selection;
     },
-    // check
-    check(index) {}
+    // pass
+    pass(index) {
+      if (this.payData[index].state == "待审核") {
+        let checkPO = {
+          id: this.payData[index].id,
+          state: "审核通过"
+        };
+        api.updateDataToManager(url.finance_pay_checkURL, checkPO).then(res => {
+          if (res == 1) {
+            this.initPayData(this.selectState, this.currentPage, this.pageSize);
+          }
+        });
+      } else {
+        this.$Message.error("已审核！");
+      }
+    },
+    // lose
+    lose(index) {
+      if (this.payData[index].state == "待审核") {
+        let checkPO = {
+          id: this.payData[index].id,
+          state: "审核不通过"
+        };
+        api.updateDataToManager(url.finance_pay_checkURL, checkPO).then(res => {
+          if (res == 1) {
+            this.initPayData(this.selectState, this.currentPage, this.pageSize);
+          }
+        });
+      } else {
+        this.$Message.error("已审核！");
+      }
+    }
   },
   computed: {
     tableColumns() {
@@ -91,42 +155,16 @@ export default {
       columns.push({
         title: "付款人",
         key: "payName",
-        sortable: true
+        width: 100
       });
       columns.push({
         title: "付款账户",
-        key: "payAccount",
-        sortable: true
+        key: "payAccount"
       });
       columns.push({
         title: "审核状态",
         key: "state",
-        sortable: true,
-        filters: [
-          {
-            label: "未提交审核",
-            value: "未提交审核"
-          },
-          {
-            label: "待审核",
-            value: "待审核"
-          },
-          {
-            label: "审核通过",
-            value: "审核通过"
-          },
-          {
-            label: "审核不通过",
-            value: "审核不通过"
-          },
-          {
-            label: "已结算",
-            value: "已结算"
-          }
-        ],
-        filterMethod(value, row) {
-          return row.state.indexOf(value) > -1;
-        }
+        sortable: true
       });
       columns.push({
         title: "操作",
@@ -139,7 +177,7 @@ export default {
               "Button",
               {
                 props: {
-                  type: "primary",
+                  type: "success",
                   size: "small"
                 },
                 style: {
@@ -147,7 +185,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index);
+                    this.pass(params.index);
                   }
                 }
               },
@@ -157,7 +195,7 @@ export default {
               "Button",
               {
                 props: {
-                  type: "success",
+                  type: "error",
                   size: "small"
                 },
                 style: {
@@ -165,7 +203,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.check(params.index);
+                    this.lose(params.index);
                   }
                 }
               },
@@ -181,22 +219,6 @@ export default {
 </script>
 
 <style scoped>
-.body {
-  width: 100%;
-  height: auto;
-}
-
-.header {
-  width: 100%;
-  height: auto;
-  text-align: right;
-  padding-bottom: 5px;
-}
-.page {
-  width: 100%;
-  height: auto;
-  text-align: right;
-  padding: 10px;
-}
+@import url("../css/manager.css");
 </style>
 

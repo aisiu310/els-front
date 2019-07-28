@@ -1,4 +1,6 @@
 const api = 'http://192.168.2.231:8088/'
+const finance = 'http://localhost:9001/yuantu/finance/'
+const warehouse = 'http://localhost:9001/yuantu/stock/'
 
 const url = {
     // salary
@@ -24,5 +26,16 @@ const url = {
     // postage
     postage_getURL: api + "postageStrategy/queryPostageStrategy",
     postage_updateURL: api + "postageStrategy/modifyPostageStrategy",
+    // finance
+    finance_payee_getURL: finance + "receipt/getPayeeToManager",
+    finance_payee_checkURL: finance + "receipt/update",
+    finance_pay_getURL: finance + "pay/getPayToManager",
+    finance_pay_checkURL: finance + "pay/update",
+    // warehouse
+    warehouse_in_getURL: warehouse + "",
+    warehouse_in_checkURL: warehouse + "",
+    warehouse_out_getURL: warehouse + "",
+    warehouse_out_checkURL: warehouse + "",
+
 }
 export { url }

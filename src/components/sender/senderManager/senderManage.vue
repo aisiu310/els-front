@@ -1,7 +1,7 @@
 <template>
   <div class="body">
     <div class="left">
-      <Menu :active-name="active" :open-names="['2']" :width="200">
+      <Menu :active-name="active" :open-names="['2']">
         <Submenu name="2">
           <template slot="title">
             <Icon type="ios-people" />账户管理
@@ -23,7 +23,7 @@ import bus from '../../reuse/bus'
 export default {
   data() {
     return {
-      active:''
+      active:'',
     };
   },
   mounted() {

@@ -1,11 +1,8 @@
 <template>
   <div>
-    <div id="bussiness">
-        <bussiness></bussiness>
-    </div>
-    <div id="benefit">
-        <benefit></benefit>
-    </div>
+    <bussiness></bussiness>
+
+    <!-- <benefit></benefit> -->
   </div>
 </template>
 <script>
