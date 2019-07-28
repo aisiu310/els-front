@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import store from "../../../store/index";
 export default {
   data() {
     return {
@@ -54,57 +53,11 @@ export default {
       width: "100%",
       menuItem: ""
     };
-  },
-  created() {
-    // this.employee_name = this.$route.query.user;
-    this.menuItem = store.state.login.menu;
-    // console.log("这里是待展示导航菜单", this.menuItem);
   }
 };
 </script>
 
 
 <style scoped>
-.finance {
-  display: flex;
-}
-
-.navigator {
-  width: 16%;
-  background-color: white;
-  margin-top: 1%;
-  border-radius: 8px;
-  box-shadow: #666 0px 0px 8px;
-}
-
-.work_list {
-  width: 100%;
-  height: auto;
-  font-size: 16px;
-  font-family: "宋体";
-  color: black;
-  text-align: center;
-  margin-top: 2%;
-}
-
-a {
-  color: black;
-}
-
-.divide {
-  width: 100%;
-  height: 30px;
-}
-
-.employee_message {
-  width: 100%;
-  height: auto;
-  font-size: 14px;
-  color: black;
-  text-align: center;
-}
-
-.content {
-  width: 84%;
-}
+@import url("../css/finance.css");
 </style>

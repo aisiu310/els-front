@@ -233,7 +233,6 @@ export default {
     // add pay modal
     add_pay() {
       api.addData(url.pay_addURL, this.formItem).then(res => {
-        console.log(res);
         if (res != null) {
           this.initPayData(this.currentPage);
           this.modal = false;

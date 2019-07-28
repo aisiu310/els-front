@@ -71,7 +71,7 @@
           <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="addpay()">新建</Button>
+          <Button type="primary" @click="addPay()">新建</Button>
           <Button style="margin-left: 8px" @click="modal = false">取消</Button>
         </FormItem>
       </Form>
@@ -301,6 +301,15 @@ export default {
             this.rentModal = false;
           }
         });
+    },
+    addPay() {
+      api.addData(url.pay_addURL, this.formItem).then(res => {
+        if (res != null) {
+          this.initPayData(this.currentPage);
+          this.modal = false;
+          this.$Message.success("创建成功！");
+        }
+      });
     }
   }
 };

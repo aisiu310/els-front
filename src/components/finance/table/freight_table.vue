@@ -46,7 +46,8 @@ export default {
         {
           title: "Address",
           key: "address"
-        },{
+        },
+        {
           title: "Name",
           key: "name"
         },
@@ -90,20 +91,13 @@ export default {
       freight: []
     };
   },
-  moounted(){
-    this.$Message.error("运费合计尚未开发！请等待开发人员开发~")
+  moounted() {
+    this.$Message.error("运费合计尚未开发！请等待开发人员开发~");
   },
   methods: {
-    update(index) {
-      this.$Modal.info({
-        title: "User Info"
-      });
-    },
-    remove(index) {
-      this.data6.splice(index, 1);
-    },
+    update(index) {},
     changePage(val) {},
-    batchSelect(selection, row){}
+    batchSelect(selection, row) {}
   }
 };
 </script>
