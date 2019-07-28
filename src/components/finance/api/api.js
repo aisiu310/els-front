@@ -139,6 +139,33 @@ const api = {
         } catch (error) {
             console.log(error);
         }
+    },
+    // get salary by org
+    async getSalaryByOrg(URL, org, currentPage) {
+        try {
+            let parameter = qs.stringify({ name: org, currentPage: currentPage, pageSize: 10 })
+            let res = await axios.get(URL + parameter);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // batch delete salary
+    async batchDeleteSalary(URL, deleteId) {
+        try {
+            let res = await axios.delete(URL, { data: deleteId });
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async updateSalary(URL, obj) {
+        try {
+            let res = await axios.put(URL, obj);
+            return res.data.data;
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 export { api }

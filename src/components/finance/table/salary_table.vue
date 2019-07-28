@@ -4,17 +4,27 @@
       <div class="word">工资表</div>
       <div class="search"></div>
       <div class="button">
-        <Button type="primary">
+        <Button type="primary" @click="calculate()">
           <Icon type="ios-calculator" size="16" />工资结算
         </Button>
-        <Button type="error">
+        <Button type="error" @click="batchDelete()">
           <Icon type="ios-trash" size="16" />批量删除
         </Button>
       </div>
     </div>
     <hr class="common" />
     <div class="select">
-      <Cascader :data="data" v-model="value1" @on-change="organization"></Cascader>
+      <Select v-model="selectCity" prefix="ios-home" style="width:100px" @on-change="getOrgList">
+        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+      <Select
+        v-model="selectOrg"
+        prefix="ios-home"
+        style="width:200px; padding-left: 5px"
+        @on-change="getSalary"
+      >
+        <Option v-for="item in orgList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
     </div>
 
     <Table
@@ -27,16 +37,69 @@
       @on-select-all="batchSelect"
     ></Table>
     <div class="alonePage">
-      <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
+      <Page :total="total" :current="currentPage" show-total show-elevator @on-change="changePage" />
     </div>
+
+    <!-- calculate rent modal -->
+    <Modal title="租金结算" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
+      <Form :model="formItem" :label-width="80">
+        <FormItem label="付款日期">
+          <Row>
+            <Col span="11">
+              <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
+            </Col>
+          </Row>
+        </FormItem>
+        <FormItem label="付款金额">
+          <Input v-model="formItem.payMoney" type="number" placeholder="请输入付款金额" prefix="logo-usd"></Input>
+        </FormItem>
+        <FormItem label="付款人">
+          <Input v-model="formItem.payName" placeholder="请输入付款人姓名"></Input>
+        </FormItem>
+        <FormItem label="付款账户">
+          <Input v-model="formItem.payAccount" placeholder="请输入付款账户"></Input>
+        </FormItem>
+        <FormItem label="付款条目">
+          <Input
+            v-model="formItem.payList"
+            type="textarea"
+            :autosize="{minRows: 2,maxRows: 5}"
+            placeholder="请输入付款条目"
+          ></Input>
+        </FormItem>
+        <FormItem label="备注">
+          <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="addpay()">新建</Button>
+          <Button style="margin-left: 8px" @click="modal = false">取消</Button>
+        </FormItem>
+      </Form>
+    </Modal>
+
+    <!-- update rent -->
+    <Modal v-model="salaryModal" :styles="{top: '20px'}" @on-ok="updateSalary()">
+      <Form ref="formValidate" :model="udpateSalaryData" :label-width="80">
+        <FormItem label="租金">
+          <Input v-model="udpateSalaryData.deduction" prefix="logo-usd" type="number"></Input>
+        </FormItem>
+        <FormItem label="期限">
+          <Input v-model="udpateSalaryData.remarks"></Input>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
 <script>
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {
-      dataLength: 0,
+      modal: false,
+      salaryModal: false,
+      total: 0,
       currentPage: 1,
       columns: [
         {
@@ -46,7 +109,7 @@ export default {
         },
         {
           title: "工号",
-          key: "employeeId"
+          key: "code"
         },
         {
           title: "职位",
@@ -81,7 +144,7 @@ export default {
         {
           title: "操作",
           key: "action",
-          width: 130,
+          width: 100,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -102,105 +165,131 @@ export default {
                   }
                 },
                 "修改"
-              ),
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "error",
-                    size: "small"
-                  },
-                  on: {
-                    click: () => {
-                      this.remove(params.index);
-                    }
-                  }
-                },
-                "删除"
               )
             ]);
           }
         }
       ],
-      salary: [
-        {
-          employeeId: 10086,
-          position: "财务",
-          name: "John Brown",
-          month: "2019.06",
-          salary: 5000,
-          royalty: 0,
-          bonus: 600,
-          total: 5600
-        },
-        {
-          employeeId: 10001,
-          position: "总经理",
-          name: "John Brown",
-          month: "2019.06",
-          salary: 10000,
-          royalty: 0,
-          bonus: 1000,
-          total: 11000
-        },
-        {
-          employeeId: 10086,
-          position: "快递员",
-          name: "John Brown",
-          month: "2019.06",
-          salary: 3000,
-          royalty: 3000,
-          bonus: 500,
-          total: 6500
-        },
-        {
-          employeeId: 10086,
-          position: "仓库管理员",
-          name: "John Brown",
-          month: "2019.06",
-          salary: 5000,
-          royalty: 0,
-          bonus: 300,
-          total: 5300
-        }
-      ],
-      value1: ["beijing", "gugong"],
-      data: [
-        {
-          value: "beijing",
-          label: "北京",
-          children: [
-            {
-              value: "gugong",
-              label: "故宫"
-            },
-            {
-              value: "tiantan",
-              label: "天坛"
-            },
-            {
-              value: "wangfujing",
-              label: "王府井"
-            }
-          ]
-        }
-      ]
+      salary: [],
+      cityList: [],
+      orgList: [],
+      selectCity: "",
+      selectOrg: "",
+      deleteArr: [],
+      formItem: {
+        payDate: new Date(),
+        payMoney: "",
+        payName: "",
+        payAccount: "",
+        payList: "城市所有机构租金总和",
+        payRemarks: ""
+      },
+      udpateSalaryData: {
+        id: "",
+        deduction: "",
+        remarks: ""
+      }
     };
+  },
+  mounted() {
+    this.getCity();
   },
   methods: {
     update(index) {
       this.$Modal.info({
-        title: "User Info",
+        title: "User Info"
       });
     },
-    remove(index) {
-      this.salary.splice(index, 1);
+    batchSelect(selection, row) {},
+    // get city and get org
+    getCity() {
+      api.getCityList(url.rent_getCityURL).then(res => {
+        if (res != null) {
+          var city = [];
+          for (let i = 0; i < res.length; i++)
+            city[i] = { value: res[i], label: res[i] };
+        }
+        this.cityList = city;
+        this.selectCity = res[0];
+        this.getOrgList(res[0]);
+      });
     },
-    organization(value, selectedData) {
-      // alert(value);
+    // as function name
+    getOrgList(city) {
+      api.getOrgByCity(url.rent_getOrganizationURL, city).then(res => {
+        if (res != null) {
+          if (res != null) {
+            var org = [];
+            for (let i = 0; i < res.length; i++)
+              org[i] = { value: res[i].name, label: res[i].name };
+          }
+          this.orgList = org;
+          this.selectOrg = res[0].name;
+          this.getSalary(res[0].name);
+        }
+      });
     },
-    changePage(val) {},
-    batchSelect(selection, row){}
+    // get salary by org
+    getSalary(val) {
+      api
+        .getSalaryByOrg(url.salary_getAllURL, val, this.currentPage)
+        .then(res => {
+          if (res != null) {
+            this.salary = res.list;
+            this.total = res.total;
+          }
+        });
+    },
+    changePage(val) {
+      api
+        .getSalaryByOrg(url.salary_getAllURL, this.selectOrg, val)
+        .then(res => {
+          if (res != null) {
+            this.salary = res.list;
+            this.total = res.total;
+          }
+        });
+    },
+    batchSelect(selection, row) {
+      let id = [];
+      for (let i = 0; i < selection.length; i++) {
+        id[i] = selection[i].id;
+      }
+      this.deleteArr = id;
+    },
+    batchDelete() {
+      api.batchDeleteSalary(url.salary_delURL, this.deleteArr).then(res => {
+        if (res != null) {
+          this.$Message.success("删除成功！");
+          this.getSalary(this.selectOrg);
+        }
+      });
+    },
+    // get total rent
+    getTotalRent(org) {
+      api.getTotalRent(url.salary_totalURL, org).then(res => {
+        if (res != null) {
+          this.formItem.payMoney = res;
+        }
+      });
+    },
+    // calculate rent
+    calculate() {
+      this.modal = true;
+      this.getTotalRent(this.selectOrg);
+    },
+    // update rent
+    updateSalary() {
+      api.updateSalary(url.rent_updateRentURL, this.udpateRentData).then(res => {
+        if (res == 1) {
+          this.getOrgList(this.selectCity);
+          this.rentModal = false;
+        } else {
+          alert("修改失败！");
+          this.rentModal = false;
+        }
+      });
+    }
   }
 };
 </script>
