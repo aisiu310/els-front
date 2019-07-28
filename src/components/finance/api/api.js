@@ -161,7 +161,7 @@ const api = {
     },
     async updateSalary(URL, obj) {
         try {
-            let res = await axios.put(URL, obj);
+            let res = await axios.post(URL, obj);
             return res.data.data;
         } catch (error) {
             console.log(error);
