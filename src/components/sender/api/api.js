@@ -3,7 +3,7 @@ import qs from "qs"
 
 const api = {
     // get all order
-    async initData(URL, phone, skip, pageSize) {
+    async initDataByPost(URL, phone, skip, pageSize) {
         try {
             let res = await axios.post(URL, { account: phone, currentPage: skip, pageSize: pageSize });
             return res.data.data;
@@ -66,5 +66,7 @@ const api = {
             console.log(error);
         }
     },
+    // init order by post
+
 }
 export { api }

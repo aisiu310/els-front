@@ -144,7 +144,7 @@ export default {
       cost: 0,
       package: "",
       packingFee: 0,
-      courie: "",
+      courie: "120",
       courieFee: 0,
       weight: 0,
       cityList: [],
@@ -219,20 +219,21 @@ export default {
     // pay
     pay() {
       let newData = {
-        code: this.createRandomId(),
-        senderName: this.send.name,
-        senderRegion: this.send.city,
-        senderDetailAddress: this.send.address,
-        senderPhone: this.send.phone,
-        addresseeName: this.receipt.name,
-        addresseeRegion: this.receipt.city,
-        addresseeDetailAddress: this.receipt.address,
-        addresseePhone: this.receipt.phone,
-        packingFee: this.packingFee,
-        freight: this.courieFee,
-        totalFee: this.cost,
-        orderTime: new Date(),
-        paymentTime: new Date()
+        code: this.createRandomId()+"",
+        senderName: "this.send.name",
+        senderRegion: "this.send.city",
+        senderDetailAddress: "this.send.address",
+        senderPhone: "18396016699",
+        addresseeName: "this.receipt.name",
+        addresseeRegion: "this.receipt.city",
+        addresseeDetailAddress: "this.receipt.address",
+        addresseePhone: "18396016699",
+        goodsWeight: 8,
+        type: "this.courie",
+        packingFee: 18,
+        freight: 30,
+        totalFee: 48,
+        orderTime: new Date()
       };
       api.addOrder(url.order_addURL, newData).then(res => {
         if (res == 1) {
