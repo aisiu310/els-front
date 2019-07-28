@@ -116,7 +116,7 @@ export default {
     // init data
     getAllInventory() {
       let self = this;
-      api.getAllInventory("南京中转中心仓库", self.limitTime).then(res => {
+      api.getAllInventory(sessionStorage.getItem("organizationName"), self.limitTime).then(res => {
         self.data = res;
         self.checkData = self.data.slice(0, 10);
         self.dataLength = self.data.length;
@@ -124,7 +124,7 @@ export default {
     },
     getDate(val) {
       let self = this;
-      api.getAllInventory("南京中转中心仓库", val).then(res => {
+      api.getAllInventory(sessionStorage.getItem("organizationName"), val).then(res => {
         self.data = res;
         self.checkData = self.data.slice(0, 10);
         self.dataLength = self.data.length;

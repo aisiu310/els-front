@@ -130,17 +130,17 @@ export default {
         self.$Message.error("用户名、密码、验证码不能为空");
       } else {
         if (self.formInline.authcode == self.checkCode) {
-          // self.$axios
-          //   .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
-          //     account: self.formInline.user,
-          //     password: self.formInline.password
-          //   })
-          //   .then(response => {
-          //     if (response.data.status === 200) {
-          //       let res = response.data.data;
-          //       self.$Message.success("登陆成功");
-          //       self.$store.commit("setToken", res.userCode);
-          //       self.$store.commit("setRole", res.identity);
+          self.$axios
+            .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
+              account: self.formInline.user,
+              password: self.formInline.password
+            })
+            .then(response => {
+              if (response.data.status === 200) {
+                let res = response.data.data;
+                self.$Message.success("登陆成功");
+                self.$store.commit("setToken", res.userCode);
+                self.$store.commit("setRole", res.identity);
                 // self.$store.commit(
                 //   "setBusinessHallCode",
                 //   response.data.data.organizationCode
@@ -149,11 +149,17 @@ export default {
                 //   "businessHallCode",
                 //   response.data.data.organizationCode
                 // );
-                // sessionStorage.setItem("userCode", res.userCode);  // 用户编号  
-                // sessionStorage.setItem("userName", res.userName);  // 用户名
-                // sessionStorage.setItem("identity", res.identity);  // 身份
-                // sessionStorage.setItem("organizationCode", res.organizationCode);  // 机构编号
-                // sessionStorage.setItem("organizationName", res.organizationName);  // 机构名
+                sessionStorage.setItem("userCode", res.userCode); // 用户编号
+                sessionStorage.setItem("userName", res.userName); // 用户名
+                sessionStorage.setItem("identity", res.identity); // 身份
+                sessionStorage.setItem(
+                  "organizationCode",
+                  res.organizationCode
+                ); // 机构编号
+                sessionStorage.setItem(
+                  "organizationName",
+                  res.organizationName
+                ); // 机构名
                 // self.$store.commit("setUserName", response.data.data.userName);
                 // self.$router.push({
                 //   path: self.$store.state.login.role
@@ -164,21 +170,21 @@ export default {
                 //     response.data.data.identity
                 //   );
                 // }
-            //   } else {
-            //     self.$Message.error(response.data.msg);
-            //   }
-            // })
-            // .catch(error => {
-            //   console.log(error);
-            //   self.$Message.error("服务器异常、检查连接信息");
-            // });
-          self.$store.commit("setToken", 123456);
-          self.$Message.success("登陆成功");
-          sessionStorage.setItem("code", 18001);
-          self.$store.commit("setRole", "manager");
-          this.$router.push({
-            path: self.$store.state.login.role
-          });
+              } else {
+                self.$Message.error(response.data.msg);
+              }
+            })
+            .catch(error => {
+              console.log(error);
+              self.$Message.error("服务器异常、检查连接信息");
+            });
+          // self.$store.commit("setToken", 123456);
+          // self.$Message.success("登陆成功");
+          // sessionStorage.setItem("code", 18001);
+          // self.$store.commit("setRole", "manager");
+          // this.$router.push({
+          //   path: self.$store.state.login.role
+          // });
         } else {
           this.$Message.error("验证码错误！");
         }

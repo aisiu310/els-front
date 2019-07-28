@@ -102,7 +102,7 @@ export default {
       tableSize: "default",
       // new form data
       formValidate: {
-        inventoryName: "南京中转中心仓库",
+        inventoryName: sessionStorage.getItem("organizationName"),
         orderCode: "",
         inDate: new Date(),
         destination: "",
