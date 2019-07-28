@@ -1,6 +1,6 @@
 import axios from 'axios'
 //ip
-const ip = ''
+const ip = '192.168.2.229'
 const testIP = '127.0.0.1'
 //port
 const port = ''
@@ -8,9 +8,10 @@ const testPort = ':9001'
 //path
 const distributePath = '/yuantu/logistics/distribute'
 const retreatPath = ''
+const collectPath = '/yuantu/business/order'
 //揽件
-const getCollectListUrl = "http://" + testIP + testPort + distributePath + "/getDistributeList"
-const submitCollectListUrl = ''
+const getCollectListUrl = "http://" + ip + testPort + collectPath + "/getPendingOrderList"
+const submitCollectListForCheckUrl = "http://" + ip + testPort + collectPath + "/modifyCourierInfo"
 //派件
 const getSenderListUrl = "http://" + testIP + testPort + distributePath + "/getDistributeList"
 const submitSenderListUrl = "http://" + testIP + testPort + distributePath + "/modifyStateList"
@@ -26,23 +27,25 @@ const api = {
     });
     return response
   },
-  async getCollectList(currentPage, pageSize) {
-    let response = await axios.post(getCollectListUrl, {
-      code: '025000',
-      currentPage: currentPage,
-      pageSize: pageSize
-    });
+  //查询揽件单~与杨维涛测试成功
+  async getCollectList() {
+    let response = await axios.get(getCollectListUrl);
     return response
   },
-  async submitCollectList(sel) {
-    let list = [];
-    sel.forEach(element => {
-      if (element.state === 0) {
-        list.push(element.id);
-      }
-    });
-    let response = await axios.post(submitCollectListUrl, list)
-    return response
+  async submitCollectListForCheck(sel) {
+    let code = sel[0].code
+    console.log(code)
+    if (!sel.courierId) {
+      let response = await axios.put(submitCollectListForCheckUrl, {
+        orderCode: code,
+        hallCode: sessionStorage.getItem('hallCode'),
+        courierId: sessionStorage.getItem('courierId'),
+        courierName: sessionStorage.getItem('courierName')
+      })
+      return response
+    } else {
+      alert('已被揽件')
+    }
   },
   //查询派件单~自测成功
   async getSenderList(currentPage, pageSize) {

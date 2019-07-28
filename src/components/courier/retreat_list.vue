@@ -2,19 +2,14 @@
   <div>
     <Tabs>
       <TabPane label="退件单" icon="ios-paper-plane">
-        <Transfer
-          :data="data"
-          :target-keys="targetdata"
-          :list-style="listStyle"
-          :render-format="render3"
-          :operations="['一键退件']"
-          filterable
-          @on-change="handleChange3"
-        >
-          <div :style="{float: 'right', margin: '5px'}">
-            <Button size="small" @click="submit(targetdata)">确认揽件</Button>
+        <Row>
+          <div style="background:#eee;padding: 20px">
+            <Table :columns="columns" :data="data"></Table>
+            <div :style="{float: 'right', margin: '5px'}">
+              <Button size="small" @click="submit()">确认退件</Button>
+            </div>
           </div>
-        </Transfer>
+        </Row>
       </TabPane>
       <TabPane label="历史记录" icon="ios-clock-outline">
         <p>等待程序员小哥开发</p>
@@ -27,37 +22,17 @@ import { api } from "./api";
 export default {
   data() {
     return {
-      data: this.getOrderlist(),
-      targetdata: this.getTargetKeys(),
-      listStyle: {
-        width: "650px",
-        height: "600px"
-      }
+      data: "",
+      data1: "",
+      columes: [
+        {
+          title: "Name",
+          key: "name"
+        }
+      ]
     };
   },
   methods: {
-    getOrderlist() {
-      let mockData = [];
-      for (let i = 1; i <= 20; i++) {
-        mockData.push({
-          key: i.toString(),
-          label: "新订单 " + i,
-          description: "新订单来自"
-        });
-      }
-      return mockData;
-    },
-    getTargetKeys() {
-      return this.getOrderlist()
-        .filter(() => Math.random() * 2 > 1)
-        .map(item => item.key);
-    },
-    handleChange3(newTargetKeys) {
-      this.targetKeys3 = newTargetKeys;
-    },
-    render3(item) {
-      return item.label + " - " + item.description;
-    },
     submit(sel) {
       const self = this;
       var list = [];

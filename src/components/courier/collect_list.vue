@@ -2,10 +2,11 @@
   <div>
     <Tabs>
       <TabPane label="揽件单" icon="ios-paper-plane">
-        <Table stripe border :columns="columns" :data="data" @on-selection-change="select"></Table>
-        <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
-        </div>
+        <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
+          <template slot-scope="{ row, index }" slot="action">
+            <Button type="success" @click="submitforcheck()">一件揽件</Button>
+          </template>
+        </Table>
       </TabPane>
     </Tabs>
   </div>
@@ -16,8 +17,6 @@ export default {
   data() {
     return {
       modal: false,
-      currentPage: 1,
-      pageSize: 10,
       formItem: {
         code: "025000",
         deliverDate: "2019-07-20",
@@ -42,16 +41,12 @@ export default {
           align: "center"
         },
         {
-          title: "营业厅编号",
-          key: "code"
-        },
-        {
-          title: "派送日期",
-          key: "deliverDate"
+          title: "收件人所属区域",
+          key: "addresseeRegion"
         },
         {
           title: "订单条形码号",
-          key: "allOrderCode"
+          key: "code"
         },
         {
           title: "快递员编号",
@@ -62,25 +57,24 @@ export default {
           key: "courier"
         },
         {
-          title: "派件状态",
-          key: "state"
+          title: "操作",
+          slot: "action"
         }
       ]
     };
   },
   mounted() {
-    this.getSenderList(this.currentPage, this.pageSize);
+    this.getCollectList();
   },
   methods: {
-    getSenderList(currentPage, pageSize) {
+    getCollectList() {
       const self = this;
       api
-        .getSenderList(currentPage, pageSize)
+        .getCollectList()
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
-            self.data = response.data.data.list;
-            self.sum = response.data.data.total;
+            self.data = response.data.data;
           } else {
             self.$Message.error(response.data.msg);
           }
@@ -92,15 +86,17 @@ export default {
     select(selection, row) {
       this.sel = selection;
     },
-    submitforcheck(sel) {
+    submitforcheck() {
       const self = this;
+      sel = self.sel;
+      console.log(sel);
       if (sel.length > 0) {
         api
-          .submitSenderListForCheck(sel)
+          .submitCollectListForCheck(sel)
           .then(response => {
             console.log(response);
             if (response.data.status === 200) {
-              self.getSenderList(this.currentPage, this.pageSize);
+              self.getCollectList();
               self.$Message.success("审核成功");
             } else {
               self.$Message.error(response.data.msg);
