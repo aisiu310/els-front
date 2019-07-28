@@ -52,14 +52,8 @@
         :maxlength="10"
       />
     </div>
-    <div v-if="show" class="position">
-      <baidu-map
-        class="bm-view"
-        :center="position"
-        :zoom="15"
-        :scroll-wheel-zoom="true"
-        @click="comfirm()"
-      >
+    <div v-if="show == true" class="position">
+      <baidu-map class="bm-view" :center="position" :zoom="15" :scroll-wheel-zoom="true">
         <bm-marker :position="position" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
         <!-- <bm-panorama></bm-panorama> -->
       </baidu-map>
@@ -112,8 +106,8 @@ export default {
           }
         ]
       },
-      // { lng: 116.404, lat: 39.915 }
-      position: "南京鼓楼区苏宁大厦"
+      // { lng: 31.932, lat: 118.928 }
+      position: {}
     };
   },
 
@@ -182,7 +176,7 @@ export default {
           self.$store.commit("setRole", "manager");
           this.$router.push({
             path: self.$store.state.login.role
-          }); 
+          });
         } else {
           this.$Message.error("验证码错误！");
         }
@@ -249,11 +243,28 @@ export default {
         this.show = false;
       } else {
         // invoke the back-end API
-        this.show = true;
+        this.$axios
+          .post(
+            "http://192.168.2.229:9001/yuantu/business/logistics/getLogisticsList",
+            { orderCode: data }
+          )
+          .then(res => {
+            if (res.data.status == 200) {
+              let result = res.data.data;
+              // let location = { lng: result[0].lng, lat: result[0].lat };
+              this.position = result[0].address;
+              // this.position = location;
+              this.show = true;
+            } else {
+              this.$Message.error(
+                "未查询到该订单号物流信息！请确认订单号是否正确！"
+              );
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
-    },
-    comfirm() {
-      alert("nihao!");
     }
   }
 };
