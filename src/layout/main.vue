@@ -17,8 +17,7 @@
               <Icon :type="item.meta.icon"></Icon>
               {{item.meta.title}}
             </MenuItem>
-          </div>
-          <div class="layout-info">
+
             <Poptip trigger="hover" title="Title" content="content">
               <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />
             </Poptip>
@@ -95,7 +94,9 @@ export default {
 .layout-nav {
   width: 70%;
   margin: 0 auto;
-  margin-right: 0px;
+  float: right;
+  text-align: right;
+  border: 3px solid red;
 }
 /* .layout-info {
   border: 1px solid rebeccapurple;

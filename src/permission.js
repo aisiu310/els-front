@@ -11,16 +11,12 @@ router.beforeEach((to, from, next) => {
   // 取到用户的角色
   let GetRole = sessionStorage.getItem("role")
   // let GetRole = store.state.login.role;
-
-  store.commit('setBreadCrumb', to.name)
-  console.log('存储面包屑导航条', store.state.login.breadCrumb)
-
   console.log('目标页面', to);
   console.log('起始页面', from);
   console.log('根据token拉取用户角色:', GetRole, '生成路由', );
   // 如果登录了
   if (GetRole && to.path != '/login') {
-    // 如果路由表 没根据角色进行筛选,就筛选一次
+    // 如果路由表不存在， 没根据角色进行筛选则筛选一次
     if (!addRouFlag) {
       addRouFlag = true
       var getRoutes = baseRoleGetRouters(asynRouter, GetRole.split(","))
@@ -30,6 +26,9 @@ router.beforeEach((to, from, next) => {
       router.push({
         path: to.path
       })
+    } //路由表存在 进行权限控制  对于非法访问统一拦截  重定向至无权访问界面
+    else {
+
     }
   } else {
     // 用户没登录，跳转到登录页面

@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>这是统一错误页面</h1>
+    <img src="../../assets/404page.png" />
   </div>
 </template>

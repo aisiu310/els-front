@@ -481,7 +481,6 @@ export const asynRouter = [
   },
   // 当页面地址和上面任一地址不匹配，则跳转到404
   {
-
     path: '*',
     redirect: '/404',
     component: error,
