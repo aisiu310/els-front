@@ -131,8 +131,7 @@ export default {
         self.$Message.error("用户名、密码、验证码不能为空");
       } else {
         if (self.formInline.authcode == self.checkCode) {
-<<<<<<< HEAD
-          self.$axios;
+          // self.$axios
           // .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
           //   account: self.formInline.user,
           //   password: self.formInline.password
@@ -183,59 +182,6 @@ export default {
           this.$router.push({
             path: self.$store.state.login.role
           });
-=======
-          self.$axios
-            .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
-              account: self.formInline.user,
-              password: self.formInline.password
-            })
-            .then(response => {
-              console.log(response);
-              if (response.data.status === 200) {
-                let res = response.data.data;
-                self.$Message.success("登陆成功");
-                self.$store.commit("setToken", res.userCode);
-                self.$store.commit("setRole", res.identity);
-
-                sessionStorage.setItem(
-                  "organizationName",
-                  res.organizationName
-                );
-                sessionStorage.setItem("identity", res.identity);
-                sessionStorage.setItem("userCode", res.userCode);
-                sessionStorage.setItem("userName", res.userName);
-                sessionStorage.setItem(
-                  "businessHallCode",
-                  res.organizationCode
-                );
-                // self.$store.commit("setUserName", response.data.data.userName);
-                self.$router.push({
-                  path: self.$store.state.login.role
-                });
-                if (response.data.data.identity === "businessHall") {
-                  self.$store.commit(
-                    "setBusinessHallCode",
-                    response.data.data.identity
-                  );
-                }
-              } else {
-                self.$Message.error(response.data.msg);
-              }
-            })
-            .catch(error => {
-              console.log(error);
-              self.$Message.error("服务器异常、检查连接信息");
-            });
-          // self.$store.commit("setToken", 123456);
-          // self.$Message.success("登陆成功");
-          // sessionStorage.setItem("hallCode", 18001);
-          // sessionStorage.setItem("courierId", 18001123);
-          // sessionStorage.setItem("courierName", "courier");
-          // self.$store.commit("setRole", "businessHall");
-          // this.$router.push({
-          //   path: self.$store.state.login.role
-          // });
->>>>>>> f3950f639cf57e85c491d5fafe74575f04ebc858
         } else {
           this.$Message.error("验证码错误！");
           this.$Loading.error();
