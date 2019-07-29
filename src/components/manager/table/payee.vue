@@ -62,6 +62,11 @@ export default {
         if (res != null) {
           this.payeeData = res[0];
           this.total = res[1];
+          if (selectState == "待审核") {
+            this.$Notice.info({
+              title: "您还有" + res[0].length + "条收款单待审核"
+            });
+          }
         }
       });
     },
@@ -83,11 +88,17 @@ export default {
           id: this.payeeData[index].id,
           state: "审核通过"
         };
-        api.updateDataToManager(url.finance_payee_checkURL, checkPO).then(res => {
-          if (res == 1) {
-            this.initPayData(this.selectState, this.currentPage, this.pageSize);
-          }
-        });
+        api
+          .updateDataToManager(url.finance_payee_checkURL, checkPO)
+          .then(res => {
+            if (res == 1) {
+              this.initPayData(
+                this.selectState,
+                this.currentPage,
+                this.pageSize
+              );
+            }
+          });
       } else {
         this.$Message.error("已审核！");
       }
@@ -99,11 +110,17 @@ export default {
           id: this.payeeData[index].id,
           state: "审核不通过"
         };
-        api.updateDataToManager(url.finance_payee_checkURL, checkPO).then(res => {
-          if (res == 1) {
-            this.initPayData(this.selectState, this.currentPage, this.pageSize);
-          }
-        });
+        api
+          .updateDataToManager(url.finance_payee_checkURL, checkPO)
+          .then(res => {
+            if (res == 1) {
+              this.initPayData(
+                this.selectState,
+                this.currentPage,
+                this.pageSize
+              );
+            }
+          });
       } else {
         this.$Message.error("已审核！");
       }

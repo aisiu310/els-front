@@ -51,14 +51,14 @@ export default {
 }
 
 .search {
-  width: 60%;
+  width: 50%;
   font-size: 20px;
   color: white;
   text-align: center
 }
 
 .username {
-  width: 10%;
+  width: 20%;
   font-size: 16px;
   margin-top: .5%;
   color: white;

@@ -65,6 +65,11 @@ export default {
         if (res != null) {
           this.payData = res[0];
           this.total = res[1];
+          if (selectState == "待审核") {
+            this.$Notice.info({
+              title: "您还有" + res[0].length + "条付款单待审核"
+            });
+          }
         }
       });
     },

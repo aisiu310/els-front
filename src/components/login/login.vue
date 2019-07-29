@@ -180,8 +180,9 @@ export default {
             // });
           self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
-          sessionStorage.setItem("code", 18001);
-          self.$store.commit("setRole", "manager");
+          sessionStorage.setItem("organizationName", "南京中转中心仓库");
+          console.log(sessionStorage.getItem("organizationName"));-
+          self.$store.commit("setRole", "warehouse");
           this.$router.push({
             path: self.$store.state.login.role
           });
