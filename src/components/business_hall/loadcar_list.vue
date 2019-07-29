@@ -151,7 +151,7 @@
       </TabPane>
 
       <TabPane label="历史记录" icon="ios-clock-outline">
-        <p>等待程序员小哥开发</p>
+        <img src="../../assets/B_G.png" width="100%" height="660px" />
       </TabPane>
     </Tabs>
   </div>
@@ -312,7 +312,33 @@ export default {
         },
         {
           title: "审核状态",
-          slot: "state"
+          slot: "state",
+          render: (h, params) => {
+            const row = params.row;
+            const color =
+              row.status === 1
+                ? "primary"
+                : row.status === 0
+                ? "success"
+                : "error";
+            const text =
+              row.status === 1
+                ? "Working"
+                : row.status === 0
+                ? "已审核"
+                : "待审核";
+
+            return h(
+              "Tag",
+              {
+                props: {
+                  type: "dot",
+                  color: color
+                }
+              },
+              text
+            );
+          }
         },
         {
           title: "操作",
