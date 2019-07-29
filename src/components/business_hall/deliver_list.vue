@@ -3,36 +3,7 @@
     <Tabs>
       <TabPane label="派件管理" icon="ios-swap">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
-          <template slot-scope="{row,index}" hidden slot="id">
-            <span>{{row.id}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="code">
-            <input type="text" v-model="editItem.code" v-if="editIndex === index" />
-            <span v-else>{{row.code}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="deliverDate">
-            <input type="text" v-model="editItem.deliverDate" v-if="editIndex === index" />
-            <span v-else>{{row.deliverDate}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="allOrderCode">
-            <input type="text" v-model="editItem.allOrderCode" v-if="editIndex === index" />
-            <span v-else>{{row.allOrderCode}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="courierId">
-            <input type="text" v-model="editItem.courierId" v-if="editIndex === index" />
-            <span v-else>{{row.courierId}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="courier">
-            <input type="text" v-model="editItem.courier" v-if="editIndex === index" />
-            <span v-else>{{row.courier}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="state">
-            <span>{{row.state}}</span>
-          </template>
-          <template slot-scope="{ row }" slot="date">
-            <strong>{{ row.date }}</strong>
-          </template>
-          <template slot-scope="{row,index}" slot="action">
+          <!-- <template slot-scope="{row,index}" slot="action">
             <div v-if="editIndex === index">
               <Button v-bind="editItem" @click="handleSave(editItem)">保存</Button>
               <Button @click="editIndex = -1">取消</Button>
@@ -40,12 +11,14 @@
             <div v-else>
               <Button @click="handleEdit(row,index)">修改</Button>
             </div>
-          </template>
+          </template>-->
         </Table>
         <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="deliverListSubmitForCheck(sel)">提交审核</Button>
+          <Button type="primary" @click="addDeliverlist()">生成派件单</Button>
         </div>
-
+        <div id="submit_for_check">
+          <Button type="success" @click="savelist()">存储派件单</Button>
+        </div>
         <div style="margin: 10px;overflow: hidden">
           <div style="float: right;">
             <Page
@@ -70,29 +43,20 @@
 <script>
 import { api } from "./api";
 import { log, error } from "util";
+import { resolve } from "url";
 export default {
   data() {
     return {
       currentPage: 1,
       pageSize: 10,
+      showTime: "",
       sel: [],
       data: [],
-      editIndex: -1, // 当前聚焦的输入框的行数
-      editItem: {
-        id: "",
-        code: "",
-        deliverDate: "",
-        allOrderCode: "",
-        courierId: "",
-        courier: ""
-      },
+      temp: [],
+      valueData: [],
+      keyData: [],
       sum: 0,
       columns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
         {
           type: "index",
           width: 60,
@@ -100,31 +64,15 @@ export default {
         },
         {
           title: "营业厅编号",
-          slot: "code"
-        },
-        {
-          title: "派送日期",
-          slot: "deliverDate"
+          key: "code"
         },
         {
           title: "所有订单条形码号",
-          slot: "allOrderCode"
+          key: "allOrderCode"
         },
         {
           title: "快递员编号",
-          slot: "courierId"
-        },
-        {
-          title: "快递员",
-          slot: "courier"
-        },
-        {
-          title: "审核状态",
-          slot: "state"
-        },
-        {
-          title: "操作",
-          slot: "action"
+          key: "courierId"
         }
       ]
     };
@@ -139,17 +87,44 @@ export default {
       api
         .getdeliverlist(currentPage, pageSize)
         .then(response => {
-          console.log(response);
+          // console.log(response);
           if (response.data.status === 200) {
             self.data = response.data.data.list;
-            self.sum = response.data.data[1];
+            self.sum = response.data.data.total;
           } else {
             self.$Message.error(response.data.data.msg);
           }
         })
         .catch(error => {
-          self.$Message.error("请求超时,请检查链接信息");
+          self.$Message.error("请求超时,请检查链接信息1");
         });
+    },
+    addDeliverlist() {
+      let self = this;
+      api.addDeliverlist().then(response => {
+        console.log(response);
+        if (response.data.status === 200) {
+          let tempData = response.data.data;
+          let key = Object.keys(tempData); // get key
+          let tempShowData = [];
+          for (let i = 0; i < key.length; i++) {
+            let all = "";
+            for (let j = i; j < i + 1; j++) {
+              all = tempData[key[j]] + all;
+            }
+            tempShowData[i] = {
+              code: "025001",
+              allOrderCode: all,
+              courierId: key[i]
+            };
+            console.log(tempShowData[0]);
+            this.data = tempShowData;
+          }
+          self.$Message.success("分配成功");
+        } else {
+          self.$Message.error("分配失败");
+        }
+      });
     },
     handleEdit(row, index) {
       this.editItem.id = row.id;
@@ -183,32 +158,25 @@ export default {
       this.sel = selection;
     },
     //派件单提交审核
-    deliverListSubmitForCheck(sel) {
+    savelist() {
       const self = this;
-      var list = [];
-      if (sel.length > 0) {
-        sel.forEach(element => {
-          if (element.state === 0) {
-            list.push(element.id);
+      // let alldata = [];
+      // alldata.push(self.time);
+      // alldata.push(self.data);
+      console.log(this.data);
+      api
+        .deliverListSave(this.data)
+        .then(response => {
+          console.log(response);
+          if (response.data.status === 200) {
+            self.$Message.success("提交成功");
+          } else {
+            self.$Message.error("提交失败");
           }
+        })
+        .catch(function(error) {
+          self.$Message.error("请求超时,请检查连接信息");
         });
-        api
-          .deliverListSubmitForCheck(list)
-          .then(response => {
-            console.log(response);
-            if (response.data.status === 200) {
-              self.getdeliverlist(self.currentPage, self.pageSize);
-              self.$Message.success("提交成功");
-            } else {
-              self.$Message.error("提交失败");
-            }
-          })
-          .catch(function(error) {
-            self.$Message.error("请求超时,请检查连接信息");
-          });
-      } else {
-        self.$Message.error("你还没有选择");
-      }
     },
     cancle() {
       this.$Message.info("取消操作");

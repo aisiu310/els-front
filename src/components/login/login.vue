@@ -130,6 +130,55 @@ export default {
         self.$Message.error("用户名、密码、验证码不能为空");
       } else {
         if (self.formInline.authcode == self.checkCode) {
+<<<<<<< HEAD
+          self.$axios;
+          // .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
+          //   account: self.formInline.user,
+          //   password: self.formInline.password
+          // })
+          // .then(response => {
+          //   console.log(response);
+          //   if (response.data.status === 200) {
+          //     self.$Message.success("登陆成功");
+          //     self.$store.commit("setToken", response.data.data.userCode);
+          //     console.log(1);
+          //     self.$store.commit("setRole", response.data.data.identity);
+          //     console.log(2);
+          //     // self.$store.commit(
+          //     //   "setBusinessHallCode",
+          //     //   response.data.data.organizationCode
+          //     // );
+          //     sessionStorage.setItem(
+          //       "businessHallCode",
+          //       response.data.data.organizationCode
+          //     );
+
+          //     // self.$store.commit("setUserName", response.data.data.userName);
+          //     console.log(1, self.$store.state.login.role);
+          //     self.$router.push({
+          //       path: self.$store.state.login.role
+          //     });
+          //     if (response.data.data.identity === "businessHall") {
+          //       self.$store.commit(
+          //         "setBusinessHallCode",
+          //         response.data.data.identity
+          //       );
+          //     }
+          //   } else {
+          //     self.$Message.error(response.data.msg);
+          //   }
+          // })
+          // .catch(error => {
+          //   console.log(error);
+          //   self.$Message.error("服务器异常、检查连接信息");
+          // });
+          self.$store.commit("setToken", 123456);
+          self.$Message.success("登陆成功");
+          sessionStorage.setItem("hallCode", 18001);
+          sessionStorage.setItem("courierId", 18001123);
+          sessionStorage.setItem("courierName", "courier");
+          self.$store.commit("setRole", "businessHall");
+=======
           // self.$axios
           //   .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
           //     account: self.formInline.user,
@@ -182,6 +231,7 @@ export default {
           self.$Message.success("登陆成功");
           sessionStorage.setItem("organizationName", "南京中转中心仓库");
           self.$store.commit("setRole", "warehouse");
+>>>>>>> 41030757ce764bc6bfaae9cba37e60c02afc616d
           this.$router.push({
             path: self.$store.state.login.role
           });

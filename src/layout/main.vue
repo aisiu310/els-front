@@ -16,17 +16,17 @@
   border-radius: 3px;
   float: left;
   position: relative;
-  /* left: 10px; */
+  left: -3em;
 }
 .layout-nav {
   /* border: 10px solid rebeccapurple; */
-  width: 820px;
+  width: 720px;
   margin: 0 auto;
   margin-right: 0px;
 }
 .layout-info {
-  border: 1px solid rebeccapurple; 
-} 
+  border: 1px solid rebeccapurple;
+}
 .layout-footer-center {
   text-align: center;
 }
@@ -62,7 +62,7 @@
         <Breadcrumb :style="{margin: '20px 0'}" v-bind="menuItem">
           <BreadcrumbItem>物流管理系统</BreadcrumbItem>
           <BreadcrumbItem :to="menuItem[0].path">{{menuItem[0].meta.title}}</BreadcrumbItem>
-          <BreadcrumbItem>{{breadCrumb}}</BreadcrumbItem>
+          <BreadcrumbItem>{{$route.name}}</BreadcrumbItem>
         </Breadcrumb>
         <Card>
           <div style="min-height: auto;">
@@ -80,14 +80,10 @@ export default {
   data() {
     return {
       footerTime: "2019/06-2019/07",
-      menuItem: "",
-      breadCrumb: ""
+      menuItem: ""
     };
   },
-  mounted() {
-    this.breadCrumb = store.state.login.breadCrumb;
-    console.log("这里是面包屑导航条", this.breadCrumb);
-  },
+  mounted() {},
   computed: {
     // 首次进入页面时展开当前页面所属的菜单
     onRoutes() {
@@ -98,11 +94,6 @@ export default {
     this.menuItem = store.state.login.menu;
     console.log("这里是待展示导航菜单", this.menuItem);
   },
-  methods: {
-    Input(val) {
-      this.item = val;
-    },
-    getAllInfo() {}
-  }
+  methods: {}
 };
 </script>
