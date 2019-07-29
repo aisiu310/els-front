@@ -1,18 +1,10 @@
 <template>
   <div class="header">
     <div class="logo">Express System</div>
-    <div class="search" v-if="username !== 'manager'">
-      <!-- <Input v-model="search_value" placeholder="Enter something..." style="width: 400px" />
-      <Button type="primary" shape="circle" icon="ios-search" @click="search()">Search</Button> -->
+    <div class="search">
     </div>
-
-    <div class="search" v-if="username === 'manager'">
-      <!-- 当前共有{{check}}条记录待审核！
-      <Button type="info" shape="circle">立即审核</Button> -->
-    </div>
-
     <div class="username">
-      {{username}}
+      {{organizationName}}/{{username}}
       <Icon type="md-exit" size="20" @click="exit()" />
     </div>
   </div>
@@ -23,18 +15,16 @@ export default {
   data() {
     return {
       search_value: "",
-      username: ""
+      username: "",
+      organizationName:''
     };
   },
   mounted() {
-    this.username = sessionStorage.getItem("account");
+    this.username = sessionStorage.getItem("userName");
+    this.organizationName = sessionStorage.getItem("organizationName");
     // invoke the back-end API in order to get An unapproved order
   },
   methods: {
-    search() {
-      // invoke the back-end API
-      this.$Message.success("test!");
-    },
     exit() {
       this.$router.push("/");
     }
@@ -61,14 +51,14 @@ export default {
 }
 
 .search {
-  width: 60%;
+  width: 50%;
   font-size: 20px;
   color: white;
   text-align: center
 }
 
 .username {
-  width: 10%;
+  width: 20%;
   font-size: 16px;
   margin-top: .5%;
   color: white;

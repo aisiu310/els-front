@@ -7,47 +7,6 @@
         <Button type="primary" @click="calculate()">
           <Icon type="ios-calculator" size="16" />租金结算
         </Button>
-        <!-- calculate rent modal -->
-        <Modal title="租金结算" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
-          <Form :model="formItem" :label-width="80">
-            <FormItem label="付款日期">
-              <Row>
-                <Col span="11">
-                  <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
-                </Col>
-              </Row>
-            </FormItem>
-            <FormItem label="付款金额">
-              <Input
-                v-model="formItem.payMoney"
-                type="number"
-                placeholder="请输入付款金额"
-                prefix="logo-usd"
-              ></Input>
-            </FormItem>
-            <FormItem label="付款人">
-              <Input v-model="formItem.payName" placeholder="请输入付款人姓名"></Input>
-            </FormItem>
-            <FormItem label="付款账户">
-              <Input v-model="formItem.payAccount" placeholder="请输入付款账户"></Input>
-            </FormItem>
-            <FormItem label="付款条目">
-              <Input
-                v-model="formItem.payList"
-                type="textarea"
-                :autosize="{minRows: 2,maxRows: 5}"
-                placeholder="请输入付款条目"
-              ></Input>
-            </FormItem>
-            <FormItem label="备注">
-              <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
-            </FormItem>
-            <FormItem>
-              <Button type="primary" @click="addpay()">新建</Button>
-              <Button style="margin-left: 8px" @click="modal = false">取消</Button>
-            </FormItem>
-          </Form>
-        </Modal>
       </div>
     </div>
     <hr class="common" />
@@ -60,7 +19,45 @@
     <div class="alonePage">
       <Page :total="dataLength" :current="currentPage" show-elevator @on-change="changePage" />
     </div>
-    <!-- update rent -->
+
+    <!-- calculate rent modal -->
+    <Modal title="租金结算" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
+      <Form :model="formItem" :label-width="80">
+        <FormItem label="付款日期">
+          <Row>
+            <Col span="11">
+              <DatePicker type="date" placeholder="选择付款日期" v-model="formItem.payDate"></DatePicker>
+            </Col>
+          </Row>
+        </FormItem>
+        <FormItem label="付款金额">
+          <Input v-model="formItem.payMoney" type="number" placeholder="请输入付款金额" prefix="logo-usd"></Input>
+        </FormItem>
+        <FormItem label="付款人">
+          <Input v-model="formItem.payName" placeholder="请输入付款人姓名"></Input>
+        </FormItem>
+        <FormItem label="付款账户">
+          <Input v-model="formItem.payAccount" placeholder="请输入付款账户"></Input>
+        </FormItem>
+        <FormItem label="付款条目">
+          <Input
+            v-model="formItem.payList"
+            type="textarea"
+            :autosize="{minRows: 2,maxRows: 5}"
+            placeholder="请输入付款条目"
+          ></Input>
+        </FormItem>
+        <FormItem label="备注">
+          <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="addPay()">新建</Button>
+          <Button style="margin-left: 8px" @click="modal = false">取消</Button>
+        </FormItem>
+      </Form>
+    </Modal>
+
+    <!-- update rent modal -->
     <Modal v-model="rentModal" :styles="{top: '20px'}" @on-ok="updateRent()">
       <Form ref="formValidate" :model="udpateRentData" :label-width="80">
         <FormItem label="租金">
@@ -229,17 +226,25 @@ export default {
       });
     },
     // get total rent
-    getTotalRent(city){
+    getTotalRent(city) {
       api.getTotalRent(url.rent_totalRentURL, city).then(res => {
-        if(res != null){
+        if (res != null) {
           this.formItem.payMoney = res;
         }
-      })
+      });
     },
     // calculate rent
-    calculate(){
+    calculate() {
       this.modal = true;
       this.getTotalRent(this.selectCity);
+    },
+    addPay() {
+      api.addData(url.pay_addURL, this.formItem).then(res => {
+        if (res != null) {
+          this.modal = false;
+          this.$Message.success("创建成功！");
+        }
+      });
     }
   }
 };

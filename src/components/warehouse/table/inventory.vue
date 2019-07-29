@@ -72,7 +72,7 @@ export default {
     // init data
     initData(page) {
       let self = this;
-      api.getInventory(self.area, "南京中转中心仓库", page).then(res=>{
+      api.getInventory(self.area, sessionStorage.getItem("organizationName"), page).then(res=>{
         self.data = res[0];
         self.dataLength = res[1];
       })

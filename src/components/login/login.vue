@@ -52,14 +52,8 @@
         :maxlength="10"
       />
     </div>
-    <div v-if="show" class="position">
-      <baidu-map
-        class="bm-view"
-        :center="position"
-        :zoom="15"
-        :scroll-wheel-zoom="true"
-        @click="comfirm()"
-      >
+    <div v-if="show == true" class="position">
+      <baidu-map class="bm-view" :center="position" :zoom="15" :scroll-wheel-zoom="true">
         <bm-marker :position="position" :dragging="true" animation="BMAP_ANIMATION_BOUNCE" />
         <!-- <bm-panorama></bm-panorama> -->
       </baidu-map>
@@ -112,8 +106,8 @@ export default {
           }
         ]
       },
-      // { lng: 116.404, lat: 39.915 }
-      position: "南京鼓楼区苏宁大厦"
+      // { lng: 31.932, lat: 118.928 }
+      position: {}
     };
   },
 
@@ -136,6 +130,7 @@ export default {
         self.$Message.error("用户名、密码、验证码不能为空");
       } else {
         if (self.formInline.authcode == self.checkCode) {
+<<<<<<< HEAD
           self.$axios;
           // .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
           //   account: self.formInline.user,
@@ -183,6 +178,61 @@ export default {
           sessionStorage.setItem("courierId", 18001123);
           sessionStorage.setItem("courierName", "courier");
           self.$store.commit("setRole", "businessHall");
+=======
+          // self.$axios
+          //   .post("http://192.168.2.229:9001/yuantu/login_regist/login", {
+          //     account: self.formInline.user,
+          //     password: self.formInline.password
+          //   })
+          //   .then(response => {
+          //     if (response.data.status === 200) {
+          //       let res = response.data.data;
+          //       self.$Message.success("登陆成功");
+          //       self.$store.commit("setToken", res.userCode);
+          //       self.$store.commit("setRole", res.identity);
+                // self.$store.commit(
+                //   "setBusinessHallCode",
+                //   response.data.data.organizationCode
+                // );
+                // sessionStorage.setItem(
+                //   "businessHallCode",
+                //   response.data.data.organizationCode
+                // );
+                // sessionStorage.setItem("userCode", res.userCode); // 用户编号
+                // sessionStorage.setItem("userName", res.userName); // 用户名
+                // sessionStorage.setItem("identity", res.identity); // 身份
+                // sessionStorage.setItem(
+                //   "organizationCode",
+                //   res.organizationCode
+                // ); // 机构编号
+                // sessionStorage.setItem(
+                //   "organizationName",
+                //   res.organizationName
+                // ); // 机构名
+                // self.$store.commit("setUserName", response.data.data.userName);
+                // self.$router.push({
+                //   path: self.$store.state.login.role
+                // });
+                // if (response.data.data.identity === "businessHall") {
+                //   self.$store.commit(
+                //     "setBusinessHallCode",
+                //     response.data.data.identity
+                //   );
+                // }
+            //   } else {
+            //     self.$Message.error(response.data.msg);
+            //   }
+            // })
+            // .catch(error => {
+            //   console.log(error);
+            //   self.$Message.error("服务器异常、检查连接信息");
+            // });
+          self.$store.commit("setToken", 123456);
+          self.$Message.success("登陆成功");
+          sessionStorage.setItem("organizationName", "南京中转中心仓库");
+          console.log(sessionStorage.getItem("organizationName"));-
+          self.$store.commit("setRole", "warehouse");
+>>>>>>> 41030757ce764bc6bfaae9cba37e60c02afc616d
           this.$router.push({
             path: self.$store.state.login.role
           });
@@ -252,11 +302,28 @@ export default {
         this.show = false;
       } else {
         // invoke the back-end API
-        this.show = true;
+        this.$axios
+          .post(
+            "http://192.168.2.229:9001/yuantu/business/logistics/getLogisticsList",
+            { orderCode: data }
+          )
+          .then(res => {
+            if (res.data.status == 200) {
+              let result = res.data.data;
+              // let location = { lng: result[0].lng, lat: result[0].lat };
+              this.position = result[0].address;
+              // this.position = location;
+              this.show = true;
+            } else {
+              this.$Message.error(
+                "未查询到该订单号物流信息！请确认订单号是否正确！"
+              );
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
-    },
-    comfirm() {
-      alert("nihao!");
     }
   }
 };

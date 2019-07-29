@@ -129,14 +129,6 @@ export default {
         bankAccount: ""
       },
       ruleValidate: {
-        // date: [
-        //   {
-        //     required: true,
-        //     type: "date",
-        //     message: "输入不能为空",
-        //     trigger: "blur"
-        //   }
-        // ],
         name: [{ required: true, message: "输入不能为空", trigger: "blur" }],
         organization: [
           { required: true, message: "输入不能为空", trigger: "change" }

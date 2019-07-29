@@ -57,37 +57,7 @@ export default {
         },
         {
           title: "名称",
-          key: "name",
-          filters: [
-            {
-              label: "工商银行",
-              value: "工商银行"
-            },
-            {
-              label: "建设银行",
-              value: "建设银行"
-            },
-            {
-              label: "南京银行",
-              value: "南京银行"
-            },
-            {
-              label: "农业银行",
-              value: "农业银行"
-            },
-            {
-              label: "交通银行",
-              value: "交通银行"
-            },
-            {
-              label: "兴业银行",
-              value: "兴业银行"
-            }
-          ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            return row.name.indexOf(value) > -1;
-          }
+          key: "name"
         },
         {
           title: "金额",

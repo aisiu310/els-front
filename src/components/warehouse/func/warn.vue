@@ -28,15 +28,15 @@ export default {
     };
   },
   mounted() {
-    this.getCurrentCapacity("南京中转中心仓库");
-    this.getCurrentWarnLine("南京中转中心仓库");
+    this.getCurrentCapacity(sessionStorage.getItem("organizationName"));
+    this.getCurrentWarnLine(sessionStorage.getItem("organizationName"));
     if(this.warehouse_capacity > this.warehouse_warn_line){
       this.$Message.error("库存容量超出警戒线！");
     }
   },
   methods: {
     setWarnLine(val) {
-      api.setInventoryLine("南京中转中心仓库", val).then(res=>{
+      api.setInventoryLine(sessionStorage.getItem("organizationName"), val).then(res=>{
           if(res == 1){
             this.$Message.success("设置成功！");
           }else{

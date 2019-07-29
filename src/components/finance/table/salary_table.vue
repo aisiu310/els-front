@@ -71,7 +71,7 @@
           <Input v-model="formItem.payRemarks" placeholder="备注"></Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="addpay()">新建</Button>
+          <Button type="primary" @click="addPay()">新建</Button>
           <Button style="margin-left: 8px" @click="modal = false">取消</Button>
         </FormItem>
       </Form>
@@ -80,10 +80,13 @@
     <!-- update rent -->
     <Modal v-model="salaryModal" :styles="{top: '20px'}" @on-ok="updateSalary()">
       <Form ref="formValidate" :model="udpateSalaryData" :label-width="80">
-        <FormItem label="租金">
+        <FormItem label="扣罚">
           <Input v-model="udpateSalaryData.deduction" prefix="logo-usd" type="number"></Input>
         </FormItem>
-        <FormItem label="期限">
+        <FormItem label="总计">
+          <Input v-model="udpateSalaryData.total" prefix="logo-usd" type="number"></Input>
+        </FormItem>
+        <FormItem label="备注">
           <Input v-model="udpateSalaryData.remarks"></Input>
         </FormItem>
       </Form>
@@ -113,20 +116,17 @@ export default {
         },
         {
           title: "职位",
-          key: "position"
+          key: "position",
+          width: 130
         },
         {
           title: "姓名",
           key: "name"
         },
         {
-          title: "月份",
-          key: "month",
-          sortable: true
-        },
-        {
           title: "基础工资",
           key: "salary",
+          width: 110,
           sortable: true
         },
         {
@@ -138,8 +138,16 @@ export default {
           key: "bonus"
         },
         {
+          title: "扣除",
+          key: "deduction"
+        },
+        {
           title: "总计",
           key: "total"
+        },
+        {
+          title: "备注",
+          key: "remarks"
         },
         {
           title: "操作",
@@ -181,13 +189,14 @@ export default {
         payMoney: "",
         payName: "",
         payAccount: "",
-        payList: "城市所有机构租金总和",
+        payList: "机构所有工资总和",
         payRemarks: ""
       },
       udpateSalaryData: {
         id: "",
         deduction: "",
-        remarks: ""
+        remarks: "",
+        total: ""
       }
     };
   },
@@ -196,9 +205,10 @@ export default {
   },
   methods: {
     update(index) {
-      this.$Modal.info({
-        title: "User Info"
-      });
+      this.salaryModal = true;
+      this.udpateSalaryData.id = this.salary[index].id;
+      this.udpateSalaryData.deduction = this.salary[index].deduction;
+      this.udpateSalaryData.total = this.salary[index].total;
     },
     batchSelect(selection, row) {},
     // get city and get org
@@ -280,13 +290,23 @@ export default {
     },
     // update rent
     updateSalary() {
-      api.updateSalary(url.rent_updateRentURL, this.udpateRentData).then(res => {
-        if (res == 1) {
-          this.getOrgList(this.selectCity);
-          this.rentModal = false;
-        } else {
-          alert("修改失败！");
-          this.rentModal = false;
+      api
+        .updateSalary(url.rent_updateRentURL, this.udpateSalaryData)
+        .then(res => {
+          if (res == 1) {
+            // this.getOrgList(this.selectCity);
+            this.rentModal = false;
+          } else {
+            alert("修改失败！");
+            this.rentModal = false;
+          }
+        });
+    },
+    addPay() {
+      api.addData(url.pay_addURL, this.formItem).then(res => {
+        if (res != null) {
+          this.modal = false;
+          this.$Message.success("创建成功！");
         }
       });
     }
