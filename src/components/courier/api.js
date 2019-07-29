@@ -10,11 +10,12 @@ const distributePath = '/yuantu/logistics/distribute'
 const retreatPath = ''
 const collectPath = '/yuantu/business/order'
 //揽件
+const getAleradyCollectListUrl = "http://" + ip + testPort + collectPath + "/getCourierOrderList"
 const getCollectListUrl = "http://" + ip + testPort + collectPath + "/getPendingOrderList"
 const submitCollectListForCheckUrl = "http://" + ip + testPort + collectPath + "/modifyCourierInfo"
 //派件
-const getSenderListUrl = "http://" + testIP + testPort + distributePath + "/getDistributeList"
-const submitSenderListUrl = "http://" + testIP + testPort + distributePath + "/modifyStateList"
+const getSenderListUrl = "http://" + ip + testPort + distributePath + "/getDistributeList"
+const submitSenderListUrl = "http://" + ip + testPort + distributePath + "/modifyStateList"
 //退件
 const retreatListUrl = "http://" + testIP + testPort + retreatPath + "/modifyStateList"
 //api
@@ -27,11 +28,21 @@ const api = {
     });
     return response
   },
-  //查询揽件单~与杨维涛测试成功
+  //查询待揽件单~与杨维涛测试成功
   async getCollectList() {
     let response = await axios.get(getCollectListUrl);
     return response
   },
+  //查询已揽件单~与杨维涛测试成功
+  async getAleradyCollectList(currentPage, pageSize) {
+    let response = await axios.post(getAleradyCollectListUrl, {
+      account: sessionStorage.getItem('courierId'),
+      currentPage: currentPage,
+      pageSize: pageSize
+    });
+    return response
+  },
+  //揽件单提交审核~与杨维涛测试成功
   async submitCollectListForCheck(sel) {
     let code = sel[0].code
     console.log(code)
@@ -50,7 +61,8 @@ const api = {
   //查询派件单~自测成功
   async getSenderList(currentPage, pageSize) {
     let response = await axios.post(getSenderListUrl, {
-      code: '025000',
+      code: sessionStorage.getItem('hallCode'),
+      courierId: sessionStorage.getItem('courierId'),
       currentPage: currentPage,
       pageSize: pageSize
     });

@@ -53,7 +53,7 @@
           width="40"
           v-model="modal"
           title="建立收款单"
-          @on-ok="submitform('formItem')"
+          @on-ok="submitform(formItem)"
           @on-cancel="cancle"
         >
           <Form :model="formItem" :label-width="80">
@@ -115,13 +115,12 @@ export default {
       receiptRecord: [],
       courier: [],
       formItem: {
-        id: "",
-        number: "",
-        code: "",
-        time: "",
-        money: "",
-        courierId: "",
-        courierName: "",
+        number: "1",
+        code: "1",
+        time: "2019-7-21",
+        money: "12",
+        courierId: "18001",
+        courierName: "褚岩",
         orderList: "0987654321"
       }
     };
@@ -170,14 +169,13 @@ export default {
   methods: {
     getCourierList() {
       let self = this;
-
       api
         .getCourierList()
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
-            console.log(response.data.data[0]);
-            console.log(response.data.date[1]);
+            // console.log(response.data.data[0]);
+            // console.log(response.data.date[1]);
             self.receiptRecord = response.data.data[0];
             self.courier = response.data.date[1];
           }
@@ -205,19 +203,9 @@ export default {
     },
     createlist() {
       let self = this;
-      let myDate = new Date(); //获取当前年
-      let year = myDate.getFullYear(); //获取当前月
-      let month = myDate.getMonth() + 1; //获取当前日
-      let date = myDate.getDate();
-      let hh = myDate.getHours(); //获取当前小时数(0-23)
-      let mm = myDate.getMinutes(); //获取当前分钟数(0-59)
-      if (mm < 10) mm = "0" + mm;
-      let ss = myDate.getSeconds();
-      if (ss < 10) ss = "0" + ss;
       self.formItem.number = "025000";
       self.formItem.code = this.getCode();
-      self.formItem.time =
-        year + "-" + month + "-" + date + "-" + " " + hh + ":" + mm + ":" + ss;
+      self.formItem.time = new Date();
       self.formItem.money = this.caculateMoney();
       self.formItem.courierName = this.getName();
       self.formItem.courierId = this.getId();
@@ -242,11 +230,11 @@ export default {
       return listNumber;
     },
     getName() {
-      let name = sessionStorage.getItem("name");
+      let name = sessionStorage.getItem("courierName");
       return name;
     },
     getId() {
-      let id = sessionStorage.getItem("id");
+      let id = sessionStorage.getItem("courierId");
       return id;
     },
     caculateMoney() {
@@ -279,8 +267,9 @@ export default {
       let self = this;
       if (formItem) {
         api
-          .receiptRecordSubmitForm()
+          .receiptRecordSubmitForm(formItem)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
               self.$Message.success("添加成功");
               self.getCourierList();

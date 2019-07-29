@@ -15,20 +15,10 @@ import { api } from "./api";
 export default {
   data() {
     return {
-      modal: false,
       currentPage: 1,
       pageSize: 10,
-      formItem: {
-        code: "025000",
-        deliverDate: "2019-07-20",
-        allOrderCode: "15476125",
-        courierId: "12123",
-        courier: "褚岩"
-      },
-      ruleValidate: {},
       sel: [],
       data: [],
-
       sum: 0,
       columns: [
         {
@@ -43,11 +33,7 @@ export default {
         },
         {
           title: "营业厅编号",
-          key: "code"
-        },
-        {
-          title: "派送日期",
-          key: "deliverDate"
+          key: sessionStorage.getItem("hallCode")
         },
         {
           title: "订单条形码号",
@@ -55,11 +41,11 @@ export default {
         },
         {
           title: "快递员编号",
-          key: "courierId"
+          key: sessionStorage.getItem("courierId")
         },
         {
           title: "快递员",
-          key: "courier"
+          key: sessionStorage.getItem("courierName")
         },
         {
           title: "派件状态",
@@ -77,10 +63,9 @@ export default {
       api
         .getSenderList(currentPage, pageSize)
         .then(response => {
-          console.log(response);
+          console.log(response.data);
           if (response.data.status === 200) {
-            self.data = response.data.data.list;
-            self.sum = response.data.data.total;
+            self.data = response.data.data;
           } else {
             self.$Message.error(response.data.msg);
           }
@@ -119,25 +104,11 @@ export default {
     },
     changePage(page) {
       this.getSenderList(page, this.pageSize);
-    },
-    changePageSize(pageSize) {
-      this.getSenderList(this.currentPage, pageSize);
     }
   }
 };
 </script>
 <style>
-#delete_button {
-  margin: 10px;
-  float: left;
-}
-#arrive_list_add {
-  border: 0px solid rebeccapurple;
-  margin: 10px;
-  width: auto;
-  height: auto;
-  float: left;
-}
 #submit_for_check {
   margin: 10px;
   width: auto;

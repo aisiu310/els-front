@@ -1,9 +1,10 @@
 <template>
   <div>
-    <Table stripe border :columns="columns" :data="data" @on-selection-change="select" :key="index"></Table>
-    <div style="margin:10px;float:left;">
-      <Button type="success" v-bind="sel" @click="receiptListSubmitForCheck(sel)">提交审核</Button>
-    </div>
+    <Table stripe border :columns="columns" :data="data" @on-selection-change="select" :key="index">
+      <template slot-scope="{ row, index }" slot="action">
+        <Button type="success" v-bind="sel" @click="receiptListSubmitForCheck(sel)">提交审核</Button>
+      </template>
+    </Table>
     <div style="margin:10px;float:right;">
       <Page
         :total="sum"
@@ -42,38 +43,42 @@ export default {
           align: "center"
         },
         {
-          title: "收款单编号",
-          slot: "code"
+          title: "收款单机构",
+          key: "code"
         },
         {
           title: "日期",
-          slot: "time"
+          key: "time"
         },
         {
           title: "金额",
-          slot: "money"
+          key: "money"
         },
         {
           title: "快递员编号",
-          slot: "courierId"
+          key: "courierId"
         },
         {
           title: "快递员姓名",
-          slot: "courierName"
+          key: "courierName"
         },
         {
           title: "快递单集合",
-          slot: "orderList"
+          key: "orderList"
         },
         {
           title: "审核状态",
-          slot: "state"
+          key: "state"
+        },
+        {
+          title: "操作",
+          slot: "action"
         }
       ]
     };
   },
   mounted() {
-    // this.getReceiptList(this.currentPage, this.pageSize);
+    this.getReceiptList(this.currentPage, this.pageSize);
   },
   methods: {
     getReceiptList(currentPage, pageSize) {
@@ -96,16 +101,14 @@ export default {
     },
     receiptListSubmitForCheck(sel) {
       const self = this;
-      var list = [];
-      if (sel.length > 0) {
-        sel.forEach(element => {
-          if (element.state === 0) {
-            list.push(element.id);
-          }
-        });
+
+      if ((sel.length = 1)) {
+        console.log(sel[0].id);
+        let id = sel[0].id;
         api
-          .receiptListSubmitForCheck(list)
+          .receiptListSubmitForCheck(id)
           .then(response => {
+            console.log(response);
             if (response.data.status === 200) {
               self.getReceiptList(self.currentPage, self.pageSize);
               self.$Message.success("提交成功");
@@ -117,14 +120,13 @@ export default {
             self.$Message.error("请求超时,请检查连接信息");
           });
       } else {
-        self.$Message.error("你还没有选择");
+        self.$Message.error("每次只能提交一条记录");
       }
     },
     cancle() {
       this.$Message.info("取消操作");
     },
     changePage(page) {
-      console.log(page);
       this.getReceiptList(page, this.pageSize);
     },
     changePageSize(pageSize) {

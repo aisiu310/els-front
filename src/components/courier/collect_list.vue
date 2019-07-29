@@ -2,11 +2,27 @@
   <div>
     <Tabs>
       <TabPane label="揽件单" icon="ios-paper-plane">
-        <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
-          <template slot-scope="{ row, index }" slot="action">
-            <Button type="success" @click="submitforcheck()">一件揽件</Button>
-          </template>
-        </Table>
+        <Row style="background:#eee;padding:20px">
+          <Col span="11">
+            <Card :bordered="false">
+              <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
+                <template slot-scope="{ row, index }" slot="action">
+                  <Button type="success" @click="submitforcheck()">一件揽件</Button>
+                </template>
+              </Table>
+            </Card>
+          </Col>
+          <Col span="11" offset="2">
+            <Card shadow>
+              <Table stripe border :columns="columns1" :data="data1"></Table>
+              <div style="margin: 10px;overflow: hidden">
+                <div style="float: right;">
+                  <Page :total="sum" @on-change="changePage" show-elevator show-total></Page>
+                </div>
+              </div>
+            </Card>
+          </Col>
+        </Row>
       </TabPane>
     </Tabs>
   </div>
@@ -16,18 +32,12 @@ import { api } from "./api";
 export default {
   data() {
     return {
+      currentPage: 1,
+      pageSize: 10,
       modal: false,
-      formItem: {
-        code: "025000",
-        deliverDate: "2019-07-20",
-        allOrderCode: "15476125",
-        courierId: "12123",
-        courier: "褚岩"
-      },
-      ruleValidate: {},
       sel: [],
       data: [],
-
+      data1: [],
       sum: 0,
       columns: [
         {
@@ -54,25 +64,66 @@ export default {
         },
         {
           title: "快递员",
-          key: "courier"
+          key: "courierName"
         },
         {
           title: "操作",
           slot: "action"
+        }
+      ],
+      columns1: [
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "收件人所属区域",
+          key: "addresseeRegion"
+        },
+        {
+          title: "订单条形码号",
+          key: "code"
+        },
+        {
+          title: "快递员编号",
+          key: "courierId"
+        },
+        {
+          title: "快递员",
+          key: "courierName"
         }
       ]
     };
   },
   mounted() {
     this.getCollectList();
+    this.getAleradyCollectList(this.currentPage, this.pageSize);
   },
   methods: {
+    getAleradyCollectList(currentPage, pageSize) {
+      const self = this;
+      api
+        .getAleradyCollectList(currentPage, pageSize)
+        .then(response => {
+          // console.log(response);
+          if (response.data.status === 200) {
+            self.data1 = response.data.data.list;
+            self.sum = response.data.total;
+          } else {
+            self.$Message.error(response.data.msg);
+          }
+        })
+        .catch(error => {
+          self.$Message.error("请求超时");
+        });
+    },
     getCollectList() {
       const self = this;
       api
         .getCollectList()
         .then(response => {
-          console.log(response);
+          // console.log(response);
           if (response.data.status === 200) {
             self.data = response.data.data;
           } else {
@@ -88,8 +139,8 @@ export default {
     },
     submitforcheck() {
       const self = this;
-      sel = self.sel;
-      console.log(sel);
+      let sel = self.sel;
+      // console.log(sel);
       if (sel.length > 0) {
         api
           .submitCollectListForCheck(sel)
@@ -97,6 +148,7 @@ export default {
             console.log(response);
             if (response.data.status === 200) {
               self.getCollectList();
+              self.getAleradyCollectList();
               self.$Message.success("审核成功");
             } else {
               self.$Message.error(response.data.msg);
@@ -114,10 +166,7 @@ export default {
       this.$Message.info("取消操作");
     },
     changePage(page) {
-      this.getSenderList(page, this.pageSize);
-    },
-    changePageSize(pageSize) {
-      this.getSenderList(this.currentPage, pageSize);
+      this.getAleradyCollectList(page, this.pageSize);
     }
   }
 };

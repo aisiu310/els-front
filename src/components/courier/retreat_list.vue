@@ -23,12 +23,12 @@ export default {
   data() {
     return {
       data: "",
-      data1: "",
       columes: [
         {
           title: "Name",
           key: "name"
-        }
+        },
+        {}
       ]
     };
   },

@@ -3,6 +3,7 @@ import axios from 'axios'
 const ip = '192.168.2.229'
 const driverIp = '192.168.2.231'
 const testIp = '127.0.0.1'
+const recipentIp = '192.168.2.151'
 //port
 const port = ':9001'
 const driverPort = ':8088'
@@ -14,6 +15,7 @@ const arrivePath = '/yuantu/logistics/arrive'
 const deliverPath = '/yuantu/logistics/distribute'
 const driverPath = '/driver'
 const orderPath = '/yuantu/business/order'
+const recipentPath = '/yuantu/finance/receipt'
 //装车管理url
 const getLoadCarListUrl = "http://" + testIp + testPort + loadCarPath + "/getLoadingList"
 const loadcarListSaveUrl = "http://" + testIp + testPort + loadCarPath + "/modifyLoadingById"
@@ -27,8 +29,9 @@ const arriveListRemoveUrl = "http://" + ip + port + arrivePath + "/removeArriveF
 const arriveListSubmitFormUrl = "http://" + ip + port + arrivePath + "/addArrive"
 const arriveListSubmitForCheckUrl = "http://" + ip + port + arrivePath + "/modifyStateList"
 //派件管理url
-const getdeliverlistUrl = "http://" + testIp + port + deliverPath + "/getDistributeList"
-const deliverListSave = "http://" + testIp + port + deliverPath + "/modifyDistributeById"
+const getdeliverlistUrl = "http://" + ip + port + deliverPath + "/getDistributeList"
+const addDeliverlistUrl = "http://" + ip + port + deliverPath + "/addHallRandomDistribute"
+const deliverListSaveUrl = "http://" + ip + port + deliverPath + "/addDistributeList"
 const deliverListSubmitForCheckUrl = "http://" + testIp + port + deliverPath + "/modifyStateList?state=1"
 //车辆管理url
 const getCarListUrl = "http://" + testIp + port + carPath + "/getCarList"
@@ -45,10 +48,10 @@ const searchDriverUrl = "http://" + driverIp + driverPort + driverPath + "/query
 //营收管理-收款记录url
 const getCourierListUrl = "http://" + ip + port + orderPath + "/getReceiptInfo"
 const getReceiptRecordUrl = "http://" + ip + port + orderPath + "/getReceiptInfo"
-const receiptRecordSubmitFormUrl = ''
-//营收灌流-收款单url
-const getReceiptListUrl = ''
-const receiptListSubmitForCheckUrl = ''
+//营收-收款单url   
+const receiptRecordSubmitFormUrl = "http://" + recipentIp + port + recipentPath + "/addReceipt"
+const getReceiptListUrl = "http://" + recipentIp + port + recipentPath + "/getReceiptByOrg"
+const receiptListSubmitForCheckUrl = "http://" + recipentIp + port + recipentPath + "/update"
 //allApi
 const api = {
   //接收管理，对到达单操作
@@ -138,17 +141,26 @@ const api = {
   },
   //派件管理
   //查询派件单~自测成功
+
+  async addDeliverlist() {
+    let response = await axios.get(addDeliverlistUrl, {
+      params: {
+        departmentCode: sessionStorage.getItem('hallCode')
+      }
+    })
+    return response
+  },
   async getdeliverlist(currentPage, pageSize) {
     let response = await axios.post(getdeliverlistUrl, {
-      code: "025000",
+      code: sessionStorage.getItem('hallCode'),
       currentPage: currentPage,
       pageSize: pageSize
     });
     return response
   },
   //修改派件单~自测成功
-  async deliverListSave(editItem) {
-    let response = await axios.put(deliverListSave, editItem);
+  async deliverListSave(alldata) {
+    let response = await axios.post(deliverListSaveUrl, alldata);
     return response
   },
   //派件单提交审核~自测成功
@@ -240,6 +252,7 @@ const api = {
     return response.data.data;
   },
   //营收管理-收款记录
+  //查询快递员信息~与杨维涛测试成功
   async getCourierList() {
     let response = await axios.post(getCourierListUrl, {
       code: sessionStorage.getItem("code"),
@@ -247,6 +260,7 @@ const api = {
     });
     return response
   },
+  //修改司机信息~与余雷测试成功
   async getReceiptRecord() {
     let response = await axios.post(getReceiptRecordUrl, {
       code: "025000",
@@ -258,14 +272,19 @@ const api = {
     return response
   },
   //营收管理-收款单
-  async getReceiptList() {
+  async getReceiptList(currentPage, pageSize) {
     let response = await axios.post(getReceiptListUrl, {
-      code: "025000",
+      code: "秦淮区",
+      currentPage: currentPage,
+      pageSize: pageSize
     });
     return response
   },
-  async receiptListSubmitForCheck(list) {
-    let response = await axios.put(receiptListSubmitForCheckUrl, list);
+  async receiptListSubmitForCheck(id) {
+    let response = await axios.post(receiptListSubmitForCheckUrl, {
+      id: id,
+      state: '待审核'
+    });
     return response
   },
 }
