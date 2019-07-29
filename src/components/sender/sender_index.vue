@@ -115,7 +115,7 @@ export default {
     };
   },
   mounted: function() {
-    this.username = sessionStorage.getItem("account");
+    this.username = sessionStorage.getItem("userName");
   },
   methods: {
     // return to login.vue

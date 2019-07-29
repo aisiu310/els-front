@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       active: "",
-      width: "200"
+      width: "100"
     };
   },
   mounted() {

@@ -14,7 +14,7 @@
                 <Icon type="md-bookmarks" size="36" />通信录
               </span>
               <div class="api" slot="content">
-                <Table height="250" :columns="columns" :data="address" @on-row-click="turnSender"></Table>
+                <Table height="auto" :columns="columns" :data="address" @on-row-click="turnSender"></Table>
               </div>
             </Poptip>
           </div>
@@ -54,7 +54,7 @@
                 <Icon type="md-bookmarks" size="36" />通信录
               </span>
               <div class="api" slot="content">
-                <Table height="250" :columns="columns" :data="address" @on-row-click="turnReceipt"></Table>
+                <Table height="auto" :columns="columns" :data="address" @on-row-click="turnReceipt"></Table>
               </div>
             </Poptip>
           </div>
@@ -266,7 +266,7 @@ export default {
     // get address by userId
     getAddressList() {
       api
-        .initAddress(url.address_getURL, "18396016699")
+        .initAddress(url.address_getURL, sessionStorage.getItem("userCode"))
         .then(res => {
           if (res != null) {
             this.address = res;
@@ -296,7 +296,7 @@ export default {
     },
     // Randomly generate ten order Numbers
     createRandomId() {
-      return (Math.random() * 10000000000).toString().substr(0, 10);
+      return (Math.random() * 100000000000).toString().substr(0, 10);
     }
   },
   // wait for calculate
