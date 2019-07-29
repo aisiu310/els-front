@@ -32,7 +32,7 @@ export default {
     };
   },
   mounted() {
-    this.begin = new Date(this.end.getTime() - 1000 * 60 * 60 * 24 * 7 * 3); // define the day which before a week
+    this.begin = new Date(this.end.getTime() - 1000 * 60 * 60 * 24 * 7 * 3); // define the day which before three week
     this.getPayData(this.begin, this.end);
     this.getPayeeData(this.begin, this.end);
   },

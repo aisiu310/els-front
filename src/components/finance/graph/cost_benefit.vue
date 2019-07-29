@@ -1,11 +1,7 @@
 <template>
   <div class="body">
-    <div class="header">
-      <div class="word">成本收益表</div>
-    </div>
-    <hr class="common" />
     <div class="histogram">
-      <div id="myChart" :style="{width: '80%', height: '400px'}"></div>
+      <div id="myChart" :style="{width: '100%', height: '400px'}"></div>
     </div>
   </div>
 </template>
@@ -13,15 +9,17 @@
 <script>
 // 引入基本模板
 let echarts = require("echarts/lib/echarts");
+import { api } from "../api/api";
+import { url } from "../api/url";
 export default {
   data() {
     return {};
   },
   mounted() {
-    this.myChart();
+    this.getData();
   },
   methods: {
-    myChart() {
+    myChart(data) {
       //   基于准备好的dom，初始化echarts实例
       let myChart = echarts.init(document.getElementById("myChart"));
       // 绘制图表
@@ -32,17 +30,32 @@ export default {
         legend: {},
         tooltip: {},
         dataset: {
-          source: [
-            ["product", "总支出", "总收入", "利润"],
-            ["07/08", 53.3, 85.8, 33.5],
-            ["07/09", 60.1, 73.4, 13.3],
-            ["07/10", 50.4, 65.8, 15.4],
-            ["07/11", 57.8, 89.9, 32.1]
-          ]
+          source: data
         },
         xAxis: { type: "category" },
         yAxis: {},
         series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }]
+      });
+    },
+    getData() {
+      let end = new Date();
+      let begin = new Date(end.getTime() - 1000 * 60 * 60 * 24 * 7 * 4); // define the day which before a week
+      let payee = [];
+      var pay = [];
+      let date = [];
+      let showData = [];
+      api.calculate(url.receipt_calculateURL, begin, end).then(res => {
+        payee = res[1]; // data
+        date = res[0]; // date
+        api.calculate(url.pay_calculateURL, begin, end).then(res => {
+          pay = res[1];
+          showData[0] = ["product", "总支出", "总收入", "利润"];
+          for (let i = 0; i < date.length; i++) {
+            showData[i + 1] = [date[i], pay[i], payee[i], payee[i] - pay[i]];
+          }
+          console.log(showData);
+          this.myChart(showData);
+        });
       });
     }
   }
