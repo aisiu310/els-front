@@ -27,9 +27,17 @@
       </Header>
       <Content :style="{padding: '0 50px'}">
         <Breadcrumb :style="{margin: '20px 0'}" v-bind="menuItem">
-          <BreadcrumbItem>物流管理系统</BreadcrumbItem>
-          <BreadcrumbItem :to="menuItem[0].path">{{menuItem[0].meta.title}}</BreadcrumbItem>
-          <BreadcrumbItem>{{$route.name}}</BreadcrumbItem>
+          <BreadcrumbItem>
+            <Icon type="ios-home-outline"></Icon>物流管理系统
+          </BreadcrumbItem>
+          <BreadcrumbItem :to="menuItem[0].path">
+            <Icon type="logo-buffer"></Icon>
+            {{menuItem[0].meta.title}}
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <Icon type="ios-cafe"></Icon>
+            {{$route.name}}
+          </BreadcrumbItem>
         </Breadcrumb>
         <Card>
           <div style="min-height: auto;">

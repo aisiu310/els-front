@@ -7,7 +7,7 @@
       </TabPane>
 
       <TabPane label="历史记录" icon="ios-clock-outline">
-        <h1>等待程序员小哥开发</h1>
+        <img src="../../assets/B_G.png" width="100%" height="660px" />
       </TabPane>
     </Tabs>
   </div>
