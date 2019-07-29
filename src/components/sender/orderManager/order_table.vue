@@ -76,41 +76,13 @@ export default {
           align: "center"
         }
       ],
-      data: [
-        {
-          id: "1231231231",
-          code: "1231231231",
-          courierId: "123",
-          courierName: "小明",
-          senderName: "小红",
-          senderRegion: "南京",
-          senderDetailAddress: "雨花台软件大道",
-          senderPhone: "12345678912",
-          addresseeName: "小黑",
-          addresseeRegion: "北京",
-          addresseeDetailAddress: "五道口",
-          addresseePhone: "12312345565",
-          goodsSize: "书信",
-          goodsCount: "123",
-          goodsWeight: "123",
-          remarks: "无",
-          type: "特快",
-          packingFee: "12",
-          freight: "23",
-          totalFee: "35",
-          orderTime: "2019/07/10 12：01",
-          contractTime: "2019/07/10 12：01",
-          paymentTime: "2019/07/10 12：01",
-          trueAddresseeName: "",
-          receiptDate: ""
-        }
-      ]
+      data: []
     };
   },
   mounted() {
     this.initData(
       url.order_getReceivedURL,
-      "15298377719",
+      sessionStorage.getItem("userCode"),
       this.currentPage,
       this.pageSize
     );
@@ -120,7 +92,7 @@ export default {
         case "1-1":
           this.initData(
             url.order_getURL,
-            "15298377719",
+            sessionStorage.getItem("userCode"),
             this.currentPage,
             this.pageSize
           );
@@ -167,7 +139,12 @@ export default {
       this.data.splice(index, 1);
     },
     change(val) {
-      this.initData(url.order_getURL, "15298377719", val, this.pageSize);
+      this.initData(
+        url.order_getURL,
+        sessionStorage.getItem("userCode"),
+        val,
+        this.pageSize
+      );
     },
     // get All order
     initData(url, phone, currentPage, pageSize) {

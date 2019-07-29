@@ -1,10 +1,9 @@
 <template>
   <div class="header">
     <div class="logo">Express System</div>
-    <div class="search">
-    </div>
+    <div class="search"></div>
     <div class="username">
-      {{organizationName}}/{{username}}
+      {{organizationName}}&nbsp;/&nbsp;{{userName}}
       <Icon type="md-exit" size="20" @click="exit()" />
     </div>
   </div>
@@ -14,13 +13,12 @@
 export default {
   data() {
     return {
-      search_value: "",
-      username: "",
-      organizationName:''
+      userName: "",
+      organizationName: ""
     };
   },
   mounted() {
-    this.username = sessionStorage.getItem("userName");
+    this.userName = sessionStorage.getItem("userName");
     this.organizationName = sessionStorage.getItem("organizationName");
     // invoke the back-end API in order to get An unapproved order
   },
@@ -38,29 +36,29 @@ export default {
   height: 35px;
   display: flex;
   border-radius: 8px;
-  background-color:dodgerblue;
+  background-color: dodgerblue;
   box-shadow: #666 0px 0px 8px;
 }
 
 .logo {
   width: 28%;
   font-size: 20px;
-  font-family: '隶书';
+  font-family: "隶书";
   color: white;
-  margin-left: 2%
+  margin-left: 2%;
 }
 
 .search {
   width: 50%;
   font-size: 20px;
   color: white;
-  text-align: center
+  text-align: center;
 }
 
 .username {
   width: 20%;
   font-size: 16px;
-  margin-top: .5%;
+  margin-top: 0.5%;
   color: white;
 }
 </style>

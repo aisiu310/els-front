@@ -1,38 +1,5 @@
-<style scoped>
-.layout {
-  border: 1px solid #d7dde4;
-  background: #f5f7f9;
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.layout-logo {
-  width: 400px;
-  height: 30px;
-  text-align: center;
-  font-size: 30px;
-  font-family: "隶书";
-  color: white;
-  border-radius: 3px;
-  float: left;
-  position: relative;
-  left: -3em;
-}
-.layout-nav {
-  /* border: 10px solid rebeccapurple; */
-  width: 720px;
-  margin: 0 auto;
-  margin-right: 0px;
-}
-.layout-info {
-  border: 1px solid rebeccapurple;
-}
-.layout-footer-center {
-  text-align: center;
-}
-</style>
 <template>
-  <div class="layout">
+  <div>
     <Layout>
       <Header>
         <Menu mode="horizontal" theme="dark">
@@ -105,3 +72,35 @@ export default {
   methods: {}
 };
 </script>
+<style scoped>
+/* .layout {
+  border: 1px solid #d7dde4; 
+  background: #f5f7f9;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+} */
+.layout-logo {
+  width: 30%;
+  height: auto;
+  text-align: center;
+  font-size: 30px;
+  font-family: "隶书";
+  color: white;
+  border-radius: 3px;
+  float: left;
+  position: relative;
+  left: -3em;
+}
+.layout-nav {
+  width: 70%;
+  margin: 0 auto;
+  margin-right: 0px;
+}
+/* .layout-info {
+  border: 1px solid rebeccapurple;
+} */
+.layout-footer-center {
+  text-align: center;
+}
+</style>

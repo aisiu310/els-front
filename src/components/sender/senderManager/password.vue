@@ -53,7 +53,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          this.$Message.success("Success!");
+          this.$Message.success("请等待开发小哥哥开发~");
         } else {
           this.$Message.error("Fail!");
         }

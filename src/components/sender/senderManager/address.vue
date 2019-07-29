@@ -74,12 +74,13 @@ export default {
         {
           title: "手机号",
           key: "phone",
-          width: 150,
+          width: 120,
           tooltip: true
         },
         {
           title: "所属区域",
-          key: "city"
+          key: "city",
+          width: 120
         },
         {
           title: "详细地址",
@@ -96,7 +97,7 @@ export default {
       showData: [],
       cityList: [],
       myAddress: {
-        account: "18396016699",
+        account: sessionStorage.getItem("userCode"),
         name: "",
         phone: "",
         city: "",
@@ -184,6 +185,15 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    show(index) {
+      this.$Modal.info({
+        content:
+          `姓名：${this.showData[index].name} <br>` +
+          `手机号：${this.showData[index].phone}<br> ` +
+          `城市： ${this.showData[index].city}<br>` +
+          `地址: ${this.showData[index].address}`
+      });
     }
   }
 };

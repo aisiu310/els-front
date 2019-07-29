@@ -3,7 +3,7 @@
     <div class="navigator">
       <!-- <div class="divide"></div> -->
       <div class="work_list">
-        <Menu :theme="theme" :width="100" :open-names="['2']" :accordion="true">
+        <Menu :theme="theme" :width="width" :open-names="['2']" :accordion="true">
           <MenuItem name="1" to="/warehouse/show">库存展示</MenuItem>
           <Submenu name="2">
             <template slot="title">出/入库管理</template>
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       theme: "light",
+      width: "100",
       user: {
         employee_id: "1001",
         employee_name: "benny",
