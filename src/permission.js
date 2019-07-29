@@ -4,6 +4,9 @@ import {
 } from '@/router'
 import router from '@/router'
 import store from './store/index'
+import {
+  setTimeout
+} from 'timers';
 var addRouFlag = false
 
 router.beforeEach((to, from, next) => {
@@ -13,9 +16,10 @@ router.beforeEach((to, from, next) => {
   // let GetRole = store.state.login.role;
   console.log('目标页面', to);
   console.log('起始页面', from);
-  console.log('根据token拉取用户角色:', GetRole, '生成路由', );
+  console.log('根据token拉取用户角色:', GetRole, '生成路由');
   // 如果登录了
   if (GetRole && to.path != '/login') {
+
     // 如果路由表不存在， 没根据角色进行筛选则筛选一次
     if (!addRouFlag) {
       addRouFlag = true
@@ -26,10 +30,23 @@ router.beforeEach((to, from, next) => {
       router.push({
         path: to.path
       })
+      next()
     } //路由表存在 进行权限控制  对于非法访问统一拦截  重定向至无权访问界面
     else {
+      if (to.name) {
+        next()
+      } else {
+        store.commit('delMenu')
+        store.commit('delRole')
+        addRouFlag = false
+        setTimeout({
 
+        }, 5000)
+        next('/403')
+
+      }
     }
+
   } else {
     // 用户没登录，跳转到登录页面
     if (to.path === '/') {
@@ -43,7 +60,6 @@ router.beforeEach((to, from, next) => {
       }
     }
   }
-
 })
 
 function hasPermission(route, roles) {

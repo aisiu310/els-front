@@ -66,11 +66,21 @@ import show_admin from "@/components/admin/func/show"
 Vue.use(router)
 export const fixedRouter = [{
     path: '/',
-    redirect: '/login'
+    component: login
+    // redirect: '/login'
   },
   {
     path: '/login',
     component: login
+  },
+  {
+    path: '/403',
+    component: error,
+    meta: {
+      title: "统一错误返回页面",
+      icon: "el-icon-success",
+      requireAuth: false
+    },
   }
 ]
 export const asynRouter = [
@@ -480,17 +490,7 @@ export const asynRouter = [
     ]
   },
   // 当页面地址和上面任一地址不匹配，则跳转到404
-  {
-    path: '*',
-    redirect: '/404',
-    component: error,
-    meta: {
-      title: "统一错误返回页面",
-      icon: "el-icon-success",
-      roles: ['admin', 'manager', 'transist', 'businessHall'],
-      requireAuth: false
-    },
-  }
+
 ]
 
 export default new router({

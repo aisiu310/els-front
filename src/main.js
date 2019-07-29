@@ -45,7 +45,7 @@ new Vue({
   },
   template: '<App/>'
 })
-// request攔截器
+// request拦截器
 // axios.interceptors.request.use(config => {
 //   if (store.state.login.token) {
 //     // alert('token存在')

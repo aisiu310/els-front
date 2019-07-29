@@ -11,6 +11,9 @@ const mutations = {
   setMenu(state, value) {
     state.menu = value;
   },
+  delMenu(state) {
+    state.menu = '';
+  },
   setBreadCrumb(state, value) {
     state.breadCrumb = value;
   },
@@ -35,6 +38,10 @@ const mutations = {
     state.role = value;
     sessionStorage.setItem("role", state.role); //
   },
+  delRole(state) {
+    state.role = '';
+    sessionStorage.removeItem("role")
+  }
 }
 export default {
   state,
