@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import store from "../../store/index";
 export default {
   data() {
     return {
@@ -25,6 +26,7 @@ export default {
   methods: {
     exit() {
       this.$router.push("/");
+      store.commit("delToken");
     }
   }
 };

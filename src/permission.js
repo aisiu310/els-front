@@ -43,7 +43,6 @@ router.beforeEach((to, from, next) => {
 
         }, 5000)
         next('/403')
-
       }
     }
 

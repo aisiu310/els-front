@@ -17,10 +17,24 @@
               <Icon :type="item.meta.icon"></Icon>
               {{item.meta.title}}
             </MenuItem>
-
-            <Poptip trigger="hover" title="Title" content="content">
-              <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />
-            </Poptip>
+            <Dropdown style="text-align: left;">
+              <a href="javascript:void(0)">
+                <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />
+              </a>
+              <DropdownMenu slot="list">
+                <DropdownItem>
+                  <Icon type="ios-contact-outline" />个人中心
+                </DropdownItem>
+                <DropdownItem>
+                  <Icon type="ios-settings-outline" />设置
+                </DropdownItem>
+                <DropdownItem divided>
+                  <div @click="exit()">
+                    <Icon type="ios-log-out" />退出登录
+                  </div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </Menu>
       </Header>
@@ -68,7 +82,12 @@ export default {
     this.menuItem = store.state.login.menu;
     console.log("这里是待展示导航菜单", this.menuItem);
   },
-  methods: {}
+  methods: {
+    exit() {
+      this.$router.push("/");
+      store.commit("delToken");
+    }
+  }
 };
 </script>
 <style scoped>
@@ -90,13 +109,14 @@ export default {
   float: left;
   position: relative;
   left: -3em;
+  /* border: 3px solid red; */
 }
 .layout-nav {
-  width: 70%;
+  width: 40%;
   margin: 0 auto;
   float: right;
   text-align: right;
-  border: 3px solid red;
+  /* border: 3px solid red; */
 }
 /* .layout-info {
   border: 1px solid rebeccapurple;
