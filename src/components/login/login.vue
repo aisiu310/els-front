@@ -175,11 +175,10 @@ export default {
           //   });
           self.$store.commit("setToken", 123456);
           self.$Message.success("登陆成功");
-
-          // sessionStorage.setItem("hallCode", 18001);
-          // sessionStorage.setItem("courierId", 18001123);
-          // sessionStorage.setItem("courierName", "courier");
-          self.$store.commit("setRole", "manager");
+          sessionStorage.setItem("hallCode", 18001);
+          sessionStorage.setItem("courierId", 18001123);
+          sessionStorage.setItem("courierName", "courier");
+          self.$store.commit("setRole", "admin");
           this.$router.push({
             path: self.$store.state.login.role
           });
