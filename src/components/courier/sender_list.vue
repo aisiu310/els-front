@@ -4,7 +4,7 @@
       <TabPane label="派件单" icon="ios-paper-plane">
         <Table stripe border :columns="columns" :data="data" @on-selection-change="select"></Table>
         <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">送达审核</Button>
         </div>
       </TabPane>
     </Tabs>
@@ -33,23 +33,41 @@ export default {
         },
         {
           title: "营业厅编号",
-          key: sessionStorage.getItem("hallCode")
+          key: "code"
         },
         {
           title: "订单条形码号",
           key: "allOrderCode"
         },
         {
-          title: "快递员编号",
-          key: sessionStorage.getItem("courierId")
-        },
-        {
-          title: "快递员",
-          key: sessionStorage.getItem("courierName")
-        },
-        {
           title: "派件状态",
-          key: "state"
+          key: "state",
+          render: (h, params) => {
+            const row = params.row;
+            const color =
+              row.status === 1
+                ? "primary"
+                : row.status === 0
+                ? "success"
+                : "error";
+            const text =
+              row.status === 1
+                ? "Working"
+                : row.status === 0
+                ? "已送达"
+                : "待送达";
+
+            return h(
+              "Tag",
+              {
+                props: {
+                  type: "dot",
+                  color: color
+                }
+              },
+              text
+            );
+          }
         }
       ]
     };
@@ -65,9 +83,10 @@ export default {
         .then(response => {
           console.log(response.data);
           if (response.data.status === 200) {
-            self.data = response.data.data;
+            self.data = response.data.data.list;
+            self.data.code = sessionStorage.getItem("organizationCode");
           } else {
-            self.$Message.error(response.data.msg);
+            self.$Message.error(response.data.data.msg);
           }
         })
         .catch(error => {

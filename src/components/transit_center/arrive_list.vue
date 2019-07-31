@@ -1,131 +1,146 @@
 <template>
   <div>
     <Tabs>
+      <!-- 接收管理Pane -->
       <TabPane label="接收管理" icon="md-clipboard">
-        <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
-          <template slot-scope="{row,index}" hidden slot="date">
-            <span>{{row.id}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="code">
-            <span v-model="editItem.code">{{row.code}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="arriveDate">
-            <input type="text" v-model="editItem.arriveDate" v-if="editIndex === index" />
-            <span v-else>{{row.arriveDate}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="placeOfDeparture">
-            <input type="text" v-model="editItem.placeOfDeparture" v-if="editIndex === index" />
-            <span v-else>{{row.placeOfDeparture}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="transferId">
-            <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
-            <span v-else>{{row.transferId}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="goodsState">
-            <input type="text" v-model="editItem.goodsState" v-if="editIndex === index" />
-            <span v-else>{{row.goodsState}}</span>
-          </template>
-          <template slot-scope="{row,index}" slot="state">
-            <span>{{row.state}}</span>
-          </template>
-          <template slot-scope="{ row }" slot="date">
-            <strong>{{ row.date }}</strong>
-          </template>
-          <template slot-scope="{row,index}" slot="action">
-            <div v-if="editIndex === index">
-              <Button v-bind="editItem" @click="handleSave(index,editItem)">保存</Button>
-              <Button @click="editIndex = -1">取消</Button>
-            </div>
-            <div v-else>
-              <Button @click="handleEdit(row,index)">修改</Button>
-            </div>
-          </template>
-        </Table>
-
-        <Button type="error" id="delete_button" @click="modaldelet = true">删除</Button>
-        <Modal v-model="modaldelet" width="360">
-          <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>Delete confirmation</span>
-          </p>
-          <div style="text-align:center">
-            <p>这些数据删除后无法恢复、你确定要删除吗？</p>
-          </div>
-          <div slot="footer">
-            <Button
-              type="error"
-              :v-bind="sel"
-              @click="remove(sel)"
-              size="large"
-              long
-              :loading="modal_loading"
-            >Delete</Button>
-          </div>
-        </Modal>
-
-        <div id="arrive_list_add">
-          <Button type="primary" @click="modal = true">添加</Button>
-          <Modal
-            v-model="modal"
-            title="添加"
-            v-bind="formItem"
-            @on-ok="submitform('formItem')"
-            @on-cancle="cancle"
-          >
-            <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
-              <FormItem label="中转中心编号" prop="code">
-                <Input v-model="formItem.code" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="到达日期" prop="arriveDate">
-                <Row>
-                  <Col span="11">
-                    <DatePicker
-                      type="date"
-                      placeholder="Select date"
-                      :options="option"
-                      v-model="formItem.arriveDate"
-                    ></DatePicker>
-                  </Col>
-                </Row>
-              </FormItem>
-              <FormItem label="货物状态" prop="goodsState">
-                <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="中转单编号" prop="transferId">
-                <Input v-model="formItem.transferId" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="出发地" prop="placeOfDeparture">
-                <Input v-model="formItem.placeOfDeparture" placeholder="Enter something..."></Input>
-              </FormItem>
-              <FormItem label="货物状态" prop="goodsState">
-                <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
-              </FormItem>
-            </Form>
-          </Modal>
-        </div>
-
-        <div id="submit_for_check">
-          <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
-        </div>
-
-        <div style="margin: 10px;overflow: hidden">
-          <div style="float: right;">
-            <Page
-              :total="sum"
-              @on-change="changePage"
-              @on-page-size-change="changePageSize"
-              show-sizer
-              :courent="currentPage"
-              :page-size="pageSize"
-              show-elevator
-              show-total
-            ></Page>
-          </div>
-        </div>
+        <!-- 接收管理Pane~card背景 -->
+        <Row style="background:#eee;padding:20px">
+          <!-- 接收管理Pane~来自营业厅/中转中心card -->
+          <Col span="11" style="width:24%">
+            <Card :bordered="false">
+              <p slot="title">来自营业厅/中转中心</p>
+              <Table :columns="loadCarColumns" @on-selection-change="selectLoadCarList"></Table>
+              <Button
+                type="primary"
+                id="arrive_button"
+                @click.native="createArriveList();modal = true"
+              >生成装车单</Button>
+            </Card>
+          </Col>
+          <!-- 接收管理Pane~中转中心到达单card -->
+          <Col span="11" offset="2" style="width:66%">
+            <Card shadow>
+              <p slot="title">中转中心到达单</p>
+              <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
+                <template slot-scope="{row,index}" hidden slot="date">
+                  <span>{{row.id}}</span>
+                </template>
+                <template slot-scope="{row,index}" slot="code">
+                  <span v-model="editItem.code">{{row.code}}</span>
+                </template>
+                <template slot-scope="{row,index}" slot="arriveDate">
+                  <input type="text" v-model="editItem.arriveDate" v-if="editIndex === index" />
+                  <span v-else>{{row.arriveDate}}</span>
+                </template>
+                <template slot-scope="{row,index}" slot="placeOfDeparture">
+                  <input type="text" v-model="editItem.placeOfDeparture" v-if="editIndex === index" />
+                  <span v-else>{{row.placeOfDeparture}}</span>
+                </template>
+                <template slot-scope="{row,index}" slot="transferId">
+                  <input type="text" v-model="editItem.transferId" v-if="editIndex === index" />
+                  <span v-else>{{row.transferId}}</span>
+                </template>
+                <template slot-scope="{row,index}" slot="goodsState">
+                  <input type="text" v-model="editItem.goodsState" v-if="editIndex === index" />
+                  <span v-else>{{row.goodsState}}</span>
+                </template>
+                <template slot-scope="{row,index}" slot="state">
+                  <span>{{row.state}}</span>
+                </template>
+                <template slot-scope="{ row }" slot="date">
+                  <strong>{{ row.date }}</strong>
+                </template>
+                <template slot-scope="{row,index}" slot="action">
+                  <div v-if="editIndex === index">
+                    <Button v-bind="editItem" @click="handleSave(index,editItem)">保存</Button>
+                    <Button @click="editIndex = -1">取消</Button>
+                  </div>
+                  <div v-else>
+                    <Button @click="handleEdit(row,index)">修改</Button>
+                  </div>
+                </template>
+              </Table>
+              <!-- 接收管理Pane~中转中心到达单card~删除 -->
+              <Button type="error" id="delete_button" @click="modaldelet = true">删除</Button>
+              <Modal v-model="modaldelet" width="360">
+                <p slot="header" style="color:#f60;text-align:center">
+                  <Icon type="ios-information-circle"></Icon>
+                  <span>删除确认</span>
+                </p>
+                <div style="text-align:center">
+                  <p>这些数据删除后无法恢复、你确定要删除吗？</p>
+                </div>
+                <div slot="footer">
+                  <Button
+                    type="error"
+                    :v-bind="sel"
+                    @click="remove(sel)"
+                    size="large"
+                    long
+                    :loading="modal_loading"
+                  >Delete</Button>
+                </div>
+              </Modal>
+              <!-- 接收管理Pane~中转中心到达单card~新增  -->
+              <Modal
+                v-model="modal"
+                title="添加"
+                v-bind="formItem"
+                @on-ok="submitform(formItem)"
+                @on-cancle="cancle"
+              >
+                <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
+                  <FormItem label="中转中心编号" prop="code">
+                    <Input v-model="formItem.code" placeholder="Enter something..."></Input>
+                  </FormItem>
+                  <FormItem label="到达日期" prop="arriveDate">
+                    <Row>
+                      <Col span="11">
+                        <DatePicker
+                          type="date"
+                          placeholder="Select date"
+                          :options="option"
+                          v-model="formItem.arriveDate"
+                        ></DatePicker>
+                      </Col>
+                    </Row>
+                  </FormItem>
+                  <FormItem label="货物状态" prop="goodsState">
+                    <Input v-model="formItem.goodsState" placeholder="Enter something..."></Input>
+                  </FormItem>
+                  <FormItem label="出发地" prop="placeOfDeparture">
+                    <Input v-model="formItem.placeOfDeparture" placeholder="Enter something..."></Input>
+                  </FormItem>
+                </Form>
+              </Modal>
+              <!-- 接收管理Pane~中转中心到达单card~审核 -->
+              <div id="submit_for_check">
+                <Button type="success" v-bind="sel" @click="submitforcheck(sel)">提交审核</Button>
+              </div>
+              <!-- 接收管理Pane~中转中心到达单card~分页 -->
+              <div style="margin: 10px;overflow: hidden;float: right">
+                <div style="float: right;">
+                  <Page
+                    :total="sum"
+                    @on-change="changePage"
+                    @on-page-size-change="changePageSize"
+                    show-sizer
+                    :courent="currentPage"
+                    :page-size="pageSize"
+                    show-elevator
+                    show-total
+                  ></Page>
+                </div>
+              </div>
+            </Card>
+          </Col>
+        </Row>
       </TabPane>
-
+      <!-- 历史记录Pane -->
       <TabPane label="历史记录" icon="ios-clock-outline">
-        <h1>等待程序员小哥开发</h1>
+        <div>
+          <img src="../../assets/B_G.png" />
+        </div>
       </TabPane>
     </Tabs>
   </div>
@@ -133,6 +148,8 @@
 <script>
 import { api } from "./api";
 import { error, log } from "util";
+import { resolve } from "url";
+import { all } from "q";
 export default {
   data() {
     return {
@@ -163,10 +180,10 @@ export default {
         ]
       },
       formItem: {
-        code: sessionStorage.getItem("code"),
-        arriveDate: "2019-7-16",
-        placeOfDeparture: "拉文克劳",
-        goodsState: "破损"
+        code: sessionStorage.getItem("hallCode"),
+        arriveDate: "",
+        placeOfDeparture: "北京",
+        goodsState: ""
       },
       ruleValidate: {
         arriveDate: [
@@ -182,6 +199,7 @@ export default {
       modal_loading: false,
       modal: false,
       sel: [],
+      selLod: [],
       data: [],
       editIndex: -1, // 当前聚焦的输入框的行数
       editItem: {
@@ -232,13 +250,63 @@ export default {
           title: "操作",
           slot: "action"
         }
+      ],
+      loadCarColumns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "押运员",
+          slot: "escort",
+          tooltip: true
+        },
+        {
+          title: "到达地",
+          slot: "placeOfArrival",
+          filters: [
+            {
+              label: "上海",
+              value: "上海"
+            },
+            {
+              label: "南京",
+              value: "南京"
+            }
+          ],
+          filterMethod(value, row) {
+            return row.placeOfArrival.indexOf(value) > -1;
+          }
+        }
       ]
     };
   },
   mounted() {
+    //显示来自营业厅或中转中心的装车单
+    this.getLoadCarList();
+    //显示已生成的到达单
     this.getArriveList(this.currentPage, this.pageSize);
   },
   methods: {
+    //查询装车单
+    getLoadCarList() {
+      const self = this;
+      let code = sessionStorage.getItem("hallCode");
+      api
+        .agetLoadCarList(code)
+        .then(response => {
+          console.log(response);
+          if (response.status === 200) {
+            self.loadCarColumns = response.data.date;
+          } else {
+            self.$Message.error(response.data.msg);
+          }
+        })
+        .catch(error => {
+          alert("网络错误，请检查连接信息");
+        });
+    },
     //查询到达单~自测成功
     getArriveList(currentPage, pageSize) {
       const self = this;
@@ -254,6 +322,42 @@ export default {
         .catch(function(error) {
           self.$Message.error("请求超时,加载本地数据");
         });
+    },
+    //根据来自营业厅或中转中心的装车单生成中转中心到达单，这里填充form表单
+    createArriveList() {
+      let self = this;
+      //目的地，出库单有数据时去掉注释使用
+      // self.formItem.placeOfDeparture = selLod[0].placeOfArrival;
+      self.formItem.goodsState = "完整";
+    },
+    //选中已揽订单，存入selOrd
+    selectLoadCarList() {
+      this.selLod = selection;
+    },
+    //根据form表单内的内容，自动生成到达单
+    submitform(formItem) {
+      const self = this;
+      self.$refs["formItem"].validate(valid => {
+        if (valid) {
+          api
+            .arriveListSubmitForm(self.formItem)
+            .then(response => {
+              console.log(response);
+              if (response.data.status) {
+                self.getArriveList(this.currentPage, this.pageSize);
+                self.$Message.success("添加成功");
+              } else {
+                self.$Message.warning(response.data.msg);
+              }
+            })
+            .catch(error => {
+              self.$Message.error("请求超时,请检查连接信息");
+            });
+        } else {
+          self.modal = "true";
+          self.$Message.error("操作失败");
+        }
+      });
     },
     handleEdit(row, index) {
       this.editItem.id = row.id;
@@ -318,31 +422,6 @@ export default {
         }, 100);
       }
     },
-    //添加到达单~自测成功
-    submitform(formItem) {
-      const self = this;
-      self.$refs[formItem].validate(valid => {
-        if (valid) {
-          api
-            .arriveListSubmitForm(self.formItem)
-            .then(response => {
-              console.log(response);
-              if (response.data.status) {
-                self.getArriveList(this.currentPage, this.pageSize);
-                self.$Message.success("添加成功");
-              } else {
-                self.$Message.warning(response.data.msg);
-              }
-            })
-            .catch(error => {
-              self.$Message.error("请求超时,请检查连接信息");
-            });
-        } else {
-          self.modal = "true";
-          self.$Message.error("操作失败");
-        }
-      });
-    },
     cancle() {
       this.$Message.info("取消操作");
     },
@@ -385,6 +464,9 @@ export default {
 };
 </script>
 <style >
+#arrive_button {
+  margin: 10px;
+}
 #delete_button {
   margin: 10px;
   float: left;

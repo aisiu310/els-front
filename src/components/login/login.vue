@@ -139,12 +139,25 @@ export default {
           //   .then(response => {
           //     console.log(111, response);
           //     if (response.data.status === 200) {
+          //       let res = response.data.data;
           //       self.$Message.success("登陆成功");
           //       this.$Loading.finish();
-          //       self.$store.commit("setToken", response.data.data.userCode);
-          //       console.log(1);
-          //       self.$store.commit("setRole", response.data.data.identity);
-          //       console.log(2);
+          //       self.$store.commit("setToken", res.userCode);
+          //       self.$store.commit("setRole", res.identity);
+          //       sessionStorage.setItem("courierId", 18001001);
+          //       sessionStorage.setItem("courierName", "courier");
+          //       sessionStorage.setItem("userCode", res.userCode);
+          //       sessionStorage.setItem("userName", res.userName);
+          //       sessionStorage.setItem("identity", res.identity);
+          //       sessionStorage.setItem(
+          //         "organizationCode",
+          //         res.organizationCode
+          //       );
+          //       sessionStorage.setItem("hallCode", 18001);
+          //       sessionStorage.setItem(
+          //         "organizationName",
+          //         res.organizationName
+          //       );
           //       // self.$store.commit(
           //       //   "setBusinessHallCode",
           //       //   response.data.data.organizationCode
@@ -153,9 +166,7 @@ export default {
           //         "businessHallCode",
           //         response.data.data.organizationCode
           //       );
-
           //       // self.$store.commit("setUserName", response.data.data.userName);
-          //       console.log(1, self.$store.state.login.role);
           //       self.$router.push({
           //         path: self.$store.state.login.role
           //       });
@@ -178,7 +189,7 @@ export default {
           sessionStorage.setItem("hallCode", 18001);
           sessionStorage.setItem("courierId", 18001123);
           sessionStorage.setItem("courierName", "courier");
-          self.$store.commit("setRole", "admin");
+          self.$store.commit("setRole", "businessHall");
           this.$router.push({
             path: self.$store.state.login.role
           });

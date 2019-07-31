@@ -29,6 +29,7 @@ Vue.prototype.$axios = axios //全局注册，使用方法为:this.$axios
 
 Vue.prototype.$store = store
 axios.defaults.headers.post['Content-Type'] = 'text/plain'
+axios.defaults.productionTip = true
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded' // 配置请求头（推荐）
 
 Vue.use(iView)

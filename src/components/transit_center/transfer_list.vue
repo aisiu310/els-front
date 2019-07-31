@@ -166,7 +166,7 @@ export default {
       data: [],
       formItem: {
         id: "",
-        code: "025000",
+        code: "18001",
         transferId: "111",
         date: "2019-12-07",
         transportationId: "121",

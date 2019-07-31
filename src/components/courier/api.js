@@ -30,7 +30,11 @@ const api = {
   },
   //查询待揽件单~与杨维涛测试成功
   async getCollectList() {
-    let response = await axios.get(getCollectListUrl);
+    let response = await axios.get(getCollectListUrl, {
+      params: {
+        departmentCode: sessionStorage.getItem('hallCode')
+      }
+    });
     return response
   },
   //查询已揽件单~与杨维涛测试成功
