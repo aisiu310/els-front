@@ -219,20 +219,20 @@ export default {
     // pay
     pay() {
       let newData = {
-        code: this.createRandomId()+"",
-        senderName: "this.send.name",
-        senderRegion: "this.send.city",
-        senderDetailAddress: "this.send.address",
-        senderPhone: "18396016699",
-        addresseeName: "this.receipt.name",
-        addresseeRegion: "this.receipt.city",
-        addresseeDetailAddress: "this.receipt.address",
-        addresseePhone: "18396016699",
-        goodsWeight: 8,
-        type: "this.courie",
-        packingFee: 18,
-        freight: 30,
-        totalFee: 48,
+        code: this.createRandomId(),
+        senderName: this.send.name,
+        senderRegion: this.send.city,
+        senderDetailAddress: this.send.address,
+        senderPhone: this.send.phone,
+        addresseeName: this.receipt.name,
+        addresseeRegion: this.receipt.city,
+        addresseeDetailAddress: this.receipt.address,
+        addresseePhone: this.send.phone,
+        goodsWeight: this.weight,
+        type: this.courie,
+        packingFee: this.packageFee,
+        freight: this.freight,
+        totalFee: this.cost ,
         orderTime: new Date()
       };
       api.addOrder(url.order_addURL, newData).then(res => {
