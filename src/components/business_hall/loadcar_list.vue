@@ -447,7 +447,7 @@ export default {
     this.getOrderList();
   },
   methods: {
-    //获取已揽件订单信息
+    //获取已揽件订单信息，生成营业厅装车单
     getOrderList() {
       const self = this;
       let code = sessionStorage.getItem("hallCode");
@@ -464,6 +464,24 @@ export default {
         .catch(error => {
           alert("网络错误，请检查连接信息");
         });
+    },
+    //根据快递员已揽订单生成营业厅装车单，这里填充form表单
+    createLoadCarList() {
+      let self = this;
+      self.formItem.code = sessionStorage.getItem("hallCode");
+      self.formItem.date = new Date();
+      self.formItem.transportationId = this.getCode();
+      //目的地，出库单有数据时去掉注释使用
+      // self.formItem.placeOfArrival = selOrd[0].placeOfArrival;
+      self.formItem.carCode = "001";
+      self.formItem.supervisor = sessionStorage.getItem("userName");
+      self.formItem.freight = "1200";
+      //this.caculateMoney();
+      self.formItem.orderList = String(this.gatherReceiptCode());
+    },
+    //选中已揽订单，存入selOrd
+    selectOrder(selection, row) {
+      this.selOrd = selection;
     },
     //查询装车单~自测成功
     getLoadCarList(currentPage, pageSize) {
@@ -507,31 +525,6 @@ export default {
         }
       });
     },
-    //根据快递员已揽订单生成营业厅装车单，这里填充form表单
-    createLoadCarList() {
-      let self = this;
-      self.formItem.code = sessionStorage.getItem("hallCode");
-      self.formItem.date = new Date();
-      self.formItem.transportationId = this.getCode();
-      //目的地，出库单有数据时去掉注释使用
-      // self.formItem.placeOfArrival = selOrd[0].placeOfArrival;
-      self.formItem.carCode = "001";
-      self.formItem.supervisor = sessionStorage.getItem("userName");
-      self.formItem.freight = "1200";
-      //this.caculateMoney();
-      self.formItem.orderList = String(this.gatherReceiptCode());
-    },
-    //随机生成中转单号
-    getCode() {
-      let listNumber = "",
-        part2 = "";
-      let part1 = sessionStorage.getItem("hallCode");
-      for (var i = 0; i < 14; i++) {
-        part2 += Math.floor(Math.random() * 10);
-      }
-      listNumber = part1 + part2;
-      return listNumber;
-    },
     //将已揽订单号汇成订单集合
     gatherReceiptCode() {
       let self = this;
@@ -545,6 +538,17 @@ export default {
       } else {
         self.$Message.error("快递单号为空");
       }
+    },
+    //随机生成中转单号
+    getCode() {
+      let listNumber = "",
+        part2 = "";
+      let part1 = sessionStorage.getItem("hallCode");
+      for (var i = 0; i < 14; i++) {
+        part2 += Math.floor(Math.random() * 10);
+      }
+      listNumber = part1 + part2;
+      return listNumber;
     },
     //计算运费
     // caculateMoney() {
@@ -565,10 +569,7 @@ export default {
     select(selection, row) {
       this.sel = selection;
     },
-    //选中已揽订单，存入selOrd
-    selectOrder(selection, row) {
-      this.selOrd = selection;
-    },
+
     //删除装车单~自测成功
     remove(sel) {
       const self = this;

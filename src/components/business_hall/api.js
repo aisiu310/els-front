@@ -1,8 +1,4 @@
-import axios from 'axios'
-import {
-  resolveAny
-} from 'dns';
-//ip
+import axios from "axios"
 const ip = '192.168.2.229'
 const driverIp = '192.168.2.231'
 const testIp = '127.0.0.1'

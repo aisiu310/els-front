@@ -189,7 +189,7 @@ export default {
           sessionStorage.setItem("hallCode", 18001);
           sessionStorage.setItem("courierId", 18001123);
           sessionStorage.setItem("courierName", "courier");
-          self.$store.commit("setRole", "businessHall");
+          self.$store.commit("setRole", "transit");
           this.$router.push({
             path: self.$store.state.login.role
           });
