@@ -14,6 +14,7 @@
                 :data="data"
                 @on-selection-change="selectLoadCarList"
               >
+                <template></template>
                 <template slot-scope="{ row, index }" slot="action">
                   <Button
                     type="primary"
@@ -119,7 +120,6 @@ export default {
       },
       modal_loading: false,
       modal: false,
-      selLod: [],
       data: [
         {
           loadCarId: "111",
@@ -172,10 +172,6 @@ export default {
       //目的地，出库单有数据时去掉注释使用
       // self.formItem.placeOfDeparture = selLod[0].placeOfArrival;
       self.formItem.goodsState = "完整";
-    },
-    //选中已揽订单，存入selOrd
-    selectLoadCarList() {
-      this.selLod = selection;
     },
     //根据form表单内的内容，自动生成到达单
     submitform(formItem) {
