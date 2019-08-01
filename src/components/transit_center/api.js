@@ -11,35 +11,53 @@ const arrivePath = '/yuantu/logistics/arrive'
 const loadCarPath = '/yuantu/logistics/loadcar'
 const transferPath = '/yuantu/logistics/transfer'
 //接收管理url
-const getArriveListUrl = "http://" + testIp + port + arrivePath + "/getArriveList"
-const arriveListSaveUrl = "http://" + testIp + port + arrivePath + "/modifyArriveById"
-const arriveListRemoveUrl = "http://" + testIp + port + arrivePath + "/removeArriveFake"
-const arriveListSubmitFormUrl = "http://" + testIp + port + arrivePath + "/addArrive"
-const arriveListSubmitForCheckUrl = "http://" + testIp + port + arrivePath + "/modifyStateList"
+const getArriveListUrl = "http://" + ip + port + arrivePath + "/getArriveList"
+const arriveListSaveUrl = "http://" + ip + port + arrivePath + "/modifyArriveById"
+const arriveListRemoveUrl = "http://" + ip + port + arrivePath + "/removeArriveFake"
+const arriveListSubmitFormUrl = "http://" + ip + port + arrivePath + "/addArrive"
+const arriveListSubmitForCheckUrl = "http://" + ip + port + arrivePath + "/modifyStateList"
 //装车管理url
-const getLoadCarListUrl = "http://" + testIp + port + loadCarPath + "/getLoadingList"
-const loadcarListSaveUrl = "http://" + testIp + port + loadCarPath + "/modifyLoadingById"
-const loadCarListSubmitFormUrl = "http://" + testIp + port + loadCarPath + "/addLoading"
-const loadCarListRemoveUrl = "http://" + testIp + port + loadCarPath + "/removeLoadingFake"
-const loadCarListSubmitForCheckmUrl = "http://" + testIp + port + loadCarPath + "/modifyStateList?state=1"
+const getLoadCarListUrl = "http://" + ip + port + loadCarPath + "/getLoadingList"
+const loadcarListSaveUrl = "http://" + ip + port + loadCarPath + "/modifyLoadingById"
+const loadCarListSubmitFormUrl = "http://" + ip + port + loadCarPath + "/addLoading"
+const loadCarListRemoveUrl = "http://" + ip + port + loadCarPath + "/removeLoadingFake"
+const loadCarListSubmitForCheckmUrl = "http://" + ip + port + loadCarPath + "/modifyStateList?state=1"
 //中转管理url
 // const getTransferListUrl = "http://" + ip + ":" + port + "/" + transferPath + "/getTransferList"
-const getTransferListUrl = "http://" + testIp + testPort + transferPath + "/getTransferList"
-const transferListSaveUrl = "http://" + testIp + testPort + transferPath + "/modifyTransferById"
-const transferListSubmitFormUrl = "http://" + testIp + testPort + transferPath + "/addTransfer"
-const transferListRemoveUrl = "http://" + testIp + testPort + transferPath + "/removeTransferFake"
-const transferListSubmitForCheckUrl = "http://" + testIp + testPort + transferPath + "/modifyStateList"
+const getTransferListUrl = "http://" + ip + testPort + transferPath + "/getTransferList"
+const transferListSaveUrl = "http://" + ip + testPort + transferPath + "/modifyTransferById"
+const transferListSubmitFormUrl = "http://" + ip + testPort + transferPath + "/addTransfer"
+const transferListRemoveUrl = "http://" + ip + testPort + transferPath + "/removeTransferFake"
+const transferListSubmitForCheckUrl = "http://" + ip + testPort + transferPath + "/modifyStateList"
 //allApi
 const api = {
   //接收管理
+  //待测试，根据中转中心code获取来自其他营业厅/中转中心的装车单，没有URl
+  async agetLoadCarList(code) {
+    let response = await axios.get(agetLoadCarListUrl, {
+      params: {
+        code: code
+      }
+    })
+    return response
+  },
+  //待测试，根据中转中心code获取出库单，没有URl
+  async getWareHouseList(code) {
+    let response = await axios.get(getWareHouseListUrl, {
+      params: {
+        code: code
+      }
+    })
+    return response
+  },
   //查询到达单~自测成功
-  async getArriveList(currentPage, pageSize) {
+  async getArriveList() {
     let response = await axios.post(getArriveListUrl, {
       // GetEmployeePO: {
       //   currentPage: currentPage,
       //   pageSize: pageSize
       // }
-      code: sessionStorage.getItem("code"),
+      code: sessionStorage.getItem("hallCode"),
       currentPage: currentPage,
       pageSize: pageSize
     });
@@ -61,7 +79,7 @@ const api = {
     });
     return response
   },
-  //添加到达单~自测成功
+  //添加到达单~修改
   async arriveListSubmitForm(formItem) {
     let response = await axios.post(arriveListSubmitFormUrl, formItem)
     return response
@@ -84,7 +102,7 @@ const api = {
   //查询装车单~自测成功
   async getLoadCarList(currentPage, pageSize) {
     let response = await axios.post(getLoadCarListUrl, {
-      code: "025000",
+      code: sessionStorage.getItem('hallCode'),
       currentPage: currentPage,
       pageSize: pageSize
     });
@@ -132,7 +150,7 @@ const api = {
   async getTransferList(currentPage, pageSize) {
     let response = await axios.post(
       getTransferListUrl, {
-        code: sessionStorage.getItem('code'),
+        code: sessionStorage.getItem('hallCode'),
         currentPage: currentPage,
         pageSize: pageSize
 

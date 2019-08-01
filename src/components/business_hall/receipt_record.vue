@@ -174,10 +174,10 @@ export default {
         .then(response => {
           console.log(response);
           if (response.data.status === 200) {
-            // console.log(response.data.data[0]);
-            // console.log(response.data.date[1]);
+            console.log(1, response.data.data[0]);
+            console.log(2, response.data.data[1]);
             self.receiptRecord = response.data.data[0];
-            self.courier = response.data.date[1];
+            self.courier = response.data.data[1];
           }
         })
         .catch(function(error) {
@@ -203,7 +203,7 @@ export default {
     },
     createlist() {
       let self = this;
-      self.formItem.number = "025000";
+      self.formItem.number = sessionStorage.getItem("hallCode");
       self.formItem.code = this.getCode();
       self.formItem.time = new Date();
       self.formItem.money = this.caculateMoney();
@@ -217,8 +217,8 @@ export default {
     },
     getCode() {
       let listNumber = "";
-      let part1 = "025000";
-      // let part1 = sessionStorage.getItem("businessId")
+      // let part1 = "18001";
+      let part1 = sessionStorage.getItem("hallCode");
       let part3 = "";
       let myDate = new Date(); //获取当前年
       let part2 =

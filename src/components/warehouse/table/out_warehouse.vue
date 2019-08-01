@@ -15,7 +15,7 @@
       <div class="button">
         <Button type="success" @click="modal = true">新建</Button>
         <!-- new create out_warehouse modal -->
-        <Modal title="新建入库单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
+        <Modal title="新建出库单" v-model="modal" :styles="{top: '20px'}" :footer-hide="true">
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
             <FormItem label="快递单号" prop="orderCode">
               <Input v-model="formValidate.orderCode" placeholder="请输入快递单号"></Input>

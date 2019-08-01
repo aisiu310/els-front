@@ -39,9 +39,6 @@ router.beforeEach((to, from, next) => {
         store.commit('delMenu')
         store.commit('delRole')
         addRouFlag = false
-        setTimeout({
-
-        }, 5000)
         next('/403')
       }
     }

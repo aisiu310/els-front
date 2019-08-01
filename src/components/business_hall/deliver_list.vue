@@ -87,7 +87,7 @@ export default {
       api
         .getdeliverlist(currentPage, pageSize)
         .then(response => {
-          // console.log(response);
+          console.log(response);
           if (response.data.status === 200) {
             self.data = response.data.data.list;
             self.sum = response.data.data.total;
@@ -113,7 +113,7 @@ export default {
               all = tempData[key[j]] + all;
             }
             tempShowData[i] = {
-              code: "025001",
+              code: sessionStorage.getItem("hallCode"),
               allOrderCode: all,
               courierId: key[i]
             };

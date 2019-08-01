@@ -7,7 +7,7 @@
             <Card :bordered="false">
               <Table stripe border :columns="columns" :data="data" @on-selection-change="select">
                 <template slot-scope="{ row, index }" slot="action">
-                  <Button type="success" @click="submitforcheck()">一件揽件</Button>
+                  <Button type="success" @click="submitforcheck()">揽件</Button>
                 </template>
               </Table>
             </Card>
@@ -52,7 +52,7 @@ export default {
         },
         {
           title: "收件人所属区域",
-          key: "addresseeRegion"
+          key: "senderRegion"
         },
         {
           title: "订单条形码号",
@@ -79,7 +79,7 @@ export default {
         },
         {
           title: "收件人所属区域",
-          key: "addresseeRegion"
+          key: "senderRegion"
         },
         {
           title: "订单条形码号",
@@ -123,7 +123,7 @@ export default {
       api
         .getCollectList()
         .then(response => {
-          // console.log(response);
+          console.log(response);
           if (response.data.status === 200) {
             self.data = response.data.data;
           } else {
@@ -148,7 +148,7 @@ export default {
             console.log(response);
             if (response.data.status === 200) {
               self.getCollectList();
-              self.getAleradyCollectList();
+              self.getAleradyCollectList(this.currentPage, this.pageSize);
               self.$Message.success("审核成功");
             } else {
               self.$Message.error(response.data.msg);
